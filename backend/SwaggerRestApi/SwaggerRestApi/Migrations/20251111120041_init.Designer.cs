@@ -10,7 +10,7 @@ using SwaggerRestApi.DBAccess;
 namespace SwaggerRestApi.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20251111114829_init")]
+    [Migration("20251111120041_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -172,7 +172,7 @@ namespace SwaggerRestApi.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.PrimitiveCollection<string>("Roles")
+                    b.Property<string>("Roles")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

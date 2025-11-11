@@ -169,7 +169,7 @@ namespace SwaggerRestApi.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.PrimitiveCollection<string>("Roles")
+                    b.Property<string>("Roles")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
