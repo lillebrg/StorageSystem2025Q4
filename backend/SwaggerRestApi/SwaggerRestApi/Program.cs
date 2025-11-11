@@ -14,7 +14,7 @@ internal class Program
         // Add services to the container.
         builder.Services.AddControllers();
 
-        builder.Services.AddDbContext<DBConext>(options =>
+        builder.Services.AddDbContext<DBContext>(options =>
             options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
         builder.Services.AddAuthentication(x =>
