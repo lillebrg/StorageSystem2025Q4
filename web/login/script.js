@@ -7,7 +7,7 @@ const form = document.querySelector(".form");
 form.addEventListener("submit", handleLogin);
 
 async function handleLogin(event) {
-  event.preventDefault(); // ⛔ stops the browser from submitting/reloading
+  event.preventDefault();
 
   const username = usernameInput.value.trim();
   const password = passwordInput.value.trim();
@@ -24,4 +24,5 @@ async function handleLogin(event) {
   }
 
   await loginRequest(username, password);
+  window.location.href='/users'
 }

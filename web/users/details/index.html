@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Storage System</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+      rel="stylesheet"
+    />
+    <script type="module" src="script.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="componentContainer">
+        <div class="card">
+          <div class="card-border-top"></div>
+          <div class="img">
+            <img src="/assets/images/telia.png" width="70px" height="70px" />
+          </div>
+          <span> Person</span>
+          <p class="job">Job Title</p>
+
+            <button class="button" id="editBtn">Edit</button>
+            <button class="button" id="changePasswordBtn">Change Password</button>
+
+        </div>
+        <div class="table">
+          <table class="responsive-table">
+            <thead>
+              <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Name</th>
+                <th scope="col">ItemDescription</th>
+                <th scope="col">Image</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Logitech MX Master 3</td>
+                <td>
+                  Wireless ergonomic mouse with customizable buttons, suitable
+                  for office and design work.
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Kingston 16GB RAM</td>
+                <td>
+                  DDR4 memory module, high-speed performance for gaming and
+                  multitasking PCs.
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>TP-Link Archer AX50</td>
+                <td>
+                  Wi-Fi 6 router with dual-band support, ideal for fast and
+                  stable internet connections.
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>Samsung 1TB SSD</td>
+                <td>
+                  NVMe solid-state drive, extremely fast storage for computers
+                  and laptops.
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td>Corsair K70 Keyboard</td>
+                <td>
+                  Mechanical gaming keyboard with RGB backlighting and Cherry MX
+                  switches.
+                </td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+        <div id="editUserModal" class="modal">
+            <div class="modalContent">
+                <span class="closeModal">&times;</span>
+                <h2>Edit Name or Email</h2>
+                <form id="editUserForm">
+                    <div class="form-container">
+                        <label for="email"><b>Email</b></label>
+                        <input type="email" placeholder="Enter email "id="email" required>
+         
+                        <label for="uname"><b>Username</b></label>
+                        <input type="text" placeholder="Enter username" id="uname" required>
+        
+                        <button id="submitEditBtn" type="submit">Save Changes</button>
+                        <div id="editprofile-error" class="error"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="changePasswordModal" class="modal">
+            <div class="modalContent">
+                <span class="closeModal">&times;</span>
+                <h2>Change Password</h2>
+                <form id="PasswordForm">
+                    <div class="form-container">
+                        <label for="psw"><b>Old Password</b></label>
+                        <input type="password" placeholder="Enter your current password" id="oldpsw" required>
+    
+                        <label for="psw"><b>New Password</b></label>
+                        <input type="password" placeholder="Enter the new password" id="psw" required>
+        
+                        <label for="rpsw"><b>Repeat New Password</b></label>
+                        <input type="password" placeholder="Enter the new password again" id="rpsw" required>
+        
+                        <button type="submit">Change Password</button>
+        
+                        <div id="password-error" class="error"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+  </body>
+</html>
