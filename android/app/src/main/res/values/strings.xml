@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Storage System</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="email_hint">john@example.com</string>
+    <string name="password">Password</string>
+    <string name="password_hint">&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;</string>
 </resources>
