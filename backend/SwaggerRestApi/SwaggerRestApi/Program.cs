@@ -2,12 +2,15 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SwaggerRestApi;
+using SwaggerRestApi.BusineesLogic;
 using SwaggerRestApi.DBAccess;
 using System.Text;
+using System.Threading.Tasks;
 
 internal class Program
 {
-    private static void Main(string[] args)
+    private static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -26,11 +29,11 @@ internal class Program
         {
             x.TokenValidationParameters = new TokenValidationParameters
             {
-                ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
-                ValidAudience = builder.Configuration["JwtSettings:Audience"],
+                ValidIssuer = builder.Configuration["JWT:Issuer"],
+                ValidAudience = builder.Configuration["JWT:Audience"],
                 IssuerSigningKey = new SymmetricSecurityKey
                 (
-                Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"])
+                Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])
                 ),
                 ValidateIssuer = true,
                 ValidateAudience = true,
@@ -80,6 +83,12 @@ internal class Program
             });
         });
 
+        // Adds DBAccess
+        builder.Services.AddScoped<UserDBAccess>();
+
+        // Adds Business logic
+        builder.Services.AddScoped<UserLogic>();
+
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
 
@@ -90,11 +99,15 @@ internal class Program
         {
             app.MapOpenApi();
             app.UseSwagger();
-            app.UseSwaggerUI(c =>
+            app.UseSwaggerBootstrap(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
         }
+
+        await using var context = app.Services.CreateAsyncScope().ServiceProvider.GetService<DBContext>();
+        SeedData seedData = new SeedData(context);
+        await seedData.StartData();
 
         app.UseHttpsRedirection();
 
