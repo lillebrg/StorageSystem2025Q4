@@ -31,7 +31,7 @@ namespace SwaggerRestApi.DBAccess
                 .IsUnique();
 
             modelBuilder.Entity<User>()
-                .HasIndex(u => u.UserName)
+                .HasIndex(u => u.Name)
                 .IsUnique();
 
             modelBuilder.Entity<Storage>()
