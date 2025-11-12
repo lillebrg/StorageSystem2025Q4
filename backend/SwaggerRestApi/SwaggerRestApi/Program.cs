@@ -85,6 +85,7 @@ internal class Program
 
         // Adds DBAccess
         builder.Services.AddScoped<UserDBAccess>();
+        builder.Services.AddScoped<ItemDBAccess>();
 
         // Adds Business logic
         builder.Services.AddScoped<UserLogic>();

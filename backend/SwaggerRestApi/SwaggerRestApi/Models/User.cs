@@ -12,7 +12,7 @@
 
         public string Role { get; set; }
 
-        public List<int> OnLoanItems { get; set; }
+        public List<int> BorrowedItems { get; set; }
 
         public bool ChangePasswordOnNextLogin { get; set; }
     }

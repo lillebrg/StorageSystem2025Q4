@@ -15,17 +15,19 @@ namespace SwaggerRestApi.BusineesLogic
     public class UserLogic
     {
         private readonly IConfiguration _configuration;
-        private readonly UserDBAccess _dbaccess;
+        private readonly UserDBAccess _userdbaccess;
+        private readonly ItemDBAccess _itemdbaccess;
 
-        public UserLogic(IConfiguration configuration, UserDBAccess dBAccess)
+        public UserLogic(IConfiguration configuration, UserDBAccess userDBAccess, ItemDBAccess itemDBAccess)
         {
             _configuration = configuration;
-            _dbaccess = dBAccess;
+            _userdbaccess = userDBAccess;
+            _itemdbaccess = itemDBAccess;
         }
 
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<UserDto>> GetUser(int id)
         {
-            var user = await _dbaccess.GetUser(id);
+            var user = await _userdbaccess.GetUser(id);
 
             if (user == null || user.Id == 0) { return new NotFoundObjectResult(new { message = "Could not find the user" }); }
 
@@ -33,24 +35,56 @@ namespace SwaggerRestApi.BusineesLogic
             {
                 email = user.Email,
                 name = user.Name,
-                borrowed_items = user.OnLoanItems,
+                borrowed_items = new List<BorrowedItems>(),
                 change_password_on_next_login = user.ChangePasswordOnNextLogin,
-                roles = user.Role,
+                role = user.Role,
             };
+
+            if (user.BorrowedItems.Count != 0)
+            {
+                foreach (var item in user.BorrowedItems)
+                {
+                    var specicItem = await _itemdbaccess.GetSpecificItemAndBaseItem(item);
+
+                    if (specicItem.Id == 0) { break; }
+
+                    BorrowedItems items = new BorrowedItems
+                    {
+                        specific_item_description = specicItem.Description,
+                        specific_item_id = specicItem.Id,
+                        base_item_id = specicItem.BaseItemId,
+                        base_item_name = specicItem.BaseItem.Name,
+                        base_item_picture = specicItem.BaseItem.Picture
+                    };
+                    userReturn.borrowed_items.Add(items);
+                }
+            }
 
             return new OkObjectResult(userReturn);
         }
 
-        public async Task<ActionResult<List<User>>> GetAllUser()
+        public async Task<ActionResult<List<UsersDTO>>> GetAllUser()
         {
-            var users = await _dbaccess.GetAllUsers();
+            var users = await _userdbaccess.GetAllUsers();
+            List<UsersDTO> result = new List<UsersDTO>();
 
-            return new OkObjectResult(users);
+            foreach (var user in users)
+            {
+                UsersDTO userReturn = new UsersDTO
+                {
+                    email = user.Email,
+                    name = user.Name,
+                    role = user.Role,
+                    borrowed_items = user.BorrowedItems.Count
+                };
+                result.Add(userReturn);
+            }
+            return new OkObjectResult(result);
         }
 
         public async Task<ActionResult> ChangePassword(ChangePassword changePassword, int id)
         {
-            var user = await _dbaccess.GetUser(id);
+            var user = await _userdbaccess.GetUser(id);
 
             if (user == null || user.Id == 0) { return new NotFoundObjectResult(new { message = "Could not find user" }); }
 
@@ -68,14 +102,14 @@ namespace SwaggerRestApi.BusineesLogic
 
             user.Password = hashedPassword;
 
-            await _dbaccess.UpdateUser(user);
+            await _userdbaccess.UpdateUser(user);
 
             return new OkObjectResult(true);
         }
 
         public async Task<ActionResult> ResetPassword(ResetPassword changePassword, int id)
         {
-            var user = await _dbaccess.GetUser(id);
+            var user = await _userdbaccess.GetUser(id);
 
             if (user == null || user.Id == 0) { return new NotFoundObjectResult(new { message = "Could not find user" }); }
 
@@ -88,14 +122,14 @@ namespace SwaggerRestApi.BusineesLogic
 
             user.Password = hashedPassword;
 
-            await _dbaccess.UpdateUser(user);
+            await _userdbaccess.UpdateUser(user);
 
             return new OkObjectResult(true);
         }
 
         public async Task<ActionResult> Login(UserLogin login)
         {
-            var user = await _dbaccess.GetUserForLogin(login.email);
+            var user = await _userdbaccess.GetUserForLogin(login.email);
 
             if (user == null || user.Id == 0) { return new NotFoundObjectResult(new { message = "Could not find user" }); }
 
@@ -119,7 +153,7 @@ namespace SwaggerRestApi.BusineesLogic
 
         public async Task<ActionResult> EditUser(UserUpdate userUpdate, int id)
         {
-            var user = await _dbaccess.GetUser(id);
+            var user = await _userdbaccess.GetUser(id);
 
             if (user == null || user.Id == 0) { return new NotFoundObjectResult(new { message = "Could not find user" }); }
 
@@ -136,14 +170,14 @@ namespace SwaggerRestApi.BusineesLogic
                 }
             }
 
-            await _dbaccess.UpdateUser(user);
+            await _userdbaccess.UpdateUser(user);
 
             return new OkObjectResult(true);
         }
 
         public async Task<ActionResult> EditUser(UserUpdateAdmin userUpdate, int id)
         {
-            var user = await _dbaccess.GetUser(id);
+            var user = await _userdbaccess.GetUser(id);
 
             if (user == null || user.Id == 0) { return new NotFoundObjectResult(new { message = "Could not find user" }); }
 
@@ -167,7 +201,7 @@ namespace SwaggerRestApi.BusineesLogic
 
             user.ChangePasswordOnNextLogin = userUpdate.change_password_on_next_login;
 
-            await _dbaccess.UpdateUser(user);
+            await _userdbaccess.UpdateUser(user);
 
             return new OkObjectResult(true);
         }
@@ -184,12 +218,12 @@ namespace SwaggerRestApi.BusineesLogic
                 return new BadRequestObjectResult(new { message = "Password does not match our security standard" });
             }
 
-            if (await _dbaccess.NameInUse(newUser.name))
+            if (await _userdbaccess.NameInUse(newUser.name))
             {
                 return new BadRequestObjectResult(new { message = "Name is already in use" });
             }
 
-            if (await _dbaccess.NameInUse(newUser.email))
+            if (await _userdbaccess.NameInUse(newUser.email))
             {
                 return new BadRequestObjectResult(new { message = "Email is already in use" });
             }
@@ -203,12 +237,12 @@ namespace SwaggerRestApi.BusineesLogic
                     Name = newUser.name,
                     Email = newUser.email,
                     Password = hashedPassword,
-                    OnLoanItems = new List<int>(),
+                    BorrowedItems = new List<int>(),
                     ChangePasswordOnNextLogin = true,
                     Role = newUser.role
                 };
 
-                await _dbaccess.CreateUser(user);
+                await _userdbaccess.CreateUser(user);
 
                 return new OkObjectResult(true);
             }
@@ -219,11 +253,11 @@ namespace SwaggerRestApi.BusineesLogic
 
         public async Task<ActionResult> DeleteUser(int id)
         {
-            var user = await _dbaccess.GetUser(id);
+            var user = await _userdbaccess.GetUser(id);
 
             if (user == null || user.Id == 0) { return new NotFoundObjectResult(new { message = "Could not find the user" }); }
 
-            await _dbaccess.DeleteUser(user);
+            await _userdbaccess.DeleteUser(user);
 
             return new OkObjectResult(true);
         }

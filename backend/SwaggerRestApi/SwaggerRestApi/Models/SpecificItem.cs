@@ -8,8 +8,7 @@
 
         public int Barcode { get; set; }
 
-        public int? OnLoanTo { get; set; }
-
+        public int? BorrowedTo { get; set; }
 
         public int BaseItemId { get; set; }
 

@@ -23,7 +23,7 @@ namespace SwaggerRestApi
                 Name = "admin",
                 Password = BCrypt.Net.BCrypt.HashPassword("admin"),
                 Role = "Admin",
-                OnLoanItems = new List<int>()
+                BorrowedItems = new List<int>()
             };
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Role == "Admin");
