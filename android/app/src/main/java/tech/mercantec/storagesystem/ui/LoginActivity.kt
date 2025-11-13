@@ -23,6 +23,10 @@ class LoginActivity : AppCompatActivity() {
 
             makeApiRequest(this, { login(email, password) }) { result ->
                 Toast.makeText(this, result.email, Toast.LENGTH_LONG).show()
+
+                val intent = Intent(this, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // Prevent going back to login screen
+                startActivity(intent)
             }
         }
     }
