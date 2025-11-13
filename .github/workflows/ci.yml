@@ -14,5 +14,6 @@ jobs:
     - uses: actions/setup-dotnet@v5
       with:
         dotnet-version: '9.0.x'
-    - run: dotnet build --project backend/SwaggerRestApi/SwaggerRestApi
+    - working-directory: backend/SwaggerRestApi/SwaggerRestApi
+    - run: dotnet build
 
