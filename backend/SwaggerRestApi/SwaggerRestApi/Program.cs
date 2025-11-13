@@ -91,6 +91,7 @@ internal class Program
         // Adds Business logic
         builder.Services.AddScoped<UserLogic>();
         builder.Services.AddScoped<BaseItemLogic>();
+        builder.Services.AddScoped<SpecificItemLogic>();
 
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();

@@ -31,6 +31,20 @@ namespace SwaggerRestApi.DBAccess
             return items;
         }
 
+        public async Task<bool> CheckForExistingBarcode(string barcode)
+        {
+            var baseItems = await _context.BaseItems.Where(b => b.ModelBarcode.Contains(barcode)).FirstOrDefaultAsync();
+
+            if (baseItems != null) { return false; }
+
+            var specificItems = await _context.SpecificItems.Where(s => s.Barcode.Contains(barcode)).FirstOrDefaultAsync();
+
+            if (specificItems != null) { return false; }
+
+
+            return true;
+        }
+
         public async Task<int> CreateBaseItem(BaseItem baseItem, int shelfId)
         {
             if (shelfId != 0)
@@ -91,7 +105,7 @@ namespace SwaggerRestApi.DBAccess
 
             await _context.SaveChangesAsync();
 
-            var savedSpecificItem = await _context.SpecificItems.Where(s => s.BaseItem.Id == baseItem.Id && s.Description == specificItem.Description).FirstOrDefaultAsync();
+            var savedSpecificItem = await _context.SpecificItems.Where(s => s.BaseItem.Id == baseItemId && s.Description == specificItem.Description).FirstOrDefaultAsync();
 
             return savedSpecificItem.Id;
         }

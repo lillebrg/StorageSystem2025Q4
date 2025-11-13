@@ -126,7 +126,7 @@ namespace SwaggerRestApi.BusineesLogic
                 baseItem.ShelfId = shelf.Id;
             }
 
-            if (baseItemCreate.barcode != null && baseItemCreate.barcode != 0) { baseItem.ModelBarcode = baseItemCreate.barcode; }
+            if (baseItemCreate.barcode != null && baseItemCreate.barcode != "") { baseItem.ModelBarcode = baseItemCreate.barcode; }
             if (baseItemCreate.image_path != null) { baseItem.Picture = baseItemCreate.image_path; }
 
             baseItem.Name = baseItemCreate.name;

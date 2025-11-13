@@ -10,10 +10,12 @@ namespace SwaggerRestApi.Controllers
     public class BaseItemController : Controller
     {
         private readonly BaseItemLogic _baseitemlogic;
+        private readonly SpecificItemLogic _specificitemlogic;
 
-        public BaseItemController(BaseItemLogic baseItemLogic)
+        public BaseItemController(BaseItemLogic baseItemLogic, SpecificItemLogic specificItemLogic)
         {
             _baseitemlogic = baseItemLogic;
+            _specificitemlogic = specificItemLogic;
         }
 
         [HttpGet]
@@ -53,9 +55,9 @@ namespace SwaggerRestApi.Controllers
 
         [HttpPost("{id}/specific-items")]
         [Authorize(Roles = "Admin, Operator")]
-        public async Task<ActionResult> CreateSpecificItems(int id)
+        public async Task<ActionResult<CreateReturnInt>> CreateSpecificItems([FromBody]SpecificItemsCreate specificItems, int id)
         {
-            return Ok();
+            return await _specificitemlogic.CreateSpecificItem(specificItems, id);
         }
     }
 }

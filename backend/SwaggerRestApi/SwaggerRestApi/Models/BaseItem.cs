@@ -12,7 +12,7 @@ namespace SwaggerRestApi.Models
 
         public string? Picture { get; set; }
 
-        public Int64? ModelBarcode { get; set; }
+        public string? ModelBarcode { get; set; }
 
         public List<SpecificItem> SpecificItems { get; set; }
 

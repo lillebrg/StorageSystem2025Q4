@@ -6,7 +6,7 @@
 
         public string description { get; set; }
 
-        public int? barcode { get; set; }
+        public string? barcode { get; set; }
 
         public string? image_path { get; set; }
 
