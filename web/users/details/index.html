@@ -13,6 +13,15 @@
     <script type="module" src="script.js"></script>
   </head>
   <body>
+     <nav class="stroke">
+    <ul>
+      <li><a href="/users">Users</a></li>
+      <li><a href="/users/details">Profile</a></li>
+      <li><a href="#">Downloads</a></li>
+      <li><a href="#">More</a></li>
+      <li><a href="#">Nice staff</a></li>
+    </ul>
+  </nav>
     <div class="container">
       <div class="componentContainer">
         <div class="card">
@@ -23,9 +32,8 @@
           <span> Person</span>
           <p class="job">Job Title</p>
 
-            <button class="button" id="editBtn">Edit</button>
-            <button class="button" id="changePasswordBtn">Change Password</button>
-
+          <button class="button" id="editBtn">Edit</button>
+          <button class="button" id="changePasswordBtn">Change Password</button>
         </div>
         <div class="table">
           <table class="responsive-table">
@@ -88,48 +96,36 @@
         </div>
       </div>
 
-        <div id="editUserModal" class="modal">
-            <div class="modalContent">
-                <span class="closeModal">&times;</span>
-                <h2>Edit Name or Email</h2>
-                <form id="editUserForm">
-                    <div class="form-container">
-                        <label for="email"><b>Email</b></label>
-                        <input type="email" placeholder="Enter email "id="email" required>
-         
-                        <label for="uname"><b>Username</b></label>
-                        <input type="text" placeholder="Enter username" id="uname" required>
-        
-                        <button id="submitEditBtn" type="submit">Save Changes</button>
-                        <div id="editprofile-error" class="error"></div>
-                    </div>
-                </form>
+      <div id="editUserModal" class="modal">
+          <form class="form modalContent">
+            <span class="closeModal">&times;</span>
+            <p class="form-title">Edit Name & Email</p>
+            <div class="input-container">
+              <input placeholder="Enter name" id="name" required/>
             </div>
-        </div>
-
-        <div id="changePasswordModal" class="modal">
-            <div class="modalContent">
-                <span class="closeModal">&times;</span>
-                <h2>Change Password</h2>
-                <form id="PasswordForm">
-                    <div class="form-container">
-                        <label for="psw"><b>Old Password</b></label>
-                        <input type="password" placeholder="Enter your current password" id="oldpsw" required>
-    
-                        <label for="psw"><b>New Password</b></label>
-                        <input type="password" placeholder="Enter the new password" id="psw" required>
-        
-                        <label for="rpsw"><b>Repeat New Password</b></label>
-                        <input type="password" placeholder="Enter the new password again" id="rpsw" required>
-        
-                        <button type="submit">Change Password</button>
-        
-                        <div id="password-error" class="error"></div>
-                    </div>
-                </form>
+            <div class="input-container">
+              <input placeholder="Enter email" type="email" id="email" required/>
             </div>
-        </div>
+            <button class="button submit" id="submitUserBtn">Save changes</button>
+          </form>
+      </div>
 
+      <div id="changePasswordModal" class="modal">
+         <form class="form modalContent">
+            <span class="closeModal">&times;</span>
+            <p class="form-title">Change Password</p>
+            <div class="input-container">
+              <input placeholder="Enter old password" type="password" id="oldPassword" required/>
+            </div>
+            <div class="input-container">
+              <input placeholder="Enter new password" type="password" id="newPassword" required/>
+            </div>
+             <div class="input-container">
+              <input placeholder="Enter new password" type="password" id="repeatNewPassword" required/>
+            </div>
+            <button class="button submit" id="submitPasswordBtn">Save changes</button>
+          </form>
+      </div>
     </div>
   </body>
 </html>

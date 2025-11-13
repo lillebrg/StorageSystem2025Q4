@@ -19,9 +19,18 @@ main {
     border-radius: 15px;
 }
 
+.toolsBar {
+  display: flex;
+  justify-content: space-between; /* pushes them to opposite sides */
+  align-items: center; /* vertically center them */
+  width: 98%;
+  margin: 1%;
+}
+
+/* #region Button */
 .button {
   position: relative;
-  padding: 10px 22px;
+  padding: 10px 15px;
   border-radius: 6px;
   border: none;
   color: #fff;
@@ -45,6 +54,7 @@ main {
   z-index: -1000;
   background-repeat: no-repeat;
 }
+/* #endregion */
 
 /* #region Table */
 /* Breakpoints converted to px (1em = 16px) */
@@ -53,6 +63,9 @@ main {
 @media (min-width: 75em) { }  /* bp-homer = 1200px */
 @media (min-width: 30em) { }  /* bp-lisa = 480px */
 
+.tableTitle{
+  margin: 5px 0 5px 0;
+}
 
 .responsive-table tbody tr {
   transition: background-color 0.2s;
@@ -79,7 +92,7 @@ main {
 }
 
 .responsive-table {
-  width: 100%;
+  width: 98%;
   margin-bottom: 1.5em;
   border-spacing: 0;
 }
@@ -291,4 +304,149 @@ main {
 
 /* #endregion */
 
+/* #region FormAndInputField */
+.form {
+  background-color: #fff;
+  display: block;
+  padding: 1rem;
+  max-width: 350px;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
 
+.form-title {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 600;
+  text-align: center;
+  color: #000;
+}
+
+.input-container {
+  position: relative;
+}
+
+.input-container input, .input-container select, .form button {
+  outline: none;
+  border: 1px solid #e5e7eb;
+  margin: 8px 0;
+}
+
+.input-container input, .input-container select {
+  background-color: #fff;
+  padding: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  width: 300px;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.submit {
+  width: 100%;
+}
+/* #endregion */
+
+/* #region NavigationBar */
+nav {
+  width: 100%;
+  margin: 0 auto;
+  box-shadow: 0px 5px 0px lightgray;
+}
+
+/* By Dominik Biedebach @domobch */
+nav ul {
+  list-style: none;
+  text-align: center;
+}
+nav ul li {
+  display: inline-block;
+}
+nav ul li a {
+  display: block;
+  padding: 5px;
+  text-decoration: none;
+  color: #7d2ae8;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin: 0 10px;
+}
+nav ul li a,
+nav ul li a:after,
+nav ul li a:before {
+  transition: all .5s;
+}
+nav ul li a:hover {
+  color: #a885eb;
+}
+nav.stroke ul li a,
+nav.fill ul li a {
+  position: relative;
+}
+nav.stroke ul li a:after,
+nav.fill ul li a:after {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 0%;
+  content: '.';
+  color: transparent;
+  height: 1px;
+}
+nav.stroke ul li a:hover:after {
+  width: 100%;
+}
+/* #endregion */
+
+/* #region Modal */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+
+    .modalContent {
+    margin: auto;
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+  }
+  
+  /* Add Animation */
+  @-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0} 
+    to {top:0; opacity:1}
+  }
+  
+  @keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+  }
+  
+  /* The Close Button */
+.closeModal {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .closeModal:hover,
+  .closeModal:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+/* #endregion */

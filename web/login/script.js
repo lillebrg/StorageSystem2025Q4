@@ -1,4 +1,4 @@
-import { loginRequest } from '../api.js'
+import { loginRequest } from "../services/user.service.js";
 
 const usernameInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
@@ -23,6 +23,6 @@ async function handleLogin(event) {
     return;
   }
 
-  await loginRequest(username, password);
-  window.location.href='/users'
+  //await loginRequest(username, password);
+  window.location.href='/users/'
 }
