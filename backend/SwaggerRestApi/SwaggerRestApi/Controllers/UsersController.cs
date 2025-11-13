@@ -26,14 +26,14 @@ namespace SwaggerRestApi.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<List<User>>> GetAllUser()
+        public async Task<ActionResult<List<UsersDTO>>> GetAllUser()
         {
             return await _logic.GetAllUser();
         }
 
         [HttpGet("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<UserDto>> GetUser(int id)
         {
             return await _logic.GetUser(id);
         }

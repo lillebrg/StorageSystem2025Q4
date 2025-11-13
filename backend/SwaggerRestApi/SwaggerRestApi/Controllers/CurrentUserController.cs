@@ -21,7 +21,7 @@ namespace SwaggerRestApi.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin, Operator, User")]
-        public async Task<ActionResult<User>> GetCurrentUser()
+        public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
             var claims = HttpContext.User.Claims;
             string userIdString = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;

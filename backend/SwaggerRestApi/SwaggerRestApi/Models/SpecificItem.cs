@@ -6,7 +6,7 @@
 
         public string? Description { get; set; }
 
-        public int Barcode { get; set; }
+        public Int64 Barcode { get; set; }
 
         public int? BorrowedTo { get; set; }
 

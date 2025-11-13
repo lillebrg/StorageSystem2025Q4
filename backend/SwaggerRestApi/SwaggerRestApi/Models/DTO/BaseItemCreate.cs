@@ -9,5 +9,7 @@
         public int? barcode { get; set; }
 
         public string? image_path { get; set; }
+
+        public int? shelf_id { get; set; }
     }
 }

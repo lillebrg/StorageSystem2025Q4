@@ -10,14 +10,14 @@ namespace SwaggerRestApi.Models
 
         public string Description { get; set; }
 
-        public string Picture { get; set; }
+        public string? Picture { get; set; }
 
-        public int ModelBarcode { get; set; }
+        public Int64? ModelBarcode { get; set; }
 
         public List<SpecificItem> SpecificItems { get; set; }
 
-        public int ShelfId { get; set; }
+        public int? ShelfId { get; set; }
 
-        public Shelf Shelf { get; set; }
+        public Shelf? Shelf { get; set; }
     }
 }
