@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import tech.mercantec.storagesystem.R
@@ -21,9 +20,7 @@ class LoginActivity : AppCompatActivity() {
             val email = findViewById<EditText>(R.id.email_input).text.toString()
             val password = findViewById<EditText>(R.id.password_input).text.toString()
 
-            makeApiRequest(this, { login(email, password) }) { result ->
-                Toast.makeText(this, result.email, Toast.LENGTH_LONG).show()
-
+            makeApiRequest(this, { login(email, password) }) {
                 val intent = Intent(this, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // Prevent going back to login screen
                 startActivity(intent)
