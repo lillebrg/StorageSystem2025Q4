@@ -1,9 +1,10 @@
 name: CI
 on:
   push:
-    branches: [ "main", "feature/github-workflow" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "main", "feature/github-workflow" ]
+    branches: [ "main" ]
+  workflow_dispatch:
 jobs:
   build_backend:
     name: build backend
