@@ -86,9 +86,12 @@ internal class Program
         // Adds DBAccess
         builder.Services.AddScoped<UserDBAccess>();
         builder.Services.AddScoped<ItemDBAccess>();
+        builder.Services.AddScoped<ShelfDBAccess>();
 
         // Adds Business logic
         builder.Services.AddScoped<UserLogic>();
+        builder.Services.AddScoped<BaseItemLogic>();
+        builder.Services.AddScoped<SpecificItemLogic>();
 
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
@@ -108,7 +111,8 @@ internal class Program
 
         await using var context = app.Services.CreateAsyncScope().ServiceProvider.GetService<DBContext>();
         SeedData seedData = new SeedData(context);
-        await seedData.StartData();
+        await seedData.StartUserData();
+        await seedData.StartStorageData();
 
         app.UseHttpsRedirection();
 
