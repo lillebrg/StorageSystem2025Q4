@@ -5,4 +5,7 @@
     <string name="email_hint">john@example.com</string>
     <string name="password">Password</string>
     <string name="password_hint">&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;</string>
+    <string name="scan">Scan</string>
+    <string name="borrowed_items">Borrowed items</string>
+    <string name="logout">Log out</string>
 </resources>

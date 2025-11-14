@@ -113,6 +113,8 @@ fun <T> makeApiRequest(ctx: Activity, request: () -> T, callback: (T) -> Unit) {
             }
         }
 
-        callback(result)
+        ctx.runOnUiThread {
+            callback(result)
+        }
     }
 }
