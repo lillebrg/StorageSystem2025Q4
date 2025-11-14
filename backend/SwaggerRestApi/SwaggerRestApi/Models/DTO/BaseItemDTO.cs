@@ -1,6 +1,6 @@
 ﻿namespace SwaggerRestApi.Models.DTO
 {
-    public class BaseItemCreate
+    public class BaseItemDTO
     {
         public string name { get; set; }
 
@@ -8,8 +8,8 @@
 
         public string? barcode { get; set; }
 
-        public string? image_path { get; set; }
+        public string? image_url { get; set; }
 
-        public int? shelf_id { get; set; }
+        public List<SpecificItemsDTO> specific_items { get; set; }
     }
 }
