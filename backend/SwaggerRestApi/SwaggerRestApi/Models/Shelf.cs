@@ -6,8 +6,7 @@
 
         public int ShelfNo { get; set; }
 
-        public int Barcode { get; set; }
-
+        public Int64 Barcode { get; set; }
 
         public List<BaseItem> BaseItems { get; set; }
 

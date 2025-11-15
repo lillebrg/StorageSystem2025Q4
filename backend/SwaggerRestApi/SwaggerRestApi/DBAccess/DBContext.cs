@@ -31,7 +31,7 @@ namespace SwaggerRestApi.DBAccess
                 .IsUnique();
 
             modelBuilder.Entity<User>()
-                .HasIndex(u => u.UserName)
+                .HasIndex(u => u.Name)
                 .IsUnique();
 
             modelBuilder.Entity<Storage>()
@@ -49,8 +49,7 @@ namespace SwaggerRestApi.DBAccess
             modelBuilder.Entity<Shelf>()
                 .HasMany(u => u.BaseItems)
                 .WithOne(r => r.Shelf)
-                .HasForeignKey(r => r.ShelfId)
-                .IsRequired();
+                .HasForeignKey(r => r.ShelfId);
 
             modelBuilder.Entity<BaseItem>()
                 .HasMany(u => u.SpecificItems)
