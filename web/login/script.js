@@ -18,11 +18,13 @@ async function handleLogin(event) {
     return;
   }
 
-  if (!username.includes("@",".")) {
-    alert("Please enter a valid email address.");
-    return;
-  }
+  // if (!username.includes("@",".")) {
+  //   alert("Please enter a valid email address.");
+  //   return;
+  // }
 
-  //await loginRequest(username, password);
-  window.location.href='/users/'
+  var response = await loginRequest(username, password);
+  if(response){
+      window.location.href='/users'
+  }
 }
