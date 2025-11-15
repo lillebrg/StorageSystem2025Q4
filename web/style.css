@@ -10,30 +10,443 @@ main {
 	margin: auto;
 }
 
-.container {
-	background-color: white;
-	border-radius: 8px;
-	padding: 2rem;
-	box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
+.container{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+  background: lightgray;
+    border-radius: 15px;
 }
 
-button {
-	font-family: "Open Sans", sans-serif;
-	cursor: pointer;
-	font-size: 1rem;
+.toolsBar {
+  display: flex;
+  justify-content: space-between; /* pushes them to opposite sides */
+  align-items: center; /* vertically center them */
+  width: 98%;
+  margin: 1%;
 }
 
-button.primary {
-	background-color: #990AE3;
-	color: white;
-	border-radius: 8px;
-	border: none;
-	padding: 0.5rem 1rem;
-	box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
-	transition: box-shadow 200ms ease-in-out;
+/* #region Button */
+.button {
+  position: relative;
+  padding: 10px 15px;
+  border-radius: 6px;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  background-color: #7d2ae8;
+  transition: all 0.2s ease;
 }
 
-button.primary:hover {
-	box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+.button:active {
+  transform: scale(0.96);
 }
 
+.button:before,
+.button:after {
+  position: absolute;
+  content: "";
+  width: 150%;
+  left: 50%;
+  height: 100%;
+  transform: translateX(-50%);
+  z-index: -1000;
+  background-repeat: no-repeat;
+}
+/* #endregion */
+
+/* #region Table */
+/* Breakpoints converted to px (1em = 16px) */
+@media (min-width: 48em) { }  /* bp-bart = 768px */
+@media (min-width: 62em) { }  /* bp-marge = 992px */
+@media (min-width: 75em) { }  /* bp-homer = 1200px */
+@media (min-width: 30em) { }  /* bp-lisa = 480px */
+
+.tableTitle{
+  margin: 5px 0 5px 0;
+}
+
+.responsive-table tbody tr {
+  transition: background-color 0.2s;
+}
+
+.responsive-table tbody tr:hover {
+/* light highlight, added important to make hover work for gray table rows */
+  background-color: rgba(125, 44, 231, 0.2) !important; 
+  cursor: pointer;
+}
+
+
+@media (min-width: 768px) {
+  .container {
+    margin: 2%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    margin: 2em auto;
+    max-width: 1200px;
+  }
+}
+
+.responsive-table {
+  width: 98%;
+  margin-bottom: 1.5em;
+  border-spacing: 0;
+}
+
+@media (min-width: 768px) {
+  .responsive-table {
+    font-size: .9em;
+  }
+}
+
+@media (min-width: 992px) {
+  .responsive-table {
+    font-size: 1em;
+  }
+}
+
+.responsive-table thead {
+  position: absolute;
+  clip: rect(1px 1px 1px 1px);
+  padding: 0;
+  border: 0;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .responsive-table thead {
+    position: relative;
+    clip: auto;
+    height: auto;
+    width: auto;
+    overflow: auto;
+  }
+}
+
+.responsive-table thead th {
+  background-color: #7d2ce7;
+  border: 1px solid rgb(41, 0, 62);
+  font-weight: normal;
+  text-align: center;
+  color: white;
+}
+
+.responsive-table thead th:first-of-type {
+  text-align: left;
+}
+
+.responsive-table tbody,
+.responsive-table tr,
+.responsive-table th,
+.responsive-table td {
+  display: block;
+  padding: 0;
+  text-align: left;
+  white-space: normal;
+}
+
+@media (min-width: 768px) {
+  .responsive-table tr {
+    display: table-row;
+  }
+}
+
+.responsive-table th,
+.responsive-table td {
+  padding: .5em;
+  vertical-align: middle;
+}
+
+@media (min-width: 480px) {
+  .responsive-table th,
+  .responsive-table td {
+    padding: .75em .5em;
+  }
+}
+
+@media (min-width: 768px) {
+  .responsive-table th,
+  .responsive-table td {
+    display: table-cell;
+    padding: .5em;
+  }
+}
+
+@media (min-width: 992px) {
+  .responsive-table th,
+  .responsive-table td {
+    padding: .75em .5em;
+  }
+}
+
+@media (min-width: 1200px) {
+  .responsive-table th,
+  .responsive-table td {
+    padding: .75em;
+  }
+}
+
+.responsive-table caption {
+  margin-bottom: 1em;
+  font-size: 1em;
+  font-weight: bold;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .responsive-table caption {
+    font-size: 1.5em;
+  }
+}
+
+.responsive-table tfoot {
+  font-size: .8em;
+  font-style: italic;
+}
+
+@media (min-width: 992px) {
+  .responsive-table tfoot {
+    font-size: .9em;
+  }
+}
+
+@media (min-width: 768px) {
+  .responsive-table tbody {
+    display: table-row-group;
+  }
+}
+
+.responsive-table tbody tr {
+  margin-bottom: 1em;
+}
+
+@media (min-width: 768px) {
+  .responsive-table tbody tr {
+    display: table-row;
+    border-width: 1px;
+  }
+}
+
+.responsive-table tbody tr:last-of-type {
+  margin-bottom: 0;
+}
+
+@media (min-width: 768px) {
+  .responsive-table tbody tr:nth-of-type(even) {
+    background-color: rgba(0,0,0,.12);
+  }
+}
+
+.responsive-table tbody th[scope="row"] {
+  background-color: rgb(41, 0, 62);
+  color: white;
+}
+
+@media (min-width: 480px) {
+  .responsive-table tbody th[scope="row"] {
+    border-left: 1px solid rgb(41, 0, 62);
+    border-bottom: 1px solid rgb(41, 0, 62);
+  }
+}
+
+@media (min-width: 768px) {
+  .responsive-table tbody th[scope="row"] {
+    background-color: transparent;
+    color: rgba(0,0,0,.87);
+    text-align: left;
+  }
+}
+
+.responsive-table tbody td {
+  text-align: right;
+}
+
+@media (min-width: 768px) {
+  .responsive-table tbody td {
+    border-left: 1px solid rgb(41, 0, 62);
+    border-bottom: 1px solid rgb(41, 0, 62);
+    text-align: center;
+  }
+
+  .responsive-table tbody td:last-of-type {
+    border-right: 1px solid rgb(41, 0, 62);
+  }
+}
+
+.responsive-table tbody td[data-type="currency"] {
+  text-align: right;
+}
+
+.responsive-table tbody td[data-title]:before {
+  content: attr(data-title);
+  float: left;
+  font-size: .8em;
+  color: rgba(0,0,0,.54);
+}
+
+@media (min-width: 480px) {
+  .responsive-table tbody td[data-title]:before {
+    font-size: .9em;
+  }
+}
+
+@media (min-width: 768px) {
+  .responsive-table tbody td[data-title]:before {
+    content: none;
+  }
+}
+
+/* #endregion */
+
+/* #region FormAndInputField */
+.form {
+  background-color: #fff;
+  display: block;
+  padding: 1rem;
+  max-width: 350px;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.form-title {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 600;
+  text-align: center;
+  color: #000;
+}
+
+.input-container {
+  position: relative;
+}
+
+.input-container input, .input-container select, .form button {
+  outline: none;
+  border: 1px solid #e5e7eb;
+  margin: 8px 0;
+}
+
+.input-container input, .input-container select {
+  background-color: #fff;
+  padding: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  width: 300px;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.submit {
+  width: 100%;
+}
+/* #endregion */
+
+/* #region NavigationBar */
+nav {
+  width: 100%;
+  margin: 0 auto;
+  box-shadow: 0px 5px 0px lightgray;
+}
+
+/* By Dominik Biedebach @domobch */
+nav ul {
+  list-style: none;
+  text-align: center;
+}
+nav ul li {
+  display: inline-block;
+}
+nav ul li a {
+  display: block;
+  padding: 5px;
+  text-decoration: none;
+  color: #7d2ae8;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin: 0 10px;
+}
+nav ul li a,
+nav ul li a:after,
+nav ul li a:before {
+  transition: all .5s;
+}
+nav ul li a:hover {
+  color: #a885eb;
+}
+nav.stroke ul li a,
+nav.fill ul li a {
+  position: relative;
+}
+nav.stroke ul li a:after,
+nav.fill ul li a:after {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 0%;
+  content: '.';
+  color: transparent;
+  height: 1px;
+}
+nav.stroke ul li a:hover:after {
+  width: 100%;
+}
+/* #endregion */
+
+/* #region Modal */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+
+    .modalContent {
+    margin: auto;
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+  }
+  
+  /* Add Animation */
+  @-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0} 
+    to {top:0; opacity:1}
+  }
+  
+  @keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+  }
+  
+  /* The Close Button */
+.closeModal {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .closeModal:hover,
+  .closeModal:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+/* #endregion */
