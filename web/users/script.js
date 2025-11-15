@@ -17,8 +17,3 @@ CreateBtn.onclick = () => {
 document.getElementById('closeCreateUserBtn').onclick = () => {
     createUserModal.style.display = "none";
 };
-window.onclick = (event) => {
-    if (event.target == createUserModal) {
-        createUserModal.style.display = "none";
-    }
-};

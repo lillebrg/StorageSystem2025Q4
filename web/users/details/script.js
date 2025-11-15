@@ -40,12 +40,4 @@ document.querySelectorAll(".closeModal").forEach((closeBtn) => {
     };
 });
 
-// Close modals when clicking outside
-window.onclick = (event) => {
-    if (event.target == editUserModal || event.target == changePasswordModal) {
-        editUserModal.style.display = "none";
-        changePasswordModal.style.display = "none";
-    }
-};
-
 
