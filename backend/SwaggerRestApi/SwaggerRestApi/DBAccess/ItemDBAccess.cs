@@ -113,7 +113,7 @@ namespace SwaggerRestApi.DBAccess
 
         public async Task DeleteSpecificItem(SpecificItem specificItem)
         {
-            _context.BaseItems.Remove(baseItem);
+            _context.SpecificItems.Remove(specificItem);
 
             await _context.SaveChangesAsync();
         }
