@@ -6,10 +6,9 @@
 
         public string? Description { get; set; }
 
-        public int Barcode { get; set; }
+        public string Barcode { get; set; }
 
-        public int? OnLoanTo { get; set; }
-
+        public int? BorrowedTo { get; set; }
 
         public int BaseItemId { get; set; }
 

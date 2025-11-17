@@ -50,7 +50,7 @@ namespace SwaggerRestApi.BusineesLogic
         }
 
         public async Task<ActionResult> DeleteSpecificItem(int id)
-        {
+            {
             var specificItem = await _itemdbaccess.GetSpecificItem(id);
 
             if (specificItem == null) { return new NotFoundObjectResult(new { message = "Could not find specific item" }); }

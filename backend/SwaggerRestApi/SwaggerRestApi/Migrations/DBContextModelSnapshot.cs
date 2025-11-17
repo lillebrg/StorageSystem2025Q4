@@ -26,18 +26,17 @@ namespace SwaggerRestApi.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ModelBarcode")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("ModelBarcode")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Picture")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ShelfId")
+                    b.Property<int?>("ShelfId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -92,7 +91,7 @@ namespace SwaggerRestApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Barcode")
+                    b.Property<long>("Barcode")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("RackId")
@@ -114,17 +113,18 @@ namespace SwaggerRestApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Barcode")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Barcode")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("BaseItemId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("BorrowedTo")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
-
-                    b.Property<int?>("OnLoanTo")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -154,6 +154,10 @@ namespace SwaggerRestApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.PrimitiveCollection<string>("BorrowedItems")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("ChangePasswordOnNextLogin")
                         .HasColumnType("INTEGER");
 
@@ -161,7 +165,7 @@ namespace SwaggerRestApi.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.PrimitiveCollection<string>("OnLoanItems")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -169,11 +173,7 @@ namespace SwaggerRestApi.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Roles")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UserName")
+                    b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -182,7 +182,7 @@ namespace SwaggerRestApi.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.HasIndex("UserName")
+                    b.HasIndex("Name")
                         .IsUnique();
 
                     b.ToTable("Users");
@@ -192,9 +192,7 @@ namespace SwaggerRestApi.Migrations
                 {
                     b.HasOne("SwaggerRestApi.Models.Shelf", "Shelf")
                         .WithMany("BaseItems")
-                        .HasForeignKey("ShelfId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ShelfId");
 
                     b.Navigation("Shelf");
                 });
