@@ -1,27 +1,45 @@
-import { url } from "/services/apiurl.js";
+import { request } from "./api.js";
 
-export async function loginRequest(email, password) {
-      try {
-    const response = await fetch(`${url}/user/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
+export function get() {
+  return request("GET", `/user`);
+}
 
-    if (!response.ok) {
-      return false;
-    }
-    
-    const data = await response.json();
-    sessionStorage.setItem("role", data.role);
-    sessionStorage.setItem("token", data.access_token);
-    
-    return true;
+export function getAll() {
+  return request("GET", `/users`);
+}
 
-  } catch (error) {
-    alert(error.message);
-    return false;
-  }
+export function create(name, email, password, role) {
+  return request("POST", "/users/create", {
+    name,
+    email,
+    password,
+    role,
+  });
+}
+
+export function update(email, username) {
+  return request("PUT", "/user/update", {
+    email,
+    username,
+  });
+}
+
+export function updatePassword(oldPassword, newPassword) {
+  return request("PUT", "/user/change-password", {
+    oldPassword,
+    newPassword,
+  });
+}
+
+export function login(email, password) {
+  return request("POST", "/user/login", {
+    email,
+    password,
+  });
+}
+
+export function logout() {
+  sessionStorage.removeItem("token");
+  sessionStorage.removeItem("role");
+  window.location.href = "/";
 }

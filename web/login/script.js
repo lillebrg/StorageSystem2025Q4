@@ -1,4 +1,4 @@
-import { loginRequest } from "../services/user.service.js";
+import { login } from "../services/user.service.js";
 
 const usernameInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
@@ -23,8 +23,10 @@ async function handleLogin(event) {
   //   return;
   // }
 
-  var response = await loginRequest(username, password);
-  if(response){
-      window.location.href='/users'
+  var response = await login(username, password);
+  if (response) {
+    sessionStorage.setItem("token", response.access_token);
+    sessionStorage.setItem("role", response.role);
+    window.location.href = "/users";
   }
 }
