@@ -8,20 +8,22 @@ namespace SwaggerRestApi.BusineesLogic
     public class SpecificItemLogic
     {
         private readonly ItemDBAccess _itemdbaccess;
+        private readonly SharedLogic _sharedlogic;
 
-        public SpecificItemLogic(ItemDBAccess itemmdbaccess)
+        public SpecificItemLogic(ItemDBAccess itemmdbaccess, SharedLogic sharedLogic)
         {
             _itemdbaccess = itemmdbaccess;
+            _sharedlogic = sharedLogic;
         }
 
         public async Task<ActionResult<CreateReturnInt>> CreateSpecificItem(SpecificItemsCreate specificItemsCreate, int baseItemId)
         {
-            if (specificItemsCreate == null) { return new BadRequestObjectResult(new { message = "Specific Items cant be null" }); }
+            if (specificItemsCreate == null) { return new BadRequestObjectResult(new { message = "Specific Items can not be null" }); }
 
             SpecificItem specificItem = new SpecificItem();
 
             specificItem.Description = specificItemsCreate.description;
-            specificItem.Barcode = await CreateRandomBarcode();
+            specificItem.Barcode = await _sharedlogic.CreateRandomBarcode();
 
             CreateReturnInt result = new CreateReturnInt();
 
@@ -32,26 +34,30 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(result);
         }
 
-        private async Task<string> CreateRandomBarcode()
+        public async Task<ActionResult> UpdateSpecificItem(SpecificItemUpdate specificItemUpdate, int id)
         {
-            bool flag = true;
-            string barcode = "";
+            if (specificItemUpdate == null) { return new BadRequestObjectResult(new { message = "Specific Item Desciption can not be null" }); }
 
-            while (flag)
+            var specificItem = await _itemdbaccess.GetSpecificItem(id);
+
+            if (specificItem == null) { return new NotFoundObjectResult(new { message = "Could not find specific item" }); }
+
+            specificItem.Description = specificItemUpdate.description;
+
+            await _itemdbaccess.UpdateSpecificItem(specificItem);
+
+            return new OkObjectResult(true);
+        }
+
+        public async Task<ActionResult> DeleteSpecificItem(int id)
             {
-                Random random = new Random();
-                barcode = "";
+            var specificItem = await _itemdbaccess.GetSpecificItem(id);
 
-                for (int i = 0; i < 13; i++)
-                {
-                    barcode += random.Next(10);
-                }
+            if (specificItem == null) { return new NotFoundObjectResult(new { message = "Could not find specific item" }); }
 
-                flag = await _itemdbaccess.CheckForExistingBarcode(barcode);
-                flag = !flag;
-            }
+            await _itemdbaccess.DeleteSpecificItem(specificItem);
 
-            return barcode;
+            return new OkObjectResult(true);
         }
     }
 }

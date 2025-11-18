@@ -93,6 +93,8 @@ internal class Program
         builder.Services.AddScoped<BaseItemLogic>();
         builder.Services.AddScoped<SpecificItemLogic>();
 
+        builder.Services.AddScoped<SharedLogic>();
+
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
 

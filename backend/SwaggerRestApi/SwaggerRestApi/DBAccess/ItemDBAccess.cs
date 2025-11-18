@@ -12,9 +12,18 @@ namespace SwaggerRestApi.DBAccess
             _context = context;
         }
 
-        public async Task<SpecificItem> GetSpecificItemAndBaseItem(int specificId)
+        public async Task<SpecificItem> GetSpecificItemAndBaseItem(int specificItemId)
         {
-            var item = await _context.SpecificItems.Include(s => s.BaseItem).FirstOrDefaultAsync(s => s.Id == specificId);
+            var item = await _context.SpecificItems.Include(s => s.BaseItem).FirstOrDefaultAsync(s => s.Id == specificItemId);
+
+            if (item == null) { return new SpecificItem(); }
+
+            return item;
+        }
+
+        public async Task<SpecificItem> GetSpecificItem(int specificItemId)
+        {
+            var item = await _context.SpecificItems.FirstOrDefaultAsync(s => s.Id == specificItemId);
 
             if (item == null) { return new SpecificItem(); }
 
@@ -88,9 +97,23 @@ namespace SwaggerRestApi.DBAccess
             await _context.SaveChangesAsync();
         }
 
+        public async Task UpdateSpecificItem(SpecificItem specificItem)
+        {
+            _context.Entry(specificItem).State = EntityState.Modified;
+
+            await _context.SaveChangesAsync();
+        }
+
         public async Task DeleteBaseItem(BaseItem baseItem)
         {
             _context.BaseItems.Remove(baseItem);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteSpecificItem(SpecificItem specificItem)
+        {
+            _context.SpecificItems.Remove(specificItem);
 
             await _context.SaveChangesAsync();
         }
