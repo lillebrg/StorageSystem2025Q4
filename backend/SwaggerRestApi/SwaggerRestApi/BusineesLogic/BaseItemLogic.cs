@@ -13,12 +13,14 @@ namespace SwaggerRestApi.BusineesLogic
         private readonly ItemDBAccess _itemdbaccess;
         private readonly ShelfDBAccess _shelfdbaccess;
         private readonly UserDBAccess _userdbaccess;
+        private readonly IConfiguration _configuration;
 
-        public BaseItemLogic(ItemDBAccess itemDBAccess, ShelfDBAccess shelfDBAccess, UserDBAccess userDBAccess)
+        public BaseItemLogic(ItemDBAccess itemDBAccess, ShelfDBAccess shelfDBAccess, UserDBAccess userDBAccess, IConfiguration configuration)
         {
             _itemdbaccess = itemDBAccess;
             _shelfdbaccess = shelfDBAccess;
             _userdbaccess = userDBAccess;
+            _configuration = configuration;
         }
 
         public async Task<ActionResult<List<BaseItemSearch>>> GetBaseItemBySearch(int limit, int offset, string? search)
@@ -28,6 +30,7 @@ namespace SwaggerRestApi.BusineesLogic
                 search = "";
             }
 
+            var imageBaseURL = _configuration["ImageUrl"];
             var items = await _itemdbaccess.GetAllBaseItems(limit, offset, search);
 
             if (items.Count == 0) { return new OkObjectResult(new List<BaseItemSearch>()); }
@@ -42,7 +45,7 @@ namespace SwaggerRestApi.BusineesLogic
                     name = item.Name,
                     description = item.Description,
                     barcode = item.ModelBarcode,
-                    image_url = item.Picture,
+                    image_url = imageBaseURL + item.Picture,
                     specific_items_count = item.SpecificItems.Count
                 };
 
@@ -76,6 +79,7 @@ namespace SwaggerRestApi.BusineesLogic
 
         public async Task<ActionResult<BaseItemGet>> GetBaseItem(int id)
         {
+            var imageBaseURL = _configuration["ImageUrl"];
             var baseItem = await _itemdbaccess.GetBaseItem(id);
 
             if (baseItem == null) { return new NotFoundObjectResult(new { message = "Could not fint base item" }); }
@@ -86,7 +90,7 @@ namespace SwaggerRestApi.BusineesLogic
                 name = baseItem.Name,
                 description = baseItem.Description,
                 barcode = baseItem.ModelBarcode,
-                image_url = baseItem.Picture,
+                image_url = imageBaseURL + baseItem.Picture,
                 specific_items = new List<SpecificItemsGet>()
             };
 

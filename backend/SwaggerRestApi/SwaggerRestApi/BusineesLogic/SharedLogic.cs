@@ -10,16 +10,20 @@ namespace SwaggerRestApi.BusineesLogic
         private readonly ItemDBAccess _itemdbaccess;
         private readonly UserDBAccess _userdbaccess;
         private readonly ShelfDBAccess _shelfdbaccess;
+        private readonly IConfiguration _configuration;
 
-        public SharedLogic(ItemDBAccess itemDBAccess, UserDBAccess userDBAccess, ShelfDBAccess shelfDBAccess)
+        public SharedLogic(ItemDBAccess itemDBAccess, UserDBAccess userDBAccess, ShelfDBAccess shelfDBAccess, IConfiguration configuration)
         {
             _itemdbaccess = itemDBAccess;
             _userdbaccess = userDBAccess;
             _shelfdbaccess = shelfDBAccess;
+            _configuration = configuration;
         }
 
         public async Task<ActionResult<ScannedBarcode>> GetScannedItem(string barcode)
         {
+            var imageBaseURL = _configuration["ImageUrl"];
+
             var baseItem = await _itemdbaccess.GetBaseItemFromBarcode(barcode);
 
             if (baseItem.Id != 0)
@@ -32,7 +36,7 @@ namespace SwaggerRestApi.BusineesLogic
 
                 scannedItem.base_item.id = baseItem.Id;
                 scannedItem.base_item.name = baseItem.Name;
-                scannedItem.base_item.image_url = baseItem.Picture;
+                scannedItem.base_item.image_url = imageBaseURL + baseItem.Picture;
                 scannedItem.base_item.description = baseItem.Description;
                 scannedItem.base_item.specific_items = new List<SpecificItemFromBaseItemBarcode>();
 
@@ -64,7 +68,7 @@ namespace SwaggerRestApi.BusineesLogic
                 scannedItem.specific_item.base_item = new BaseItemFromSpecificItemBarcode();
                 scannedItem.specific_item.base_item.id = specificItem.BaseItemId;
                 scannedItem.specific_item.base_item.name = specificItem.BaseItem.Name;
-                scannedItem.specific_item.base_item.image_url = specificItem.BaseItem.Picture;
+                scannedItem.specific_item.base_item.image_url = imageBaseURL + specificItem.BaseItem.Picture;
                 scannedItem.specific_item.base_item.description = specificItem.BaseItem.Description;
 
 
@@ -102,7 +106,7 @@ namespace SwaggerRestApi.BusineesLogic
                         id = item.Id,
                         name = item.Name,
                         description = item.Description,
-                        image_url = item.Picture
+                        image_url = imageBaseURL + item.Picture
                     };
                     scannedItem.shelf.BaseItems.Add(baseItemFromShelf);
                 }
