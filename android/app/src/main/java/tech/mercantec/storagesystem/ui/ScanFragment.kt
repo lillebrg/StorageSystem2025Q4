@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.OptIn
 import androidx.camera.core.CameraSelector
@@ -30,6 +31,7 @@ import java.util.concurrent.Executors
 class ScanFragment : Fragment() {
     private val CAMERA_PERMISSION_REQUEST_CODE = 200
     private lateinit var previewView: PreviewView
+    private lateinit var permissionNoticeView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +41,7 @@ class ScanFragment : Fragment() {
         if (cameraPermission == PERMISSION_GRANTED) {
             showCamera()
         } else {
-            requireActivity().requestPermissions(arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
+            requestPermissions(arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
         }
     }
 
@@ -51,8 +53,9 @@ class ScanFragment : Fragment() {
         if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults.contains(PERMISSION_GRANTED)) {
                 showCamera()
-            } else {
-                // TODO handle rejection
+
+                previewView.visibility = View.VISIBLE
+                permissionNoticeView.visibility = View.GONE
             }
 
             return
@@ -74,9 +77,8 @@ class ScanFragment : Fragment() {
 
             val imageAnalyzer = ImageAnalysis.Builder().build().also {
                 it.setAnalyzer(Executors.newSingleThreadExecutor()) { imageProxy ->
-                    Log.d("StorageSystem", "Analyzing image")
-                    val image = imageProxy.image?.run { InputImage.fromMediaImage(this, imageProxy.imageInfo.rotationDegrees) }
-                        ?: InputImage.fromBitmap(imageProxy.toBitmap(), imageProxy.imageInfo.rotationDegrees)
+                    if (imageProxy.image == null) return@setAnalyzer
+                    val image = InputImage.fromMediaImage(imageProxy.image!!, imageProxy.imageInfo.rotationDegrees)
 
                     scanner.process(image)
                         .addOnSuccessListener { barcodes ->
@@ -108,6 +110,11 @@ class ScanFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_scan, container, false)
 
         previewView = view.findViewById(R.id.preview)
+        permissionNoticeView = view.findViewById(R.id.permission_required)
+
+        val hasCameraPermission = checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PERMISSION_GRANTED
+        previewView.visibility = if (hasCameraPermission) View.VISIBLE else View.GONE
+        permissionNoticeView.visibility = if (hasCameraPermission) View.GONE else View.VISIBLE
 
         return view
     }
