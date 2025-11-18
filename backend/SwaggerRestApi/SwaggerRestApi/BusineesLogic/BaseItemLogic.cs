@@ -2,6 +2,9 @@
 using SwaggerRestApi.DBAccess;
 using SwaggerRestApi.Models;
 using SwaggerRestApi.Models.DTO;
+using SwaggerRestApi.Models.DTO.BaseItems;
+using SwaggerRestApi.Models.DTO.SpecificItems;
+using SwaggerRestApi.Models.DTO.User;
 
 namespace SwaggerRestApi.BusineesLogic
 {
@@ -71,24 +74,25 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(result);
         }
 
-        public async Task<ActionResult<BaseItemDTO>> GetBaseItem(int id)
+        public async Task<ActionResult<BaseItemGet>> GetBaseItem(int id)
         {
             var baseItem = await _itemdbaccess.GetBaseItem(id);
 
             if (baseItem == null) { return new NotFoundObjectResult(new { message = "Could not fint base item" }); }
 
-            BaseItemDTO result = new BaseItemDTO
+            BaseItemGet result = new BaseItemGet
             {
+                id = baseItem.Id,
                 name = baseItem.Name,
                 description = baseItem.Description,
                 barcode = baseItem.ModelBarcode,
                 image_url = baseItem.Picture,
-                specific_items = new List<SpecificItemsDTO>()
+                specific_items = new List<SpecificItemsGet>()
             };
 
             foreach (var item in baseItem.SpecificItems)
             {
-                SpecificItemsDTO specificItem = new SpecificItemsDTO();
+                SpecificItemsGet specificItem = new SpecificItemsGet();
 
                 if (item.BorrowedTo != null)
                 {

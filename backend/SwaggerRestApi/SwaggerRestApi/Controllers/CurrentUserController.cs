@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SwaggerRestApi.BusineesLogic;
 using SwaggerRestApi.Models;
-using SwaggerRestApi.Models.DTO;
+using SwaggerRestApi.Models.DTO.User;
 using System.Security.Claims;
 
 namespace SwaggerRestApi.Controllers
@@ -21,7 +21,7 @@ namespace SwaggerRestApi.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin, Operator, User")]
-        public async Task<ActionResult<UserDto>> GetCurrentUser()
+        public async Task<ActionResult<UserGet>> GetCurrentUser()
         {
             var claims = HttpContext.User.Claims;
             string userIdString = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;

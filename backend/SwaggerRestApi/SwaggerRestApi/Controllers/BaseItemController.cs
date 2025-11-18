@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using SwaggerRestApi.BusineesLogic;
 using SwaggerRestApi.Models.DTO;
+using SwaggerRestApi.Models.DTO.BaseItems;
+using SwaggerRestApi.Models.DTO.SpecificItems;
 
 namespace SwaggerRestApi.Controllers
 {
@@ -34,7 +36,7 @@ namespace SwaggerRestApi.Controllers
 
         [HttpGet("{id}")]
         [Authorize(Roles = "Admin, Operator, User")]
-        public async Task<ActionResult<BaseItemDTO>> GetBaseItem(int id)
+        public async Task<ActionResult<BaseItemGet>> GetBaseItem(int id)
         {
             return await _baseitemlogic.GetBaseItem(id);
         }

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SwaggerRestApi.BusineesLogic;
 using SwaggerRestApi.Models;
-using SwaggerRestApi.Models.DTO;
+using SwaggerRestApi.Models.DTO.User;
 
 namespace SwaggerRestApi.Controllers
 {
@@ -33,7 +33,7 @@ namespace SwaggerRestApi.Controllers
 
         [HttpGet("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<UserDto>> GetUser(int id)
+        public async Task<ActionResult<UserGet>> GetUser(int id)
         {
             return await _logic.GetUser(id);
         }

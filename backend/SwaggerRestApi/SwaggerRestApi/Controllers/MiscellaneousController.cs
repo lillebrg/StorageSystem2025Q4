@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SwaggerRestApi.Models.DTO;
+using SwaggerRestApi.Models.DTO.Barcode;
 
 namespace SwaggerRestApi.Controllers
 {
@@ -59,7 +60,7 @@ namespace SwaggerRestApi.Controllers
 
         [HttpPost("/barcodes/scan")]
         [Authorize(Roles = "Admin, Operator")]
-        public async Task<ActionResult> GetBarcodeOwner(int barcode)
+        public async Task<ActionResult<ScannedBarcode>> GetBarcodeOwner(string barcode)
         {
             return Ok();
         }

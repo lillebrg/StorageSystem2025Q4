@@ -2,6 +2,7 @@
 using SwaggerRestApi.DBAccess;
 using SwaggerRestApi.Models;
 using SwaggerRestApi.Models.DTO;
+using SwaggerRestApi.Models.DTO.SpecificItems;
 
 namespace SwaggerRestApi.BusineesLogic
 {

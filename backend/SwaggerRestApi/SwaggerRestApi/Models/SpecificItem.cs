@@ -10,6 +10,7 @@
 
         public int? BorrowedTo { get; set; }
 
+
         public int BaseItemId { get; set; }
 
         public BaseItem BaseItem { get; set; }

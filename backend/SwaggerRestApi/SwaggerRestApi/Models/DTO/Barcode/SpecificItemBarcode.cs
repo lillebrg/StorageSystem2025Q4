@@ -1,6 +1,8 @@
-﻿namespace SwaggerRestApi.Models.DTO
+﻿using SwaggerRestApi.Models.DTO.User;
+
+namespace SwaggerRestApi.Models.DTO.Barcode
 {
-    public class SpecificItemsDTO
+    public class SpecificItemBarcode
     {
         public int id { get; set; }
 

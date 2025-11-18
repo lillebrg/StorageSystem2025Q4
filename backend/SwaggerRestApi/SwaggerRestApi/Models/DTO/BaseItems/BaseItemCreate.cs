@@ -1,4 +1,4 @@
-﻿namespace SwaggerRestApi.Models.DTO
+﻿namespace SwaggerRestApi.Models.DTO.BaseItems
 {
     public class BaseItemCreate
     {

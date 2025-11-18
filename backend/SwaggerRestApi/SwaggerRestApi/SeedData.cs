@@ -48,7 +48,7 @@ namespace SwaggerRestApi
             Shelf newShelf = new Shelf
             {
                 ShelfNo = 1,
-                Barcode = 4304493269774,
+                Barcode = "1501234567899",
                 BaseItems = new List<BaseItem>()
             };
 

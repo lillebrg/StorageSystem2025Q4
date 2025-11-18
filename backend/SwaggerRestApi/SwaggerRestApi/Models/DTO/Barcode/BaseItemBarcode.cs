@@ -1,6 +1,6 @@
-﻿namespace SwaggerRestApi.Models.DTO
+﻿namespace SwaggerRestApi.Models.DTO.Barcode
 {
-    public class BaseItemSearch
+    public class BaseItemBarcode
     {
         public int id { get; set; }
 
@@ -12,6 +12,6 @@
 
         public string? image_url { get; set; }
 
-        public int specific_items_count { get; set; }
+        public List<SpecificItemFromBaseItemBarcode> specific_items { get; set; }
     }
 }
