@@ -8,8 +8,6 @@
 
         public string description { get; set; }
 
-        public string? barcode { get; set; }
-
         public string? image_url { get; set; }
 
         public List<SpecificItemFromBaseItemBarcode> specific_items { get; set; }

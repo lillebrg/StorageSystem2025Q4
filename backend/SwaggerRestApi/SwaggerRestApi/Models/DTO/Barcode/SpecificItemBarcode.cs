@@ -9,5 +9,7 @@ namespace SwaggerRestApi.Models.DTO.Barcode
         public string? description { get; set; }
 
         public UserLoanedTo? loaned_to { get; set; }
+
+        public BaseItemFromSpecificItemBarcode base_item { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SwaggerRestApi.BusineesLogic;
 using SwaggerRestApi.Models.DTO;
 using SwaggerRestApi.Models.DTO.Barcode;
 
@@ -9,10 +10,12 @@ namespace SwaggerRestApi.Controllers
     public class MiscellaneousController : Controller
     {
         private readonly IConfiguration _configuration;
+        private readonly SharedLogic _sharedlogic;
 
-        public MiscellaneousController(IConfiguration configuration)
+        public MiscellaneousController(IConfiguration configuration, SharedLogic sharedLogic)
         {
             _configuration = configuration;
+            _sharedlogic = sharedLogic;
         }
 
 
@@ -60,9 +63,9 @@ namespace SwaggerRestApi.Controllers
 
         [HttpPost("/barcodes/scan")]
         [Authorize(Roles = "Admin, Operator")]
-        public async Task<ActionResult<ScannedBarcode>> GetBarcodeOwner(string barcode)
+        public async Task<ActionResult<ScannedBarcode>> GetBarcodeItem(string barcode)
         {
-            return Ok();
+            return await _sharedlogic.GetScannedItem(barcode);
         }
     }
 }
