@@ -12,11 +12,11 @@ namespace SwaggerRestApi.Controllers
     public class CurrentUserController : Controller
     {
 
-        private readonly UserLogic _logic;
+        private readonly UserLogic _userlogic;
 
-        public CurrentUserController(UserLogic logic)
+        public CurrentUserController(UserLogic userLogic)
         {
-            _logic = logic;
+            _userlogic = userLogic;
         }
 
         [HttpGet]
@@ -26,7 +26,7 @@ namespace SwaggerRestApi.Controllers
             var claims = HttpContext.User.Claims;
             string userIdString = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
             int userId = Convert.ToInt32(userIdString);
-            return await _logic.GetUser(userId);
+            return await _userlogic.GetUser(userId);
         }
 
         [HttpPost]
@@ -36,13 +36,13 @@ namespace SwaggerRestApi.Controllers
             var claims = HttpContext.User.Claims;
             string userIdString = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
             int userId = Convert.ToInt32(userIdString);
-            return await _logic.ChangePassword(changePassword, userId);
+            return await _userlogic.ChangePassword(changePassword, userId);
         }
 
         [HttpPost("login")]
         public async Task<ActionResult> Login([FromBody] UserLogin login)
         {
-            return await _logic.Login(login);
+            return await _userlogic.Login(login);
         }
 
         [HttpPut]
@@ -52,7 +52,7 @@ namespace SwaggerRestApi.Controllers
             var claims = HttpContext.User.Claims;
             string userIdString = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
             int userId = Convert.ToInt32(userIdString);
-            return await _logic.EditUser(user, userId);
+            return await _userlogic.EditUser(user, userId);
         }
     }
 }
