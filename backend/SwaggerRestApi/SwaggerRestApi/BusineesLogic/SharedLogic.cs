@@ -125,6 +125,8 @@ namespace SwaggerRestApi.BusineesLogic
 
             while (flag)
             {
+                bool itemFlag = false;
+                bool shelfFlag = false;
                 barcode = "150";
                 int[] barcodeArray = new int[12];
 
@@ -163,8 +165,9 @@ namespace SwaggerRestApi.BusineesLogic
 
                 barcode += checkValue;
 
-                flag = await _itemdbaccess.CheckForExistingBarcode(barcode);
-                flag = !flag;
+                itemFlag = await _itemdbaccess.CheckForExistingBarcode(barcode);
+                shelfFlag = await _shelfdbaccess.CheckForExistingBarcode(barcode);
+                if (itemFlag && shelfFlag) { flag = false; }
             }
 
             return barcode;
