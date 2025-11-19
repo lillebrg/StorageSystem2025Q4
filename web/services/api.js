@@ -7,7 +7,7 @@ export async function request(method, path, body = null) {
 
     if (body)
         headers["Content-Type"] = "application/json";
-
+    console.log(url + path)
     return new Promise((resolve, reject) => {
         fetch(url + path, {
             method,
