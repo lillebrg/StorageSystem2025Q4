@@ -23,9 +23,14 @@ class Api(val ctx: Context) {
     fun request(method: String, path: String, data: String?): HttpResponse {
         val url = URL(BuildConfig.API_BASE_URL + path)
 
+        val accessToken = ctx.getSharedPreferences("current_user", Context.MODE_PRIVATE).getString("access_token", null)
+
         try {
             with(url.openConnection() as HttpURLConnection) {
                 requestMethod = method
+
+                if (accessToken != null)
+                    setRequestProperty("Authorization", "Bearer $accessToken")
 
                 if (data != null) {
                     setRequestProperty("Content-Type", "application/json")
@@ -100,10 +105,15 @@ class Api(val ctx: Context) {
     }
 
     companion object Helpers {
-        fun <T> makeRequest(ctx: Activity, request: () -> T, callback: (T) -> Unit) {
-            val progressDialog = ProgressDialog(ctx)
-            progressDialog.setMessage("Loading...")
-            progressDialog.show()
+        fun <T> makeRequest(ctx: Activity, request: () -> T, showLoading: Boolean = true, callback: (T) -> Unit) {
+            var progressDialog: ProgressDialog? = null
+
+            if (showLoading) {
+                progressDialog = ProgressDialog(ctx).apply {
+                    setMessage("Loading...")
+                    show()
+                }
+            }
 
             thread {
                 val result: T
@@ -117,7 +127,7 @@ class Api(val ctx: Context) {
                     return@thread
                 } finally {
                     ctx.runOnUiThread {
-                        progressDialog.hide()
+                        progressDialog?.hide()
                     }
                 }
 

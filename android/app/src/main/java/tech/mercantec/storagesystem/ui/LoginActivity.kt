@@ -28,8 +28,9 @@ class LoginActivity : AppCompatActivity() {
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // Prevent going back to login screen
                 startActivity(intent)
 
-                val user = auth.getCurrentUser()
-                Toast.makeText(this, "Welcome, ${user.name}", Toast.LENGTH_SHORT).show()
+                Api.makeRequest(this, { auth.getCurrentUser() }, showLoading = false) { user ->
+                    Toast.makeText(this, "Welcome, ${user.name}", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

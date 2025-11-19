@@ -4,7 +4,11 @@ import android.content.Context
 import kotlinx.serialization.Serializable
 import androidx.core.content.edit
 
-data class CurrentUser(val name: String, val email: String, val role: String)
+@Serializable
+data class BorrowedItem(val base_item_id: Int, val specific_item_id: Int, val base_item_name: String, val base_item_picture: String, val specific_item_description: String)
+
+@Serializable
+data class CurrentUser(val name: String, val email: String, val role: String, val borrowed_items: Array<BorrowedItem>, val change_password_on_next_login: Boolean)
 
 class Auth(val ctx: Context) {
     val api = Api(ctx)
@@ -28,13 +32,7 @@ class Auth(val ctx: Context) {
     }
 
     fun getCurrentUser(): CurrentUser {
-        with(ctx.getSharedPreferences("current_user", Context.MODE_PRIVATE)) {
-            val name = getString("name", "Unknown")!!
-            val email = getString("email", "Unknown")!!
-            val role = getString("role", "Unknown")!!
-
-            return CurrentUser(name, email, role)
-        }
+        return api.requestJson<Unit, CurrentUser>("GET", "/user", null)
     }
 
     fun logout() {
