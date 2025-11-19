@@ -1,1 +1,0 @@
-export var url = "https://localhost:7117"
