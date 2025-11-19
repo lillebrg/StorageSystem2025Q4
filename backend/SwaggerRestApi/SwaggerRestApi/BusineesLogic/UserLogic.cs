@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using SwaggerRestApi.DBAccess;
 using SwaggerRestApi.Models;
 using SwaggerRestApi.Models.DTO;
+using SwaggerRestApi.Models.DTO.User;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -25,13 +26,13 @@ namespace SwaggerRestApi.BusineesLogic
             _itemdbaccess = itemDBAccess;
         }
 
-        public async Task<ActionResult<UserDto>> GetUser(int id)
+        public async Task<ActionResult<UserGet>> GetUser(int id)
         {
             var user = await _userdbaccess.GetUser(id);
 
             if (user == null || user.Id == 0) { return new NotFoundObjectResult(new { message = "Could not find the user" }); }
 
-            var userReturn = new UserDto
+            var userReturn = new UserGet
             {
                 email = user.Email,
                 name = user.Name,

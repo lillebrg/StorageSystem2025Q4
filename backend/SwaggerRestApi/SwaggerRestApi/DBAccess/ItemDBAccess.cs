@@ -54,6 +54,25 @@ namespace SwaggerRestApi.DBAccess
             return true;
         }
 
+        public async Task<BaseItem> GetBaseItemFromBarcode(string barcode)
+        {
+            var baseItem = await _context.BaseItems.Include(b => b.SpecificItems).Where(b => b.ModelBarcode.Contains(barcode)).FirstOrDefaultAsync();
+
+            if (baseItem == null) { return new BaseItem(); }
+
+            return baseItem;
+        }
+
+        public async Task<SpecificItem> GetSpecificItemFromBarcode(string barcode)
+        {
+            var specificItem = await _context.SpecificItems.Include(s => s.BaseItem).Where(s => s.Barcode.Contains(barcode)).FirstOrDefaultAsync();
+
+            if (specificItem == null) { return new SpecificItem(); }
+
+
+            return specificItem;
+        }
+
         public async Task<int> CreateBaseItem(BaseItem baseItem, int shelfId)
         {
             if (shelfId != 0)

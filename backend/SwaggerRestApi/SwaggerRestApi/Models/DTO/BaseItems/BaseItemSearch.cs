@@ -1,7 +1,9 @@
-﻿namespace SwaggerRestApi.Models.DTO
+﻿namespace SwaggerRestApi.Models.DTO.BaseItems
 {
-    public class BaseItemDTO
+    public class BaseItemSearch
     {
+        public int id { get; set; }
+
         public string name { get; set; }
 
         public string description { get; set; }
@@ -10,6 +12,6 @@
 
         public string? image_url { get; set; }
 
-        public List<SpecificItemsDTO> specific_items { get; set; }
+        public int specific_items_count { get; set; }
     }
 }

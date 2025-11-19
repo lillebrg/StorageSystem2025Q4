@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SwaggerRestApi.BusineesLogic;
 using SwaggerRestApi.Models;
-using SwaggerRestApi.Models.DTO;
+using SwaggerRestApi.Models.DTO.User;
 using System.Security.Claims;
 
 namespace SwaggerRestApi.Controllers
@@ -12,21 +12,21 @@ namespace SwaggerRestApi.Controllers
     public class CurrentUserController : Controller
     {
 
-        private readonly UserLogic _logic;
+        private readonly UserLogic _userlogic;
 
-        public CurrentUserController(UserLogic logic)
+        public CurrentUserController(UserLogic userLogic)
         {
-            _logic = logic;
+            _userlogic = userLogic;
         }
 
         [HttpGet]
         [Authorize(Roles = "Admin, Operator, User")]
-        public async Task<ActionResult<UserDto>> GetCurrentUser()
+        public async Task<ActionResult<UserGet>> GetCurrentUser()
         {
             var claims = HttpContext.User.Claims;
             string userIdString = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
             int userId = Convert.ToInt32(userIdString);
-            return await _logic.GetUser(userId);
+            return await _userlogic.GetUser(userId);
         }
 
         [HttpPost]
@@ -36,13 +36,13 @@ namespace SwaggerRestApi.Controllers
             var claims = HttpContext.User.Claims;
             string userIdString = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
             int userId = Convert.ToInt32(userIdString);
-            return await _logic.ChangePassword(changePassword, userId);
+            return await _userlogic.ChangePassword(changePassword, userId);
         }
 
         [HttpPost("login")]
         public async Task<ActionResult> Login([FromBody] UserLogin login)
         {
-            return await _logic.Login(login);
+            return await _userlogic.Login(login);
         }
 
         [HttpPut]
@@ -52,7 +52,7 @@ namespace SwaggerRestApi.Controllers
             var claims = HttpContext.User.Claims;
             string userIdString = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
             int userId = Convert.ToInt32(userIdString);
-            return await _logic.EditUser(user, userId);
+            return await _userlogic.EditUser(user, userId);
         }
     }
 }

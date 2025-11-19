@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using SwaggerRestApi.BusineesLogic;
-using SwaggerRestApi.Models.DTO;
+using SwaggerRestApi.Models.DTO.SpecificItems;
 
 namespace SwaggerRestApi.Controllers
 {

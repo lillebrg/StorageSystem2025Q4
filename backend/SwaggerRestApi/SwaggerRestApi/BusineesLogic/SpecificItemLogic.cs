@@ -2,6 +2,7 @@
 using SwaggerRestApi.DBAccess;
 using SwaggerRestApi.Models;
 using SwaggerRestApi.Models.DTO;
+using SwaggerRestApi.Models.DTO.SpecificItems;
 
 namespace SwaggerRestApi.BusineesLogic
 {
@@ -10,9 +11,9 @@ namespace SwaggerRestApi.BusineesLogic
         private readonly ItemDBAccess _itemdbaccess;
         private readonly SharedLogic _sharedlogic;
 
-        public SpecificItemLogic(ItemDBAccess itemmdbaccess, SharedLogic sharedLogic)
+        public SpecificItemLogic(ItemDBAccess itemDBAccess, SharedLogic sharedLogic)
         {
-            _itemdbaccess = itemmdbaccess;
+            _itemdbaccess = itemDBAccess;
             _sharedlogic = sharedLogic;
         }
 

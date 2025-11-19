@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SwaggerRestApi.BusineesLogic;
 using SwaggerRestApi.Models;
-using SwaggerRestApi.Models.DTO;
+using SwaggerRestApi.Models.DTO.User;
 
 namespace SwaggerRestApi.Controllers
 {
@@ -10,53 +10,53 @@ namespace SwaggerRestApi.Controllers
     [Route("/users")]
     public class UsersController : Controller
     {
-        private readonly UserLogic _logic;
+        private readonly UserLogic _userlogic;
 
-        public UsersController(UserLogic logic)
+        public UsersController(UserLogic userLogic)
         {
-            _logic = logic;
+            _userlogic = userLogic;
         }
 
         [HttpPost("/create")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> CreateUser([FromBody] UserCreate user)
         {
-            return await _logic.RegisterUser(user);
+            return await _userlogic.RegisterUser(user);
         }
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<List<UsersDTO>>> GetAllUser()
         {
-            return await _logic.GetAllUser();
+            return await _userlogic.GetAllUser();
         }
 
         [HttpGet("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<UserDto>> GetUser(int id)
+        public async Task<ActionResult<UserGet>> GetUser(int id)
         {
-            return await _logic.GetUser(id);
+            return await _userlogic.GetUser(id);
         }
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> UpdateUser([FromBody]UserUpdateAdmin user, int id)
         {
-            return await _logic.EditUser(user, id);
+            return await _userlogic.EditUser(user, id);
         }
 
         [HttpPost("{id}/reset-password")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> ResetPassword([FromBody]ResetPassword resetPassword, int id)
         {
-            return await _logic.ResetPassword(resetPassword, id);
+            return await _userlogic.ResetPassword(resetPassword, id);
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteUser(int id)
         {
-            return await _logic.DeleteUser(id);
+            return await _userlogic.DeleteUser(id);
         }
     }
 }

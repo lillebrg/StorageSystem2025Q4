@@ -12,9 +12,16 @@ namespace SwaggerRestApi.DBAccess
             _context = dBContext;
         }
 
-        public async Task<Shelf?> GetShelf(int id)
+        public async Task<Shelf> GetShelf(int id)
         {
             var shelf = await _context.Shelves.FirstOrDefaultAsync(s => s.Id == id);
+
+            return shelf;
+        }
+
+        public async Task<Shelf> GetShelfFromBarcode(string barcode)
+        {
+            var shelf = await _context.Shelves.Include(s => s.BaseItems).FirstOrDefaultAsync(s => s.Barcode == barcode);
 
             return shelf;
         }
