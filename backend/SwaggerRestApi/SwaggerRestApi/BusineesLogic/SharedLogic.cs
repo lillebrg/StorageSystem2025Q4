@@ -119,11 +119,12 @@ namespace SwaggerRestApi.BusineesLogic
 
         public async Task<string> CreateRandomBarcode()
         {
-            bool flag = true;
             string barcode = "";
             Random random = new Random();
+            bool itemFlag = false;
+            bool shelfFlag = false;
 
-            while (flag)
+            while (!itemFlag && !shelfFlag)
             {
                 barcode = "150";
                 int[] barcodeArray = new int[12];
@@ -163,8 +164,8 @@ namespace SwaggerRestApi.BusineesLogic
 
                 barcode += checkValue;
 
-                flag = await _itemdbaccess.CheckForExistingBarcode(barcode);
-                flag = !flag;
+                itemFlag = await _itemdbaccess.CheckForExistingBarcode(barcode);
+                shelfFlag = await _shelfdbaccess.CheckForExistingBarcode(barcode);
             }
 
             return barcode;

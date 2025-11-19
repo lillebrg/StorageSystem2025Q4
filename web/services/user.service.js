@@ -1,25 +1,45 @@
-export async function loginRequest(username, password) {
-    console.log("login")
-      try {
-    const response = await fetch("https://your-api-url.com/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    });
+import { request } from "./api.js";
 
-    if (!response.ok) {
-      throw new Error("Login failed");
-    }
+export function get() {
+  return request("GET", `/user`);
+}
 
-    const data = await response.json();
-    console.log("Login success:", data);
+export function getAll() {
+  return request("GET", `/users`);
+}
 
-    // You could redirect or store a token
-    // window.location.href = "dashboard.html";
+export function create(name, email, password, role) {
+  return request("POST", "/users/create", {
+    name,
+    email,
+    password,
+    role,
+  });
+}
 
-  } catch (error) {
-    alert(error.message);
-  }
+export function update(email, username) {
+  return request("PUT", "/user/update", {
+    email,
+    username,
+  });
+}
+
+export function updatePassword(oldPassword, newPassword) {
+  return request("PUT", "/user/change-password", {
+    oldPassword,
+    newPassword,
+  });
+}
+
+export function login(email, password) {
+  return request("POST", "/user/login", {
+    email,
+    password,
+  });
+}
+
+export function logout() {
+  sessionStorage.removeItem("token");
+  sessionStorage.removeItem("role");
+  window.location.href = "/";
 }

@@ -17,7 +17,7 @@ namespace SwaggerRestApi.Controllers
             _userlogic = userLogic;
         }
 
-        [HttpPost("/create")]
+        [HttpPost("create")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> CreateUser([FromBody] UserCreate user)
         {
