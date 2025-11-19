@@ -1,6 +1,6 @@
-import { loginRequest } from "../services/user.service.js";
+import { login } from "../services/user.service.js";
 
-const usernameInput = document.getElementById("email");
+const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 
 const form = document.querySelector(".form");
@@ -9,20 +9,24 @@ form.addEventListener("submit", handleLogin);
 async function handleLogin(event) {
   event.preventDefault();
 
-  const username = usernameInput.value.trim();
+  const email = emailInput.value.trim();
   const password = passwordInput.value.trim();
 
   // basic email format check (HTML also validates type="email")
-  if (!username || !password) {
+  if (!email || !password) {
     alert("Please fill in both fields.");
     return;
   }
 
-  if (!username.includes("@",".")) {
+ if (!emailInput.checkValidity()) {
     alert("Please enter a valid email address.");
     return;
   }
 
-  //await loginRequest(username, password);
-  window.location.href='/users/'
+  var response = await login(email, password);
+  if (response) {
+    sessionStorage.setItem("token", response.access_token);
+    sessionStorage.setItem("role", response.role);
+    window.location.href = "/users";
+  }
 }
