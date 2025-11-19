@@ -26,6 +26,11 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 androidx-fragment = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "androidx-fragment" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 androidx-annotation-experimental = { group = "androidx.annotation", name = "annotation-experimental", version.ref = "androidx-annotation-experimental" }
+barcode-scanning = { group = "com.google.mlkit", name = "barcode-scanning", version = "17.3.0" }
+camera-core = { group = "androidx.camera", name = "camera-core", version = "1.5.1" }
+camera-camera2 = { group = "androidx.camera", name = "camera-camera2", version = "1.5.1" }
+camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version = "1.5.1" }
+camera-view = { group = "androidx.camera", name = "camera-view", version = "1.5.1" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
