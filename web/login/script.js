@@ -11,15 +11,14 @@ async function handleLogin(event) {
 
   const email = emailInput.value.trim();
   const password = passwordInput.value.trim();
-
-  // basic email format check (HTML also validates type="email")
-  if (!email || !password) {
-    alert("Please fill in both fields.");
+//TODO valid email dosent work
+   if (!emailInput.checkValidity()) {
+    alert("Please enter a valid email address.");
     return;
   }
 
- if (!emailInput.checkValidity()) {
-    alert("Please enter a valid email address.");
+  if (!email || !password) {
+    alert("Please fill in both fields.");
     return;
   }
 

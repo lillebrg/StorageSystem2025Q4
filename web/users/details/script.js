@@ -1,9 +1,10 @@
-import { get, logout, deleteUser } from "../../services/user.service.js";
+import { get, update, deleteUser, updatePassword } from "../../services/user.service.js";
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 //displayUserDetails
 var name;
 var email;
+var role;
 
 await get(id).then((data) => {
   if (!data) {
@@ -11,6 +12,7 @@ await get(id).then((data) => {
   }
   name = data.name;
   email = data.email;
+  role = data.role;
   displayProfile(data);
   displayTable(data.borrowed_items);
 });
@@ -24,10 +26,10 @@ function displayProfile(data) {
           </div>
           <span>${name}</span>
           <p class="job">${email}</p>
-          <p class="job">${data.role}</p>
+          <p class="job">${role}</p>
 
           <button class="button" id="editBtn">Edit</button>
-          <button class="button" id="changePasswordBtn">Change Password</button>
+          <button class="button" id="changePasswordBtn">Reset Password</button>
           <button class="button" style="margin-top: 10px; background-color: darkred;" id="deleteUserBtn">Delete user</button>`;
 }
 
@@ -44,30 +46,47 @@ function displayTable(data) {
             <td>${data[i].borrowed_items}</td>
           </tr>`;
   }
-  document.querySelectorAll("#tBody tr").forEach((row) => {
-    row.addEventListener("click", () => {
-      const id = row.dataset.id;
-      window.location.href = "/users/details/?id=" + id;
-    });
-  });
 }
 
 //change Password
 const changePasswordModal = document.getElementById("changePasswordModal");
-const changePasswordBtn = document.getElementById("changePasswordBtn");
-changePasswordBtn.onclick = () => (changePasswordModal.style.display = "block");
+document.getElementById("changePasswordBtn").onclick = () => (changePasswordModal.style.display = "block");
+document.getElementById("submitPasswordBtn").onclick = () => {
+  var newPasswordInput = document.getElementById("newPassword").value;
+  updatePassword(id, null, newPasswordInput)
+    .then(() => window.location.reload())
+    .catch((error) => {
+      console.log(error);
+    });
+};
 
 //edit User
 const editUserModal = document.getElementById("editUserModal");
-
-const emailInput = document.getElementById("email");
-const nameInput = document.getElementById("name");
+var emailInput = document.getElementById("email");
+var nameInput = document.getElementById("name");
+var roleInput = document.getElementById("role");
 document.getElementById("editBtn").onclick = () => {
+  nameInput.value = name;
+  emailInput.value  = email;
+  roleInput.value  = role;
   editUserModal.style.display = "block";
 };
 document.getElementById("submitUserBtn").onclick = () => {
-  deleteUser();
-  //todo, check on deletion
+  if (!emailInput.checkValidity()) {
+    alert("Please enter a valid email address.");
+    return;
+  }
+
+  if (!emailInput || !nameInput) {
+    alert("Please fill in both fields.");
+    return;
+  }
+
+  update(id, emailInput.value, nameInput.value, roleInput.value)
+    .then(() => window.location.reload())
+    .catch((error) => {
+      console.log(error);
+    });
 };
 
 //delete User
@@ -76,12 +95,10 @@ document.getElementById("deleteUserBtn").onclick = () =>
   (deleteUserModal.style.display = "block");
 document.getElementById("approveDeleteUserBtn").onclick = () => {
   deleteUser(id)
-    .then(() => location.reload())
+    .then(() =>   window.location.href = "/users")
     .catch((error) => {
-      console.log(error)
+      console.log(error);
     });
-
-  //todo, check on deletion
 };
 
 // Close modals when clicking on any close button

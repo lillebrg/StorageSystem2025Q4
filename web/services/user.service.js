@@ -1,10 +1,10 @@
 import { request } from "./api.js";
 
 export function get(id = null) {
-    if (id) {
+  if (id) {
     return request("GET", `/users/${id}`);
   } else {
-      return request("GET", `/user`);
+    return request("GET", `/user`);
   }
 }
 
@@ -21,29 +21,29 @@ export function create(name, email, password, role) {
   });
 }
 
-export function update(email, username, id = null) {
+export function update(id = null, email, name, role, cponl = null) {
   if (id) {
-    console.log(id);
     return request("PUT", `/users/${id}`, {
       email,
-      username,
+      name,
+      role,
+      cponl,
     });
   } else {
     return request("PUT", `/user`, {
       email,
-      username,
+      name,
     });
   }
 }
 
-export function updatePassword(oldPassword = null, newPassword, id = null) {
+export function updatePassword(id = null, oldPassword = null, newPassword) {
   if (id) {
-    console.log(id);
-    return request("PUT", `/users/${id}/reset-password`, {
-      newPassword,
+    return request("POST", `/users/${id}/reset-password`, {
+      new_password: newPassword,
     });
   } else {
-    return request("PUT", "/user/change-password", {
+    return request("POST", "/user/change-password", {
       oldPassword,
       newPassword,
     });
@@ -51,7 +51,6 @@ export function updatePassword(oldPassword = null, newPassword, id = null) {
 }
 
 export function deleteUser(id) {
-  console.log(id)
   return request("DELETE", `/users/${id}`);
 }
 

@@ -166,7 +166,7 @@ namespace SwaggerRestApi.BusineesLogic
 
             if (userUpdate.email != user.Email && !string.IsNullOrEmpty(userUpdate.email))
             {
-                if (!EmailCheck(userUpdate.email))
+                if (EmailCheck(userUpdate.email))
                 {
                     user.Email = userUpdate.email;
                 }
@@ -190,7 +190,7 @@ namespace SwaggerRestApi.BusineesLogic
 
             if (userUpdate.email != user.Email && !string.IsNullOrEmpty(userUpdate.email))
             {
-                if (!EmailCheck(userUpdate.email))
+                if (EmailCheck(userUpdate.email))
                 {
                     user.Email = userUpdate.email;
                 }

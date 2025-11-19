@@ -14,17 +14,15 @@
     <script type="module" src="/profile/script.js"></script>
   </head>
   <body>
-     <nav class="stroke">
-    <ul>
-      <li><a href="/users">Users</a></li>
-      <li><a href="/profile">Profile</a></li>
-    </ul>
-  </nav>
+    <nav class="stroke">
+      <ul>
+        <li><a href="/users">Users</a></li>
+        <li><a href="/profile">Profile</a></li>
+      </ul>
+    </nav>
     <div class="container">
       <div class="componentContainer">
-        <div class="card" id="profileCard">
-       
-        </div>
+        <div class="card" id="profileCard"></div>
         <div class="table">
           <table class="responsive-table">
             <thead>
@@ -35,86 +33,63 @@
                 <th scope="col">Image</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>Logitech MX Master 3</td>
-                <td>
-                  Wireless ergonomic mouse with customizable buttons, suitable
-                  for office and design work.
-                </td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Kingston 16GB RAM</td>
-                <td>
-                  DDR4 memory module, high-speed performance for gaming and
-                  multitasking PCs.
-                </td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>TP-Link Archer AX50</td>
-                <td>
-                  Wi-Fi 6 router with dual-band support, ideal for fast and
-                  stable internet connections.
-                </td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>4</td>
-                <td>Samsung 1TB SSD</td>
-                <td>
-                  NVMe solid-state drive, extremely fast storage for computers
-                  and laptops.
-                </td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>5</td>
-                <td>Corsair K70 Keyboard</td>
-                <td>
-                  Mechanical gaming keyboard with RGB backlighting and Cherry MX
-                  switches.
-                </td>
-                <td></td>
-              </tr>
-            </tbody>
+            <tbody id="tBody"></tbody>
+             <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
           </table>
         </div>
       </div>
 
       <div id="editUserModal" class="modal">
-          <form class="form modalContent">
-            <span class="closeModal">&times;</span>
-            <p class="form-title">Edit Name & Email</p>
-            <div class="input-container">
-              <input placeholder="Enter name" id="name" required/>
-            </div>
-            <div class="input-container">
-              <input placeholder="Enter email" type="email" id="email" required/>
-            </div>
-            <button class="button submit" id="submitUserBtn">Save changes</button>
-          </form>
+        <div class="form modalContent">
+          <span class="closeModal">&times;</span>
+          <p class="form-title">Edit User</p>
+          <div class="input-container">
+            <input placeholder="Enter name" id="name" required />
+          </div>
+          <div class="input-container">
+            <input placeholder="Enter email" type="email" id="email" required />
+          </div>
+          <button class="button submit" id="submitUserBtn">Save changes</button>
+        </div>
       </div>
 
       <div id="changePasswordModal" class="modal">
-         <form class="form modalContent">
-            <span class="closeModal">&times;</span>
-            <p class="form-title">Change Password</p>
-            <div class="input-container">
-              <input placeholder="Enter old password" type="password" id="oldPassword" required/>
-            </div>
-            <div class="input-container">
-              <input placeholder="Enter new password" type="password" id="newPassword" required/>
-            </div>
-             <div class="input-container">
-              <input placeholder="Enter new password" type="password" id="repeatNewPassword" required/>
-            </div>
-            <button class="button submit" id="submitPasswordBtn">Save changes</button>
-          </form>
+        <div class="form modalContent">
+          <span class="closeModal">&times;</span>
+          <p class="form-title">Change Password</p>
+          <div class="input-container">
+            <input
+              placeholder="Enter old password"
+              type="password"
+              id="oldPassword"
+              required
+            />
+          </div>
+          <div class="input-container">
+            <input
+              placeholder="Enter new password"
+              type="password"
+              id="newPassword"
+              required
+            />
+          </div>
+          <div class="input-container">
+            <input
+              placeholder="Enter new password"
+              type="password"
+              id="repeatNewPassword"
+              required
+            />
+          </div>
+          <button class="button submit" id="submitPasswordBtn">
+            Save changes
+          </button>
+        </div>
       </div>
     </div>
   </body>
