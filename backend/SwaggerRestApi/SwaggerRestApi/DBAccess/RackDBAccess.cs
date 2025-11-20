@@ -47,5 +47,12 @@ namespace SwaggerRestApi.DBAccess
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> CheckForExistingRackInStorage(int rackNo, int storageId)
+        {
+            var shelf = await _context.Racks.Where(r => r.StorageId == storageId && r.RackNo == rackNo).FirstOrDefaultAsync();
+
+            return shelf != null;
+        }
     }
 }
