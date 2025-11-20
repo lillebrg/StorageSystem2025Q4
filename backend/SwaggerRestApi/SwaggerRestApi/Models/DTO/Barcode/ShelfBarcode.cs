@@ -8,7 +8,7 @@
 
         public int rack_id { get; set; }
 
-        public List<BaseItemFromShelfBarcode> BaseItems { get; set; }
+        public List<BaseItemFromShelfBarcode> base_items { get; set; }
 
     }
 }
