@@ -1,4 +1,4 @@
-import { get, update, logout } from "../../services/user.service.js";
+import { get, update, logout, updatePassword } from "../../services/user.service.js";
 //displayUserDetails
 var name;
 var email;
@@ -47,14 +47,16 @@ function displayTable(data) {
 //change Password
 const changePasswordModal = document.getElementById("changePasswordModal");
 document.getElementById("changePasswordBtn").onclick = () => (changePasswordModal.style.display = "block");
-var oldPasswordInput = document.getElementById("oldPassword").value.trim();
-var newPasswordInput = document.getElementById("newPassword").value.trim();
-var repeatNewPasswordInput = document.getElementById("repeatNewPassword").value.trim;
 document.getElementById("submitPasswordBtn").onclick = () => {
+  var oldPasswordInput = document.getElementById("oldPassword").value;
+  var newPasswordInput = document.getElementById("newPassword").value;
+  var repeatNewPasswordInput = document.getElementById("repeatNewPassword").value;
+
   if (newPasswordInput != repeatNewPasswordInput) {
     alert("New passwords do not match");
     return;
   }
+
   updatePassword(null, oldPasswordInput, newPasswordInput)
     .then(() => window.location.reload())
     .catch((error) => {

@@ -27,6 +27,32 @@
           </div>
           <button class="button submit" type="submit">Sign in</button>
         </form>
+
+         <div id="changePasswordModal" class="modal">
+        <div class="form modalContent">
+          <p class="form-title">You need to change your password before gaining access</p>
+          <div class="input-container">
+            <input
+              placeholder="Enter new password"
+              type="password"
+              id="newPassword"
+              required
+            />
+          </div>
+          <div class="input-container">
+            <input
+              placeholder="Repeat new password"
+              type="password"
+              id="repeatNewPassword"
+              required
+            />
+          </div>
+          <button class="button submit" id="submitPasswordBtn">
+            Save changes
+          </button>
+        </div>
+      </div>
+
       </div>
     </main>
   </body>

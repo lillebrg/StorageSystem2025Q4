@@ -104,6 +104,8 @@ namespace SwaggerRestApi.BusineesLogic
 
             user.Password = hashedPassword;
 
+            user.ChangePasswordOnNextLogin = false;
+
             await _userdbaccess.UpdateUser(user);
 
             return new OkObjectResult(true);

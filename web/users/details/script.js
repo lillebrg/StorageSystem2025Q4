@@ -65,6 +65,7 @@ const editUserModal = document.getElementById("editUserModal");
 var emailInput = document.getElementById("email");
 var nameInput = document.getElementById("name");
 var roleInput = document.getElementById("role");
+var cponlInput = document.getElementById("cponl");
 document.getElementById("editBtn").onclick = () => {
   nameInput.value = name;
   emailInput.value  = email;
@@ -82,7 +83,7 @@ document.getElementById("submitUserBtn").onclick = () => {
     return;
   }
 
-  update(id, emailInput.value, nameInput.value, roleInput.value)
+  update(id, emailInput.value, nameInput.value, roleInput.value, cponlInput.checked)
     .then(() => window.location.reload())
     .catch((error) => {
       console.log(error);

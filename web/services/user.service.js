@@ -21,13 +21,13 @@ export function create(name, email, password, role) {
   });
 }
 
-export function update(id = null, email, name, role, cponl = null) {
+export function update(id = null, email, name, role, change_password_on_next_login = null) {
   if (id) {
     return request("PUT", `/users/${id}`, {
       email,
       name,
       role,
-      cponl,
+      change_password_on_next_login,
     });
   } else {
     return request("PUT", `/user`, {
@@ -37,15 +37,15 @@ export function update(id = null, email, name, role, cponl = null) {
   }
 }
 
-export function updatePassword(id = null, oldPassword = null, newPassword) {
+export function updatePassword(id = null, current_password = null, new_password) {
   if (id) {
     return request("POST", `/users/${id}/reset-password`, {
-      new_password: newPassword,
+      new_password,
     });
   } else {
-    return request("POST", "/user/change-password", {
-      oldPassword,
-      newPassword,
+    return request("POST", "/user", {
+      current_password,
+      new_password,
     });
   }
 }

@@ -1,4 +1,4 @@
-import { login } from "../services/user.service.js";
+import { login, updatePassword } from "../services/user.service.js";
 
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
@@ -11,8 +11,8 @@ async function handleLogin(event) {
 
   const email = emailInput.value.trim();
   const password = passwordInput.value.trim();
-//TODO valid email dosent work
-   if (!emailInput.checkValidity()) {
+  //TODO valid email dosent work
+  if (!emailInput.checkValidity()) {
     alert("Please enter a valid email address.");
     return;
   }
@@ -22,10 +22,37 @@ async function handleLogin(event) {
     return;
   }
 
-  var response = await login(email, password);
-  if (response) {
-    sessionStorage.setItem("token", response.access_token);
-    sessionStorage.setItem("role", response.role);
-    window.location.href = "/users";
-  }
+  await login(email, password)
+    .then((response) => {
+      console.log(response);
+      sessionStorage.setItem("token", response.access_token);
+      sessionStorage.setItem("role", response.role);
+      if (response.change_password_on_next_login) {
+        console.log("helo");
+        const changePasswordModal = document.getElementById(
+          "changePasswordModal"
+        );
+        changePasswordModal.style.display = "block";
+      } else {
+        window.location.href = "/items";
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
+  document.getElementById("submitPasswordBtn").onclick = () => {
+    var newPasswordInput = document.getElementById("newPassword").value;
+    var repeatNewPasswordInput =
+      document.getElementById("repeatNewPassword").value;
+    if (newPasswordInput != repeatNewPasswordInput) {
+      alert("New passwords do not match");
+      return;
+    }
+    updatePassword(null, password, newPasswordInput)
+      .then(() => (window.location.href = "/items"))
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 }
