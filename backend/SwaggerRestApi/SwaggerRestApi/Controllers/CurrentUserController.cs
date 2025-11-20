@@ -29,7 +29,7 @@ namespace SwaggerRestApi.Controllers
             return await _userlogic.GetUser(userId);
         }
 
-        [HttpPost]
+        [HttpPost("change-password")]
         [Authorize(Roles = "Admin, Operator, User")]
         public async Task<ActionResult> ChangePassword([FromBody] ChangePassword changePassword)
         {
