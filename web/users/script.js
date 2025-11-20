@@ -45,29 +45,21 @@ document.getElementById("closeCreateUserBtn").onclick = () => {
   createUserModal.style.display = "none";
 };
 
-const form = document.querySelector(".form");
-form.addEventListener("submit", handleCreateUser);
+const createUserForm = document.querySelector(".form");
+createUserForm.addEventListener("submit", handleCreateUser);
 
 async function handleCreateUser(event) {
-  event.preventDefault();
+    event.preventDefault();
+  if (!createUserForm.reportValidity()) {
+    return;
+  }
+
   const name = nameInput.value;
-  const email = emailInput.value.trim();
-  const password = passwordInput.value.trim();
-  const role = roleInput.value; //set value so no need for trim
+  const email = emailInput.value;
+  const password = passwordInput.value;
+  const role = roleInput.value;
 
- if (!emailInput.checkValidity()) {
-    alert("Please enter a valid email address.");
-    return;
-  }
-
-
-  // validate all fields
-  if (!name || !email || !password || !role) {
-    alert("Please fill in all fields.");
-    return;
-  }
-
-  var response = await create(name, email, password, role)
+ await create(name, email, password, role)
     .then(() => location.reload())
     .catch((error) => {
       console.log(error);

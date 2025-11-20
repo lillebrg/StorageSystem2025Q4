@@ -1,4 +1,9 @@
-import { get, update, deleteUser, updatePassword } from "../../services/user.service.js";
+import {
+  get,
+  update,
+  deleteUser,
+  updatePassword,
+} from "../../services/user.service.js";
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 //displayUserDetails
@@ -13,11 +18,11 @@ await get(id).then((data) => {
   name = data.name;
   email = data.email;
   role = data.role;
-  displayProfile(data);
+  displayProfile();
   displayTable(data.borrowed_items);
 });
 
-function displayProfile(data) {
+function displayProfile() {
   var table = document.getElementById(`profileCard`);
   table.innerHTML += `
        <div class="card-border-top"></div>
@@ -50,15 +55,24 @@ function displayTable(data) {
 
 //change Password
 const changePasswordModal = document.getElementById("changePasswordModal");
-document.getElementById("changePasswordBtn").onclick = () => (changePasswordModal.style.display = "block");
-document.getElementById("submitPasswordBtn").onclick = () => {
+document.getElementById("changePasswordBtn").onclick = () =>
+  (changePasswordModal.style.display = "block");
+
+const changePasswordForm = document.getElementById("changePasswordForm");
+changePasswordForm.addEventListener("submit", handleChangePassword);
+
+async function handleChangePassword(event) {
+  event.preventDefault();
+  if (!changePasswordForm.reportValidity()) {
+    return;
+  }
   var newPasswordInput = document.getElementById("newPassword").value;
   updatePassword(id, null, newPasswordInput)
     .then(() => window.location.reload())
     .catch((error) => {
       console.log(error);
     });
-};
+}
 
 //edit User
 const editUserModal = document.getElementById("editUserModal");
@@ -68,39 +82,51 @@ var roleInput = document.getElementById("role");
 var cponlInput = document.getElementById("cponl");
 document.getElementById("editBtn").onclick = () => {
   nameInput.value = name;
-  emailInput.value  = email;
-  roleInput.value  = role;
+  emailInput.value = email;
+  roleInput.value = role;
   editUserModal.style.display = "block";
 };
-document.getElementById("submitUserBtn").onclick = () => {
-  if (!emailInput.checkValidity()) {
-    alert("Please enter a valid email address.");
+
+const userEditForm = document.getElementById("userEditForm");
+userEditForm.addEventListener("submit", handleUserEdit);
+
+async function handleUserEdit(event) {
+  event.preventDefault();
+  if (!userEditForm.reportValidity()) {
     return;
   }
 
-  if (!emailInput || !nameInput) {
-    alert("Please fill in both fields.");
-    return;
-  }
-
-  update(id, emailInput.value, nameInput.value, roleInput.value, cponlInput.checked)
+  update(
+    id,
+    emailInput.value,
+    nameInput.value,
+    roleInput.value,
+    cponlInput.checked
+  )
     .then(() => window.location.reload())
     .catch((error) => {
       console.log(error);
     });
-};
+}
 
 //delete User
+const userDeleteForm = document.getElementById("userDeleteForm");
+userDeleteForm.addEventListener("submit", handleUserDelete);
+
 const deleteUserModal = document.getElementById("deleteUserModal");
 document.getElementById("deleteUserBtn").onclick = () =>
   (deleteUserModal.style.display = "block");
-document.getElementById("approveDeleteUserBtn").onclick = () => {
+async function handleUserDelete(event) {
+  event.preventDefault();
+  if (!userDeleteForm.reportValidity()) {
+    return;
+  }
   deleteUser(id)
-    .then(() =>   window.location.href = "/users")
+    .then(() => (window.location.href = "/users"))
     .catch((error) => {
       console.log(error);
     });
-};
+}
 
 // Close modals when clicking on any close button
 document.querySelectorAll(".closeModal").forEach((closeBtn) => {

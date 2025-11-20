@@ -47,7 +47,16 @@ function displayTable(data) {
 //change Password
 const changePasswordModal = document.getElementById("changePasswordModal");
 document.getElementById("changePasswordBtn").onclick = () => (changePasswordModal.style.display = "block");
-document.getElementById("submitPasswordBtn").onclick = () => {
+
+const changePasswordForm = document.getElementById("changePasswordForm");
+changePasswordForm.addEventListener("submit", handleChangePassword);
+
+async function handleChangePassword(event) {
+ event.preventDefault()
+  if (!changePasswordForm.reportValidity()) {
+    return;
+  }
+
   var oldPasswordInput = document.getElementById("oldPassword").value;
   var newPasswordInput = document.getElementById("newPassword").value;
   var repeatNewPasswordInput = document.getElementById("repeatNewPassword").value;
@@ -73,9 +82,13 @@ document.getElementById("editBtn").onclick = () => {
   emailInput.value  = email;
   editUserModal.style.display = "block";
 };
-document.getElementById("submitUserBtn").onclick = () => {
-  if (!emailInput || !nameInput) {
-    alert("Please fill in both fields.");
+
+const userEditForm = document.getElementById("userEditForm");
+userEditForm.addEventListener("submit", handleUserEdit);
+
+async function handleUserEdit(event){
+  event.preventDefault()
+  if (!userEditForm.reportValidity()) {
     return;
   }
 
@@ -94,6 +107,5 @@ document.querySelectorAll(".closeModal").forEach((closeBtn) => {
   closeBtn.onclick = () => {
     editUserModal.style.display = "none";
     changePasswordModal.style.display = "none";
-    deleteUserModal.style.display = "none";
   };
 });

@@ -3,32 +3,28 @@ import { login, updatePassword } from "../services/user.service.js";
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 
-const form = document.querySelector(".form");
-form.addEventListener("submit", handleLogin);
+const loginForm = document.getElementById("loginForm");
+loginForm.addEventListener("submit", handleLogin);
+
+const newPasswordForm = document.getElementById("newPasswordForm");
+newPasswordForm.addEventListener("submit", handleNewPassword);
 
 async function handleLogin(event) {
   event.preventDefault();
 
-  const email = emailInput.value.trim();
-  const password = passwordInput.value.trim();
-  //TODO valid email dosent work
-  if (!emailInput.checkValidity()) {
-    alert("Please enter a valid email address.");
+  if (!loginForm.reportValidity()) {
     return;
   }
 
-  if (!email || !password) {
-    alert("Please fill in both fields.");
-    return;
-  }
+  const email = emailInput.value;
+  const password = passwordInput.value;
 
   await login(email, password)
     .then((response) => {
       console.log(response);
-      sessionStorage.setItem("token", response.access_token);
-      sessionStorage.setItem("role", response.role);
+      localStorage.setItem("token", response.access_token);
+      localStorage.setItem("role", response.role);
       if (response.change_password_on_next_login) {
-        console.log("helo");
         const changePasswordModal = document.getElementById(
           "changePasswordModal"
         );
@@ -40,19 +36,24 @@ async function handleLogin(event) {
     .catch((error) => {
       console.log(error);
     });
+}
 
-  document.getElementById("submitPasswordBtn").onclick = () => {
-    var newPasswordInput = document.getElementById("newPassword").value;
-    var repeatNewPasswordInput =
-      document.getElementById("repeatNewPassword").value;
-    if (newPasswordInput != repeatNewPasswordInput) {
-      alert("New passwords do not match");
-      return;
-    }
-    updatePassword(null, password, newPasswordInput)
-      .then(() => (window.location.href = "/items"))
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+async function handleNewPassword(event) {
+  event.preventDefault();
+  if (!newPasswordForm.reportValidity()) {
+    return;
+  }
+
+  var newPasswordInput = document.getElementById("newPassword").value;
+  var repeatNewPasswordInput =
+    document.getElementById("repeatNewPassword").value;
+  if (newPasswordInput != repeatNewPasswordInput) {
+    alert("New passwords do not match");
+    return;
+  }
+  updatePassword(null, passwordInput.value, newPasswordInput)
+    .then(() => (window.location.href = "/items"))
+    .catch((error) => {
+      console.log(error);
+    });
 }

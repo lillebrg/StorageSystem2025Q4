@@ -62,7 +62,7 @@ export function login(email, password) {
 }
 
 export function logout() {
-  sessionStorage.removeItem("token");
-  sessionStorage.removeItem("role");
+  localStorage.removeItem("token");
+  localStorage.removeItem("role");
   window.location.href = "/";
 }

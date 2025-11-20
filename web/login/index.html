@@ -17,19 +17,19 @@
     <main>
       <div class="container">
         <h1>Telia Storage System</h1>
-        <form class="form">
+        <form class="form" id="loginForm">
           <p class="form-title">Sign in to your account</p>
           <div class="input-container">
-            <input placeholder="Enter email" id="email" />
+            <input placeholder="Enter email" id="email" required/>
           </div>
           <div class="input-container">
-            <input placeholder="Enter password" type="password" id="password" />
+            <input placeholder="Enter password" type="password" id="password" required/>
           </div>
           <button class="button submit" type="submit">Sign in</button>
         </form>
 
          <div id="changePasswordModal" class="modal">
-        <div class="form modalContent">
+        <form class="form modalContent" id="newPasswordForm">
           <p class="form-title">You need to change your password before gaining access</p>
           <div class="input-container">
             <input
@@ -47,10 +47,10 @@
               required
             />
           </div>
-          <button class="button submit" id="submitPasswordBtn">
+          <button class="button submit" type="submit">
             Save changes
           </button>
-        </div>
+        </form>
       </div>
 
       </div>

@@ -51,9 +51,9 @@ form.addEventListener("submit", handleCreateUser);
 async function handleCreateUser(event) {
   event.preventDefault();
   const name = nameInput.value;
-  const email = emailInput.value.trim();
-  const password = passwordInput.value.trim();
-  const role = roleInput.value; //set value so no need for trim
+  const email = emailInput.value;
+  const password = passwordInput.value;
+  const role = roleInput.value;
 
  if (!emailInput.checkValidity()) {
     alert("Please enter a valid email address.");

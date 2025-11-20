@@ -45,7 +45,7 @@
       </div>
 
       <div id="editUserModal" class="modal">
-        <div class="form modalContent">
+        <form class="form modalContent" id="userEditForm">
           <span class="closeModal">&times;</span>
           <p class="form-title">Edit User</p>
           <div class="input-container">
@@ -54,12 +54,12 @@
           <div class="input-container">
             <input placeholder="Enter email" type="email" id="email" required />
           </div>
-          <button class="button submit" id="submitUserBtn">Save changes</button>
-        </div>
+          <button class="button submit" type="submit">Save changes</button>
+        </form>
       </div>
 
       <div id="changePasswordModal" class="modal">
-        <div class="form modalContent">
+        <form class="form modalContent"  id="changePasswordForm">
           <span class="closeModal">&times;</span>
           <p class="form-title">Change Password</p>
           <div class="input-container">
@@ -86,10 +86,10 @@
               required
             />
           </div>
-          <button class="button submit" id="submitPasswordBtn">
+          <button class="button submit" type="submit">
             Save changes
           </button>
-        </div>
+        </form>
       </div>
     </div>
   </body>
