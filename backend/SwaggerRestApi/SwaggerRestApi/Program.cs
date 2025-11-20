@@ -115,6 +115,7 @@ internal class Program
         SeedData seedData = new SeedData(context);
         await seedData.StartUserData();
         await seedData.StartStorageData();
+        await seedData.StartItemsData();
 
         app.UseHttpsRedirection();
 

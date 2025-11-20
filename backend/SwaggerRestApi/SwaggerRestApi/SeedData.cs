@@ -78,5 +78,39 @@ namespace SwaggerRestApi
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task StartItemsData()
+        {
+            BaseItem newBaseItem = new BaseItem
+            {
+                Name = "HP Laptop",
+                Description = "",
+                Picture = "",
+                ModelBarcode = "5CG0102H1J,BRN05EC#ABY",
+                SpecificItems = new List<SpecificItem>()
+            };
+
+            SpecificItem newSpecificItem = new SpecificItem
+            {
+                Barcode = "1501234567806"
+            };
+
+            var baseItem = await _context.BaseItems.FirstOrDefaultAsync();
+
+            if (baseItem == null || baseItem.Id == 0)
+            {
+                _context.BaseItems.Add(newBaseItem);
+                await _context.SaveChangesAsync();
+            }
+
+            var specificItem = await _context.SpecificItems.FirstOrDefaultAsync();
+
+            if (specificItem == null || specificItem.Id == 0)
+            {
+                baseItem = await _context.BaseItems.FirstOrDefaultAsync();
+                baseItem.SpecificItems.Add(newSpecificItem);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }
