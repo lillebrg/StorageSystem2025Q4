@@ -124,12 +124,14 @@ namespace SwaggerRestApi.BusineesLogic
 
             user.Password = hashedPassword;
 
+            user.ChangePasswordOnNextLogin = true;
+
             await _userdbaccess.UpdateUser(user);
 
             return new OkObjectResult(true);
         }
 
-        public async Task<ActionResult> Login(UserLogin login)
+        public async Task<ActionResult<AuthResponse>> Login(UserLogin login)
         {
             var user = await _userdbaccess.GetUserForLogin(login.email);
 
@@ -147,7 +149,8 @@ namespace SwaggerRestApi.BusineesLogic
                 name = user.Name,
                 email = user.Email,
                 access_token = token,
-                role = user.Role
+                role = user.Role,
+                change_password_on_next_login = user.ChangePasswordOnNextLogin
             };
 
             return new OkObjectResult(authresponse);

@@ -40,7 +40,7 @@ namespace SwaggerRestApi.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult> Login([FromBody] UserLogin login)
+        public async Task<ActionResult<AuthResponse>> Login([FromBody] UserLogin login)
         {
             return await _userlogic.Login(login);
         }
