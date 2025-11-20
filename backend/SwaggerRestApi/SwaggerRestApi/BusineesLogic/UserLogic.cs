@@ -73,6 +73,7 @@ namespace SwaggerRestApi.BusineesLogic
             {
                 UsersDTO userReturn = new UsersDTO
                 {
+                    id = user.Id,
                     email = user.Email,
                     name = user.Name,
                     role = user.Role,

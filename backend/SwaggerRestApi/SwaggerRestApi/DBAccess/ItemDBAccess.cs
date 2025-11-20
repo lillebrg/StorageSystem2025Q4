@@ -50,7 +50,6 @@ namespace SwaggerRestApi.DBAccess
 
             if (specificItems != null) { return false; }
 
-
             return true;
         }
 
