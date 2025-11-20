@@ -4,10 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import tech.mercantec.storagesystem.services.Api
-import tech.mercantec.storagesystem.services.Auth
-import tech.mercantec.storagesystem.ui.LoginActivity
-import tech.mercantec.storagesystem.ui.MainActivity
+import tech.mercantec.storagesystem.services.*
+import tech.mercantec.storagesystem.ui.*
 
 class SplashActivity : AppCompatActivity() {
     val auth = Auth(this)

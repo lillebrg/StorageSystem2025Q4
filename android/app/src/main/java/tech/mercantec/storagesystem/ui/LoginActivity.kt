@@ -2,14 +2,11 @@ package tech.mercantec.storagesystem.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import tech.mercantec.storagesystem.R
-import tech.mercantec.storagesystem.services.Api
-import tech.mercantec.storagesystem.services.Auth
+import tech.mercantec.storagesystem.services.*
 
 class LoginActivity : AppCompatActivity() {
     val auth = Auth(this)
