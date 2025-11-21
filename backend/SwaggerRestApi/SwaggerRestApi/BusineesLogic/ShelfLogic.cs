@@ -32,12 +32,12 @@ namespace SwaggerRestApi.BusineesLogic
             {
                 barcode = shelf.Barcode,
                 id = shelf.Id,
-                base_items = new List<BaseItemSearch>()
+                base_items = new List<BaseItemFromShelf>()
             };
 
             foreach (var item in shelf.BaseItems)
             {
-                BaseItemSearch baseItem = new BaseItemSearch
+                BaseItemFromShelf baseItem = new BaseItemFromShelf
                 {
                     id = item.Id,
                     specific_items_count = item.SpecificItems.Count,

@@ -1,6 +1,4 @@
-﻿using SwaggerRestApi.Models.DTO.BaseItems;
-
-namespace SwaggerRestApi.Models.DTO.Shelf
+﻿namespace SwaggerRestApi.Models.DTO.Shelf
 {
     public class ShelfGet
     {
@@ -8,6 +6,6 @@ namespace SwaggerRestApi.Models.DTO.Shelf
 
         public string barcode { get; set; }
 
-        public List<BaseItemSearch> base_items { get; set; }
+        public List<BaseItemFromShelf> base_items { get; set; }
     }
 }
