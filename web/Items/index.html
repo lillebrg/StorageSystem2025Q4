@@ -1,16 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
+    <title>Storage System</title>
     <link rel="stylesheet" href="/style.css" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="/users/style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
       rel="stylesheet"
     />
-</head>
-<body>
-    
-</body>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <script src="/services/checklogin.js"></script>
+    <script type="module" src="/Items/script.js"></script>
+  </head>
+  <body>
+    <nav class="stroke">
+      <ul>
+        <li><a href="/users">Users</a></li>
+      <li><a href="/profile">Profile</a></li>
+      <li><a href="/items">Items</a></li>
+      </ul>
+    </nav>
+    <div class="container">
+      <table class="responsive-table">
+        <h2 class="tableTitle">All Items</h2>
+        <div class="toolsBar">
+          <input class="input" placeholder="Search...">
+          <button class="button" id="createUserBtn">
+            <i class="fa fa-plus"></i>
+          </button>
+        </div>
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">Count</th>
+            <th scope="col">Image</th>
+          </tr>
+        </thead>
+        <tbody id="tBody">
+           <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+        </tbody>
+      </table>
+
+      <div id="createUserModal" class="modal">
+        <form class="form modalContent">
+          <span class="closeModal" id="closeCreateUserBtn">&times;</span>
+          <p class="form-title">Create User</p>
+          <div class="input-container">
+            <input placeholder="Enter name" id="name" required />
+          </div>
+          <div class="input-container">
+            <input placeholder="Enter email" type="email" id="email" required />
+          </div>
+          <div class="input-container">
+            <input
+              placeholder="Enter password"
+              type="password"
+              id="password"
+              required
+            />
+          </div>
+          <div class="input-container">
+            <select name="role" id="role" required>
+              <option value=""selected disabled>Select Role...</option>
+              <option value="Admin" >Admin</option>
+              <option value="Operator">Operator</option>
+              <option value="User">User</option>
+            </select>
+          </div>
+          <button class="button submit" id="submitUserBtn">Create user</button>
+        </form>
+      </div>
+    </div>
+  </body>
 </html>

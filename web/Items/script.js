@@ -1,4 +1,4 @@
-import { create, getAll } from "../services/user.service.js";
+import { create, getAll } from "../services/items.service.js";
 
 await getAll()
   .then((data) => displayTable(data))
@@ -45,21 +45,29 @@ document.getElementById("closeCreateUserBtn").onclick = () => {
   createUserModal.style.display = "none";
 };
 
-const createUserForm = document.querySelector(".form");
-createUserForm.addEventListener("submit", handleCreateUser);
+const form = document.querySelector(".form");
+form.addEventListener("submit", handleCreateUser);
 
 async function handleCreateUser(event) {
-    event.preventDefault();
-  if (!createUserForm.reportValidity()) {
-    return;
-  }
-
+  event.preventDefault();
   const name = nameInput.value;
   const email = emailInput.value;
   const password = passwordInput.value;
   const role = roleInput.value;
 
- await create(name, email, password, role)
+ if (!emailInput.checkValidity()) {
+    alert("Please enter a valid email address.");
+    return;
+  }
+
+
+  // validate all fields
+  if (!name || !email || !password || !role) {
+    alert("Please fill in all fields.");
+    return;
+  }
+
+  var response = await create(name, email, password, role)
     .then(() => location.reload())
     .catch((error) => {
       console.log(error);

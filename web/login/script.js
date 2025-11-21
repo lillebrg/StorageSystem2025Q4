@@ -1,32 +1,59 @@
-import { login } from "../services/user.service.js";
+import { login, updatePassword } from "../services/user.service.js";
 
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 
-const form = document.querySelector(".form");
-form.addEventListener("submit", handleLogin);
+const loginForm = document.getElementById("loginForm");
+loginForm.addEventListener("submit", handleLogin);
+
+const newPasswordForm = document.getElementById("newPasswordForm");
+newPasswordForm.addEventListener("submit", handleNewPassword);
 
 async function handleLogin(event) {
   event.preventDefault();
 
-  const email = emailInput.value.trim();
-  const password = passwordInput.value.trim();
-
-  // basic email format check (HTML also validates type="email")
-  if (!email || !password) {
-    alert("Please fill in both fields.");
+  if (!loginForm.reportValidity()) {
     return;
   }
 
- if (!emailInput.checkValidity()) {
-    alert("Please enter a valid email address.");
+  const email = emailInput.value;
+  const password = passwordInput.value;
+
+  await login(email, password)
+    .then((response) => {
+      console.log(response);
+      localStorage.setItem("token", response.access_token);
+      localStorage.setItem("role", response.role);
+      if (response.change_password_on_next_login) {
+        const changePasswordModal = document.getElementById(
+          "changePasswordModal"
+        );
+        changePasswordModal.style.display = "block";
+      } else {
+        window.location.href = "/items";
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+async function handleNewPassword(event) {
+  event.preventDefault();
+  if (!newPasswordForm.reportValidity()) {
     return;
   }
 
-  var response = await login(email, password);
-  if (response) {
-    sessionStorage.setItem("token", response.access_token);
-    sessionStorage.setItem("role", response.role);
-    window.location.href = "/users";
+  var newPasswordInput = document.getElementById("newPassword").value;
+  var repeatNewPasswordInput =
+    document.getElementById("repeatNewPassword").value;
+  if (newPasswordInput != repeatNewPasswordInput) {
+    alert("New passwords do not match");
+    return;
   }
+  updatePassword(null, passwordInput.value, newPasswordInput)
+    .then(() => (window.location.href = "/items"))
+    .catch((error) => {
+      console.log(error);
+    });
 }
