@@ -32,3 +32,31 @@ export async function request(method, path, body = null) {
       .catch((err) => reject(err.message));
   });
 }
+
+export async function requestUploadImage(image) {
+  var token = localStorage.getItem("token");
+  const headers = {};
+  headers["Authorization"] = `Bearer ${token}`;
+
+  return new Promise((resolve, reject) => {
+    fetch(url + "/images", {
+      method: "POST",
+      headers,
+      body: image,
+    })
+      .then(async (response) => {
+        console.log(response)
+        const json = await response.json();
+          console.log(json)
+        try {
+          
+
+          if (response.ok) return resolve(json);
+
+        } finally {
+          reject("Request failed with HTTP code " + response.status);
+        }
+      })
+      .catch((err) => reject(err.message));
+  });
+}

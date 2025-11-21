@@ -1,4 +1,4 @@
-import { create, getAll } from "../services/items.service.js";
+import { create, getAll, uploadImage } from "../services/items.service.js";
 
 await getAll()
   .then((data) => displayTable(data))
@@ -27,49 +27,51 @@ function displayTable(data) {
 }
 
 //create User
-const createUserModal = document.getElementById("createUserModal");
+const createBaseItemModal = document.getElementById("createBaseItemModal");
 var nameInput = document.getElementById("name");
-var emailInput = document.getElementById("email");
-var passwordInput = document.getElementById("password");
-var roleInput = document.getElementById("role");
+var descriptionInput = document.getElementById("description");
+var imageInput = document.getElementById("image");
+var barcodeInput = document.getElementById("barcode");
 
 document.getElementById("createUserBtn").onclick = () => {
-  createUserModal.style.display = "block";
+  createBaseItemModal.style.display = "block";
   nameInput.value = "";
-  emailInput.value = "";
-  passwordInput.value = "";
-  roleInput.value = "";
+  descriptionInput.value = "";
+  imageInput.value = "";
+  barcodeInput.value = "";
 };
 
 document.getElementById("closeCreateUserBtn").onclick = () => {
-  createUserModal.style.display = "none";
+  createBaseItemModal.style.display = "none";
 };
 
-const form = document.querySelector(".form");
-form.addEventListener("submit", handleCreateUser);
+const createBaseItemForm = document.getElementById("createBaseItemForm");
+createBaseItemForm.addEventListener("submit", handleBaseItemUser);
 
-async function handleCreateUser(event) {
+async function handleBaseItemUser(event) {
   event.preventDefault();
+  if (!createBaseItemForm.reportValidity()) {
+    return;
+  }
+
   const name = nameInput.value;
-  const email = emailInput.value;
-  const password = passwordInput.value;
-  const role = roleInput.value;
+  const description = descriptionInput.value;
+  const barcode = barcodeInput.value;
+  const image = imageInput.files[0];
 
- if (!emailInput.checkValidity()) {
-    alert("Please enter a valid email address.");
-    return;
-  }
+  let savedFileName;
 
-
-  // validate all fields
-  if (!name || !email || !password || !role) {
-    alert("Please fill in all fields.");
-    return;
-  }
-
-  var response = await create(name, email, password, role)
-    .then(() => location.reload())
+  savedFileName = await uploadImage(image)
+    .then((response) => console.log(response))
     .catch((error) => {
       console.log(error);
     });
+
+
+
+  // await create(name, description, barcode, savedFileName, null)
+  //   .then(() => window.location.reload())
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
 }
