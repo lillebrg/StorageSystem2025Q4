@@ -12,12 +12,14 @@ import tech.mercantec.storagesystem.R
 import tech.mercantec.storagesystem.services.Auth
 
 class MainActivity : AppCompatActivity() {
-    val auth = Auth(this)
+    lateinit var auth: Auth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
+        auth = Auth(this)
 
         val scanFragment = ScanFragment()
         val borrowedItemsFragment = BorrowedItemsFragment()
