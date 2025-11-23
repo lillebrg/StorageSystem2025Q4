@@ -18,6 +18,11 @@ namespace SwaggerRestApi.BusineesLogic
             _storagedbaccess = storageDBAccess;
         }
 
+        /// <summary>
+        /// Gets a rack with all shelf on that rack
+        /// </summary>
+        /// <param name="id">The id of the rack to be returned</param>
+        /// <returns>A rack with a list of shelfs</returns>
         public async Task<ActionResult<RackGet>> GetRack(int id)
         {
             var rack = await _rackdbaccess.GetRack(id);
@@ -44,6 +49,12 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(result);
         }
 
+        /// <summary>
+        /// Updates a rack
+        /// </summary>
+        /// <param name="rackUpdate">Contains a rack number</param>
+        /// <param name="id">The id of the object to be updated</param>
+        /// <returns>True</returns>
         public async Task<ActionResult> UpdateRack(RackUpdate rackUpdate, int id)
         {
             var rack = await _rackdbaccess.GetRack(id);
@@ -57,6 +68,11 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(true);
         }
 
+        /// <summary>
+        /// Deletes a rack
+        /// </summary>
+        /// <param name="id">The id of the rack to be deleted</param>
+        /// <returns>True</returns>
         public async Task<ActionResult> DeleteRack(int id)
         {
             var rack = await _rackdbaccess.GetRack(id);
@@ -68,6 +84,12 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(true);
         }
 
+        /// <summary>
+        /// Create a new rack
+        /// </summary>
+        /// <param name="rackCreate">Contains a rack numbur</param>
+        /// <param name="storageId">The id of the storage the rack is in</param>
+        /// <returns>An int that is the id of the rack that was created</returns>
         public async Task<ActionResult<CreateReturnInt>> CreateRack(RackCreate rackCreate, int storageId)
         {
             bool exist = await _rackdbaccess.CheckForExistingRackInStorage(rackCreate.rack_no, storageId);
