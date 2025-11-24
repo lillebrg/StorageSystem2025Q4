@@ -16,6 +16,11 @@ namespace SwaggerRestApi.BusineesLogic
             _storagedbaccess = storageDBAccess;
         }
 
+        /// <summary>
+        /// Gets a storage with a list of racks
+        /// </summary>
+        /// <param name="id">The id of the storage to be returned</param>
+        /// <returns>storage with a list of racks</returns>
         public async Task<ActionResult<StorageGetWithRacks>> GetStorage(int id)
         {
             var storage = await _storagedbaccess.GetStorage(id);
@@ -42,6 +47,10 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(result);
         }
 
+        /// <summary>
+        /// Gets all storages
+        /// </summary>
+        /// <returns>A list of storages</returns>
         public async Task<ActionResult<List<StorageGet>>> GetAllStorages()
         {
             var storages = await _storagedbaccess.GetAllStorages();
@@ -61,6 +70,11 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(result);
         }
 
+        /// <summary>
+        /// Creates a new storage
+        /// </summary>
+        /// <param name="storageCreate">Contains a name of the storage to be created</param>
+        /// <returns>An int with the id if the storage that was created</returns>
         public async Task<ActionResult<CreateReturnInt>> CreateStorage(StorageCreate storageCreate)
         {
             bool exist = await _storagedbaccess.CheckForExistingStorage(storageCreate.name);
@@ -80,6 +94,12 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(result);
         }
 
+        /// <summary>
+        /// Updates a storage
+        /// </summary>
+        /// <param name="storageUpdate">Contains a name</param>
+        /// <param name="id">The id of the object to be updated</param>
+        /// <returns>True</returns>
         public async Task<ActionResult> UpdateStorage(StorageUpdate storageUpdate, int id)
         {
             var storage = await _storagedbaccess.GetStorage(id);
@@ -93,6 +113,11 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(true);
         }
 
+        /// <summary>
+        /// Deletes a storage
+        /// </summary>
+        /// <param name="id">The id of the storage to be deleted</param>
+        /// <returns>True</returns>
         public async Task<ActionResult> DeleteRack(int id)
         {
             var rack = await _storagedbaccess.GetStorage(id);

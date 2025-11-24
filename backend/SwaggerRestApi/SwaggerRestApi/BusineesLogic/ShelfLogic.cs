@@ -21,6 +21,11 @@ namespace SwaggerRestApi.BusineesLogic
             _rackdbaccess = rackDBAccess;
         }
 
+        /// <summary>
+        /// Gets shelf with a list of base items
+        /// </summary>
+        /// <param name="id">The id of the shelf to be returned</param>
+        /// <returns>A shelf with a list of base items</returns>
         public async Task<ActionResult<ShelfGet>> GetShelf(int id)
         {
             var imageBaseURL = _configuration["ImageUrl"];
@@ -53,6 +58,12 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(result);
         }
 
+        /// <summary>
+        /// Update a shelf
+        /// </summary>
+        /// <param name="shelfUpdate">Contains a shelf number</param>
+        /// <param name="id">The id of the shelf to be updated</param>
+        /// <returns>True</returns>
         public async Task<ActionResult> UpdateShelf(ShelfUpdate shelfUpdate, int id)
         {
             var shelf = await _shelfdbaccess.GetShelf(id);
@@ -66,6 +77,11 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(true);
         }
 
+        /// <summary>
+        /// Deletes a shelf
+        /// </summary>
+        /// <param name="id">The id of the shelf to be deleted</param>
+        /// <returns>True</returns>
         public async Task<ActionResult> DeleteShelf(int id)
         {
             var shelf = await _shelfdbaccess.GetShelf(id);
@@ -77,6 +93,12 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(true);
         }
 
+        /// <summary>
+        /// Create a new shelf
+        /// </summary>
+        /// <param name="shelfCreate">Contains a shelf numbur</param>
+        /// <param name="rackId">The id of the rack the shelf is in</param>
+        /// <returns>An int that is the id of the shelf that was created</returns>
         public async Task<ActionResult<ShelfCreateReturn>> CreateShelf(ShelfCreate shelfCreate, int rackId)
         {
             bool exist = await _shelfdbaccess.CheckForExistingShelfOnRack(shelfCreate.shelf_no, rackId);
