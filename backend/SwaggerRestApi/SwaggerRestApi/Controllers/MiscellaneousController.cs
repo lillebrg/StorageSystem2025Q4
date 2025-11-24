@@ -45,7 +45,6 @@ namespace SwaggerRestApi.Controllers
         }
 
         [HttpGet("/images/{filename}")]
-        [Authorize(Roles = "Admin, Operator, User")]
         public async Task<ActionResult> GetImage(string filename)
         {
             string imageBasePath = _configuration["ImageSavePath"];
@@ -55,7 +54,8 @@ namespace SwaggerRestApi.Controllers
 
             var extension = Path.GetExtension(filePath);
 
-            var mimeType = $"image/{extension}";
+            if (extension.ToLower() == ".jpg") { extension = ".jpeg"; }
+            var mimeType = $"image/{extension.Substring(1)}";
 
             return File(filePath, mimeType, filename);
         }
