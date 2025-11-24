@@ -90,19 +90,22 @@ class ImageAnalyzer(val analysis: ImageAnalysis, val ctx: Activity) : ImageAnaly
             } catch (e: ApiRequestException) {
                 if (e.code == 404) {
                     // Barcode not found, prompt product creation
-                    val dialog = AlertDialog.Builder(ctx)
-                        .setMessage("Barcode doesn't exist. Create a new product?")
-                        .setPositiveButton("Create") { dialog, which ->
-                            val intent = Intent(ctx, CreateProductActivity::class.java)
-                            intent.putExtra("barcode", barcode)
-                            ctx.startActivity(intent)
-                        }
-                        .setNegativeButton("Cancel") { dialog, which ->
+                    ctx.runOnUiThread {
+                        val dialog = AlertDialog.Builder(ctx)
+                            .setMessage("Barcode doesn't exist. Create a new product?")
+                            .setPositiveButton("Create") { dialog, which ->
+                                val intent = Intent(ctx, CreateProductActivity::class.java)
+                                intent.putExtra("barcode", barcode)
+                                ctx.startActivity(intent)
+                            }
+                            .setNegativeButton("Cancel") { dialog, which -> }
+                            .setOnDismissListener {
+                                analysis.setAnalyzer(Executors.newSingleThreadExecutor(), this)
+                            }
+                            .create()
 
-                        }
-                        .create()
-
-                    dialog.show()
+                        dialog.show()
+                    }
 
                     return@thread
                 }
@@ -112,8 +115,6 @@ class ImageAnalyzer(val analysis: ImageAnalysis, val ctx: Activity) : ImageAnaly
                 }
             } finally {
                 ctx.runOnUiThread { progressDialog.hide() }
-
-                analysis.setAnalyzer(Executors.newSingleThreadExecutor(), this)
             }
         }
     }

@@ -52,6 +52,24 @@
         android:autofillHints=""
     />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/barcode"
+        android:labelFor="@id/barcode_input"
+    />
+
+    <EditText
+        android:id="@+id/barcode_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:autofillHints=""
+        android:enabled="false"
+    />
+
     <Button
         android:id="@+id/create_button"
         android:layout_width="match_parent"

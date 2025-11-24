@@ -17,6 +17,7 @@
     <string name="current_password">Current password</string>
     <string name="create_new_product">Create new product</string>
     <string name="name">Name</string>
-    <string name="description">Description\n</string>
+    <string name="description">Description</string>
     <string name="create">Create</string>
+    <string name="barcode">Barcode</string>
 </resources>
