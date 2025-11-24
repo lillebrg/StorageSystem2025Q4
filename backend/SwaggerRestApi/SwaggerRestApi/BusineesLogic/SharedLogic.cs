@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SwaggerRestApi.DBAccess;
+using SwaggerRestApi.Models.DTO;
 using SwaggerRestApi.Models.DTO.Barcode;
 using SwaggerRestApi.Models.DTO.User;
 
@@ -11,13 +12,15 @@ namespace SwaggerRestApi.BusineesLogic
         private readonly UserDBAccess _userdbaccess;
         private readonly ShelfDBAccess _shelfdbaccess;
         private readonly IConfiguration _configuration;
+        private readonly NotificationDBAccess _notificationdbaccess;
 
-        public SharedLogic(ItemDBAccess itemDBAccess, UserDBAccess userDBAccess, ShelfDBAccess shelfDBAccess, IConfiguration configuration)
+        public SharedLogic(ItemDBAccess itemDBAccess, UserDBAccess userDBAccess, ShelfDBAccess shelfDBAccess, IConfiguration configuration, NotificationDBAccess notificationDBAccess)
         {
             _itemdbaccess = itemDBAccess;
             _userdbaccess = userDBAccess;
             _shelfdbaccess = shelfDBAccess;
             _configuration = configuration;
+            _notificationdbaccess = notificationDBAccess;
         }
 
         public async Task<ActionResult<ScannedBarcode>> GetScannedItem(string barcode)
@@ -169,6 +172,11 @@ namespace SwaggerRestApi.BusineesLogic
             }
 
             return barcode;
+        }
+
+        public async Task<ActionResult> CreateNotificationSubscription(NotificationSub subscribe)
+        {
+
         }
     }
 }

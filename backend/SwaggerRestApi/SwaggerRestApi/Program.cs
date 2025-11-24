@@ -89,6 +89,7 @@ internal class Program
         builder.Services.AddScoped<ShelfDBAccess>();
         builder.Services.AddScoped<RackDBAccess>();
         builder.Services.AddScoped<StorageDBAccess>();
+        builder.Services.AddScoped<NotificationDBAccess>();
 
         // Adds Business logic
         builder.Services.AddScoped<UserLogic>();
