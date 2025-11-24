@@ -17,6 +17,7 @@ import kotlinx.serialization.Serializable
 import tech.mercantec.storagesystem.services.Api
 import tech.mercantec.storagesystem.services.ApiRequestException
 import tech.mercantec.storagesystem.ui.CreateProductActivity
+import tech.mercantec.storagesystem.ui.ViewProductActivity
 import java.util.concurrent.Executors
 import kotlin.concurrent.thread
 
@@ -76,7 +77,9 @@ class ImageAnalyzer(val analysis: ImageAnalysis, val ctx: Activity) : ImageAnaly
                 ctx.runOnUiThread {
                     when (response.type) {
                         "base_item" -> {
-                            Toast.makeText(ctx, "Found base item: ${response.base_item!!.name}", Toast.LENGTH_LONG).show()
+                            val intent = Intent(ctx, ViewProductActivity::class.java)
+                            intent.putExtra("baseItemId", response.base_item!!.id)
+                            ctx.startActivity(intent)
                         }
                         "specific_item" -> {
                             Toast.makeText(ctx, "Found specific item: ${response.specific_item!!.name}", Toast.LENGTH_LONG).show()
@@ -86,6 +89,8 @@ class ImageAnalyzer(val analysis: ImageAnalysis, val ctx: Activity) : ImageAnaly
                         }
                         else -> Toast.makeText(ctx, "Invalid response type: ${response.type}", Toast.LENGTH_LONG).show()
                     }
+
+                    analysis.setAnalyzer(Executors.newSingleThreadExecutor(), this)
                 }
             } catch (e: ApiRequestException) {
                 if (e.code == 404) {
