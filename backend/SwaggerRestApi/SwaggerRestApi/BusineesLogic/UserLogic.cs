@@ -326,7 +326,7 @@ namespace SwaggerRestApi.BusineesLogic
 
             if (tokenEntity == null) { return new NotFoundObjectResult(new { message = "Could not find token" }); }
 
-            if (tokenEntity.IsRevoked || tokenEntity.ExpiresAt <= DateTime.Now)
+            if (tokenEntity.ExpiresAt <= DateTime.Now)
             {
                 return new BadRequestObjectResult(new { message = "Refresh token is not valid" });
             }
@@ -343,7 +343,6 @@ namespace SwaggerRestApi.BusineesLogic
                 refresh_token = await GenerateRefreshToken(tokenEntity.User.Id)
             };
 
-            tokenEntity.IsRevoked = true;
             await _userdbaccess.DeleteRefreshToken(tokenEntity);
 
             return new OkObjectResult(authresponse);
