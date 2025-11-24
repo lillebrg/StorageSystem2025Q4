@@ -19,6 +19,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StorageSystem">
         <activity
+            android:name=".ui.CreateProductActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.MainActivity"
             android:exported="false" />
         <activity

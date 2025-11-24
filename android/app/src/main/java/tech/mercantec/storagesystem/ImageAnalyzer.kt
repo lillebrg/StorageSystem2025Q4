@@ -1,7 +1,9 @@
 package tech.mercantec.storagesystem
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.app.ProgressDialog
+import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.OptIn
@@ -14,6 +16,7 @@ import com.google.mlkit.vision.common.InputImage
 import kotlinx.serialization.Serializable
 import tech.mercantec.storagesystem.services.Api
 import tech.mercantec.storagesystem.services.ApiRequestException
+import tech.mercantec.storagesystem.ui.CreateProductActivity
 import java.util.concurrent.Executors
 import kotlin.concurrent.thread
 
@@ -87,7 +90,19 @@ class ImageAnalyzer(val analysis: ImageAnalysis, val ctx: Activity) : ImageAnaly
             } catch (e: ApiRequestException) {
                 if (e.code == 404) {
                     // Barcode not found, prompt product creation
-                    ctx.runOnUiThread { Toast.makeText(ctx, "Barcode not found ($barcode)", Toast.LENGTH_LONG).show() }
+                    val dialog = AlertDialog.Builder(ctx)
+                        .setMessage("Barcode doesn't exist. Create a new product?")
+                        .setPositiveButton("Create") { dialog, which ->
+                            val intent = Intent(ctx, CreateProductActivity::class.java)
+                            intent.putExtra("barcode", barcode)
+                            ctx.startActivity(intent)
+                        }
+                        .setNegativeButton("Cancel") { dialog, which ->
+
+                        }
+                        .create()
+
+                    dialog.show()
 
                     return@thread
                 }

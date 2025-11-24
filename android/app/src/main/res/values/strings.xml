@@ -9,4 +9,14 @@
     <string name="borrowed_items">Borrowed items</string>
     <string name="logout">Log out</string>
     <string name="camera_permission_required">Camera permission is required for the app to work</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="reset_password_description">Before you proceed, you have to choose a new password.</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="change_password">Change password</string>
+    <string name="new_password">New password</string>
+    <string name="current_password">Current password</string>
+    <string name="create_new_product">Create new product</string>
+    <string name="name">Name</string>
+    <string name="description">Description\n</string>
+    <string name="create">Create</string>
 </resources>

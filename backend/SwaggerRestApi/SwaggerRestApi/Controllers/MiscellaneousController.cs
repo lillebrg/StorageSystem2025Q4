@@ -62,7 +62,7 @@ namespace SwaggerRestApi.Controllers
 
 
         [HttpPost("/barcodes/scan")]
-        [Authorize(Roles = "Admin, Operator")]
+        [Authorize(Roles = "Admin, Operator, User")]
         public async Task<ActionResult<ScannedBarcode>> GetBarcodeItem(string barcode)
         {
             return await _sharedlogic.GetScannedItem(barcode);
