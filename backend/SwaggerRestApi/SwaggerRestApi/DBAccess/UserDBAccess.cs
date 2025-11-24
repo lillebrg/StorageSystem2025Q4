@@ -20,9 +20,11 @@ namespace SwaggerRestApi.DBAccess
             await _context.SaveChangesAsync();
         }
 
-        public async Task<User?> GetUser(int userId)
+        public async Task<User> GetUser(int userId)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+            return user;
         }
 
         public async Task<List<User>> GetAllUsers()

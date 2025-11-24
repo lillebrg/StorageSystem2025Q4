@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SwaggerRestApi.DBAccess;
 using SwaggerRestApi.Models.DTO.Barcode;
+using SwaggerRestApi.Models.DTO.Borrowed;
 using SwaggerRestApi.Models.DTO.User;
 
 namespace SwaggerRestApi.BusineesLogic
@@ -40,6 +41,8 @@ namespace SwaggerRestApi.BusineesLogic
                 scannedItem.base_item.description = baseItem.Description;
                 scannedItem.base_item.specific_items = new List<SpecificItemFromBaseItemBarcode>();
 
+                if (scannedItem.base_item.image_url == imageBaseURL) { scannedItem.base_item.image_url = null; }
+
                 foreach (var item in baseItem.SpecificItems)
                 {
                     SpecificItemFromBaseItemBarcode specificItemFromBaseItem = new SpecificItemFromBaseItemBarcode
@@ -71,6 +74,7 @@ namespace SwaggerRestApi.BusineesLogic
                 scannedItem.specific_item.base_item.image_url = imageBaseURL + specificItem.BaseItem.Picture;
                 scannedItem.specific_item.base_item.description = specificItem.BaseItem.Description;
 
+                if (scannedItem.specific_item.base_item.image_url == imageBaseURL) { scannedItem.specific_item.base_item.image_url = null; }
 
                 if (specificItem.BorrowedTo != null)
                 {
@@ -108,6 +112,9 @@ namespace SwaggerRestApi.BusineesLogic
                         description = item.Description,
                         image_url = imageBaseURL + item.Picture
                     };
+
+                    if (baseItemFromShelf.image_url == imageBaseURL) { baseItemFromShelf.image_url = null; }
+
                     scannedItem.shelf.BaseItems.Add(baseItemFromShelf);
                 }
 
