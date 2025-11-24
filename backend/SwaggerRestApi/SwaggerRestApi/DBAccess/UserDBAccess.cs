@@ -65,5 +65,28 @@ namespace SwaggerRestApi.DBAccess
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
+
+        public async Task<string> AddRefreshToken(RefreshToken refreshToken)
+        {
+            _context.RefreshTokens.Add(refreshToken);
+
+            await _context.SaveChangesAsync();
+
+            return refreshToken.Token;
+        }
+
+        public async Task<RefreshToken> GetRefreshToken(string refreshToken)
+        {
+            var refreshtoken = await _context.RefreshTokens.Include(rt => rt.User).FirstOrDefaultAsync(rt => rt.Token == refreshToken);
+
+            return refreshtoken;
+        }
+
+        public async Task DeleteRefreshToken(RefreshToken refreshToken)
+        {
+            _context.RefreshTokens.Remove(refreshToken);
+
+            await _context.SaveChangesAsync();
+        }
     }
 }
