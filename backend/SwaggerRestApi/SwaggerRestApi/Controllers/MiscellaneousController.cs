@@ -57,7 +57,7 @@ namespace SwaggerRestApi.Controllers
             if (extension.ToLower() == ".jpg") { extension = ".jpeg"; }
             var mimeType = $"image/{extension.Substring(1)}";
 
-            return File(filePath, mimeType, filename);
+            return PhysicalFile(filePath, mimeType, filename);
         }
 
 

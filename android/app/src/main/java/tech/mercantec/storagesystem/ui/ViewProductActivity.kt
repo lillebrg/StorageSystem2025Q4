@@ -1,21 +1,18 @@
 package tech.mercantec.storagesystem.ui
 
 import android.content.Intent
-import android.net.Uri
+import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.*
+import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import kotlinx.serialization.Serializable
 import tech.mercantec.storagesystem.R
 import tech.mercantec.storagesystem.services.Api
-import androidx.core.net.toUri
+import java.io.InputStream
+import java.net.URL
+import kotlin.concurrent.thread
 
 class ViewProductActivity : AppCompatActivity() {
     @Serializable
@@ -45,6 +42,20 @@ class ViewProductActivity : AppCompatActivity() {
             findViewById<TextView>(R.id.title).setText(baseItem.name, TextView.BufferType.SPANNABLE)
             findViewById<TextView>(R.id.description).setText(baseItem.description, TextView.BufferType.SPANNABLE)
             findViewById<TextView>(R.id.barcode).setText("Barcode: ${baseItem.barcode}", TextView.BufferType.SPANNABLE)
+
+            if (baseItem.image_url != null) {
+                thread {
+                    val stream = URL(baseItem.image_url!!).content as InputStream
+                    val drawable = Drawable.createFromStream(stream, "src")
+
+                    runOnUiThread {
+                        findViewById<ImageView>(R.id.image).apply {
+                            visibility = View.VISIBLE
+                            setImageDrawable(drawable)
+                        }
+                    }
+                }
+            }
         }
     }
 
