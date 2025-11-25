@@ -1,5 +1,6 @@
 package tech.mercantec.storagesystem.ui
 
+import android.app.ComponentCaller
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -22,10 +23,12 @@ class ViewProductActivity : AppCompatActivity() {
     data class SpecificItem(val id: Int, val description: String, val loaned_to: Array<Borrower>)
 
     @Serializable
-    data class BaseItem(val id: Int, val name: String, val description: String, val barcode: String?, val image_url: String?, val specific_items: Array<SpecificItem>)
+    data class BaseItem(val id: Int, var name: String, var description: String, var barcode: String?, var image_url: String?, var specific_items: Array<SpecificItem>)
 
     lateinit var api: Api
     lateinit var baseItem: BaseItem
+
+    val UPDATE_PRODUCT_REQUEST = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,9 +42,7 @@ class ViewProductActivity : AppCompatActivity() {
         Api.makeRequest(this, { api.requestJson<Unit, BaseItem>("GET", "/base-items/${id}", null) }, showLoading = false) {
             baseItem = it
 
-            findViewById<TextView>(R.id.title).setText(baseItem.name, TextView.BufferType.SPANNABLE)
-            findViewById<TextView>(R.id.description).setText(baseItem.description, TextView.BufferType.SPANNABLE)
-            findViewById<TextView>(R.id.barcode).setText("Barcode: ${baseItem.barcode}", TextView.BufferType.SPANNABLE)
+            showProductInfo()
 
             if (baseItem.image_url != null) {
                 thread {
@@ -59,6 +60,31 @@ class ViewProductActivity : AppCompatActivity() {
         }
     }
 
+    private fun showProductInfo() {
+        findViewById<TextView>(R.id.title).setText(baseItem.name, TextView.BufferType.SPANNABLE)
+        findViewById<TextView>(R.id.description).setText(baseItem.description, TextView.BufferType.SPANNABLE)
+        findViewById<TextView>(R.id.barcode).setText(getString(R.string.barcode_label, baseItem.barcode), TextView.BufferType.SPANNABLE)
+    }
+
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?,
+        caller: ComponentCaller
+    ) {
+        super.onActivityResult(requestCode, resultCode, data, caller)
+
+        // Update information after returning from editing the product
+        if (requestCode == UPDATE_PRODUCT_REQUEST) {
+            data?.run {
+                baseItem.name = getStringExtra("name") ?: baseItem.name
+                baseItem.description = getStringExtra("description") ?: baseItem.description
+            }
+
+            showProductInfo()
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.view_product_actions, menu)
         return true
@@ -67,7 +93,11 @@ class ViewProductActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.edit -> {
             val intent = Intent(this, CreateProductActivity::class.java)
-            startActivity(intent)
+            intent.putExtra("id", baseItem.id)
+            intent.putExtra("name", baseItem.name)
+            intent.putExtra("description", baseItem.description)
+            intent.putExtra("barcode", baseItem.barcode)
+            startActivityForResult(intent, UPDATE_PRODUCT_REQUEST)
 
             true
         }

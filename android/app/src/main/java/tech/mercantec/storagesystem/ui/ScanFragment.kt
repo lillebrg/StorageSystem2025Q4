@@ -1,6 +1,7 @@
 package tech.mercantec.storagesystem.ui
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -21,10 +22,10 @@ class ScanFragment : Fragment() {
     private lateinit var previewView: PreviewView
     private lateinit var permissionNoticeView: TextView
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
 
-        val cameraPermission = checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
+        val cameraPermission = checkSelfPermission(context, Manifest.permission.CAMERA)
 
         if (cameraPermission == PERMISSION_GRANTED) {
             showCamera()
