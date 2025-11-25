@@ -23,6 +23,13 @@ namespace SwaggerRestApi.BusineesLogic
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// Gets all base items that matches the search within the limit and after the offset
+        /// </summary>
+        /// <param name="limit">How many base items to be returned</param>
+        /// <param name="offset">So you can make pages that tell what how many items to skip</param>
+        /// <param name="search">Some search parameter on the name on a base item</param>
+        /// <returns>A list of baseitems</returns>
         public async Task<ActionResult<List<BaseItemSearch>>> GetBaseItemBySearch(int limit, int offset, string? search)
         {
             if (search == null)
@@ -55,6 +62,11 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(result);
         }
 
+        /// <summary>
+        /// Create a new base item based on the baseitemcreate
+        /// </summary>
+        /// <param name="newBaseItem">Contains a name, description, image path and a barcode</param>
+        /// <returns>An int that is the id of the item that was created</returns>
         public async Task<ActionResult<CreateReturnInt>> CreateBaseItem(BaseItemCreate newBaseItem)
         {
             BaseItem baseItem = new BaseItem();
@@ -77,6 +89,11 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(result);
         }
 
+        /// <summary>
+        /// Gets a specific item from an id
+        /// </summary>
+        /// <param name="id">The id of the base item to be returned</param>
+        /// <returns>A base item with a list of specific item</returns>
         public async Task<ActionResult<BaseItemGet>> GetBaseItem(int id)
         {
             var imageBaseURL = _configuration["ImageUrl"];
@@ -118,6 +135,12 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(result);
         }
 
+        /// <summary>
+        /// Updates a Base item
+        /// </summary>
+        /// <param name="baseItemCreate">Contains a name, description, image path and a barcode</param>
+        /// <param name="id">The id of the item to be updated</param>
+        /// <returns>True</returns>
         public async Task<ActionResult> UpdateBaseItem(BaseItemCreate baseItemCreate, int id)
         {
             var baseItem = await _itemdbaccess.GetBaseItem(id);
@@ -145,6 +168,11 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(true);
         }
 
+        /// <summary>
+        /// Deletes a base item
+        /// </summary>
+        /// <param name="id">The id of the object to be deleted</param>
+        /// <returns>True</returns>
         public async Task<ActionResult> DeleteBaseItem(int id)
         {
             var baseItem = await _itemdbaccess.GetBaseItem(id);

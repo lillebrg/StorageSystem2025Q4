@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
         android:layout_marginTop="10dp"
+        android:textSize="12sp"
         android:text="@string/email"
     />
 
@@ -38,6 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
         android:layout_marginTop="10dp"
+        android:textSize="12sp"
         android:text="@string/password"
     />
 
@@ -57,4 +59,5 @@
         android:layout_marginTop="10dp"
         android:text="@string/login"
     />
+
 </LinearLayout>

@@ -1,10 +1,10 @@
 import { request } from "./api.js";
 
 export function get(id = null) {
-    if (id) {
+  if (id) {
     return request("GET", `/users/${id}`);
   } else {
-      return request("GET", `/user`);
+    return request("GET", `/user`);
   }
 }
 
@@ -21,37 +21,36 @@ export function create(name, email, password, role) {
   });
 }
 
-export function update(email, username, id = null) {
+export function update(id = null, email, name, role, change_password_on_next_login = null) {
   if (id) {
-    console.log(id);
     return request("PUT", `/users/${id}`, {
       email,
-      username,
+      name,
+      role,
+      change_password_on_next_login,
     });
   } else {
     return request("PUT", `/user`, {
       email,
-      username,
+      name,
     });
   }
 }
 
-export function updatePassword(oldPassword = null, newPassword, id = null) {
+export function updatePassword(id = null, current_password = null, new_password) {
   if (id) {
-    console.log(id);
-    return request("PUT", `/users/${id}/reset-password`, {
-      newPassword,
+    return request("POST", `/users/${id}/reset-password`, {
+      new_password,
     });
   } else {
-    return request("PUT", "/user/change-password", {
-      oldPassword,
-      newPassword,
+    return request("POST", "/user", {
+      current_password,
+      new_password,
     });
   }
 }
 
 export function deleteUser(id) {
-  console.log(id)
   return request("DELETE", `/users/${id}`);
 }
 
@@ -63,7 +62,7 @@ export function login(email, password) {
 }
 
 export function logout() {
-  sessionStorage.removeItem("token");
-  sessionStorage.removeItem("role");
+  localStorage.removeItem("token");
+  localStorage.removeItem("role");
   window.location.href = "/";
 }

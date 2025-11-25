@@ -19,7 +19,7 @@ namespace SwaggerRestApi
             User newUser = new User
             {
                 ChangePasswordOnNextLogin = false,
-                Email = "admin",
+                Email = "admin@admin.com",
                 Name = "admin",
                 Password = BCrypt.Net.BCrypt.HashPassword("admin"),
                 Role = "Admin",

@@ -17,6 +17,12 @@ namespace SwaggerRestApi.BusineesLogic
             _sharedlogic = sharedLogic;
         }
 
+        /// <summary>
+        /// Create a new specific item
+        /// </summary>
+        /// <param name="specificItemsCreate">Contains a description and a barcode</param>
+        /// <param name="baseItemId">The id of the base item that the specific item belongs to</param>
+        /// <returns>An int that is the id of the rack that was created</returns>
         public async Task<ActionResult<CreateReturnInt>> CreateSpecificItem(SpecificItemsCreate specificItemsCreate, int baseItemId)
         {
             if (specificItemsCreate == null) { return new BadRequestObjectResult(new { message = "Specific Items can not be null" }); }
@@ -35,6 +41,12 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(result);
         }
 
+        /// <summary>
+        /// Updates a specific item
+        /// </summary>
+        /// <param name="specificItemUpdate">Contains a description and a barcode</param>
+        /// <param name="id">The id of the specific item to be updated</param>
+        /// <returns>True</returns>
         public async Task<ActionResult> UpdateSpecificItem(SpecificItemUpdate specificItemUpdate, int id)
         {
             if (specificItemUpdate == null) { return new BadRequestObjectResult(new { message = "Specific Item Desciption can not be null" }); }
@@ -50,6 +62,11 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(true);
         }
 
+        /// <summary>
+        /// Deletes a specific item
+        /// </summary>
+        /// <param name="id">The id of the specific item to be deleted</param>
+        /// <returns>True</returns>
         public async Task<ActionResult> DeleteSpecificItem(int id)
             {
             var specificItem = await _itemdbaccess.GetSpecificItem(id);

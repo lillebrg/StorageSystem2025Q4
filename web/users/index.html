@@ -22,6 +22,7 @@
       <ul>
         <li><a href="/users">Users</a></li>
       <li><a href="/profile">Profile</a></li>
+      <li><a href="/items">Items</a></li>
       </ul>
     </nav>
     <div class="container">
@@ -35,13 +36,20 @@
         </div>
         <thead>
           <tr>
-            <th scope="col">Username</th>
+            <th scope="col">Name</th>
             <th scope="col">Email</th>
             <th scope="col">Roles</th>
             <th scope="col">Borrowed Items</th>
           </tr>
         </thead>
-        <tbody id="tBody"></tbody>
+        <tbody id="tBody">
+           <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+        </tbody>
       </table>
 
       <div id="createUserModal" class="modal">
@@ -70,7 +78,7 @@
               <option value="User">User</option>
             </select>
           </div>
-          <button class="button submit" id="submitUserBtn">Create user</button>
+          <button class="button submit" type="submit">Create user</button>
         </form>
       </div>
     </div>

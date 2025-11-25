@@ -26,6 +26,11 @@ namespace SwaggerRestApi.BusineesLogic
             _itemdbaccess = itemDBAccess;
         }
 
+        /// <summary>
+        /// Gets an user from an id
+        /// </summary>
+        /// <param name="id">The id of the user to be returned</param>
+        /// <returns>User</returns>
         public async Task<ActionResult<UserGet>> GetUser(int id)
         {
             var user = await _userdbaccess.GetUser(id);
@@ -64,6 +69,10 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(userReturn);
         }
 
+        /// <summary>
+        /// Gets all users
+        /// </summary>
+        /// <returns>A lits of all users</returns>
         public async Task<ActionResult<List<UsersDTO>>> GetAllUser()
         {
             var users = await _userdbaccess.GetAllUsers();
@@ -84,6 +93,12 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(result);
         }
 
+        /// <summary>
+        /// Changes the password of the user
+        /// </summary>
+        /// <param name="changePassword">Contains old/current password and new password</param>
+        /// <param name="id">The id of the user that changes their password</param>
+        /// <returns>True</returns>
         public async Task<ActionResult> ChangePassword(ChangePassword changePassword, int id)
         {
             var user = await _userdbaccess.GetUser(id);
@@ -104,11 +119,19 @@ namespace SwaggerRestApi.BusineesLogic
 
             user.Password = hashedPassword;
 
+            user.ChangePasswordOnNextLogin = false;
+
             await _userdbaccess.UpdateUser(user);
 
             return new OkObjectResult(true);
         }
 
+        /// <summary>
+        /// Resets password of an user
+        /// </summary>
+        /// <param name="changePassword">Contains a new password</param>
+        /// <param name="id">The id of the user to be updated</param>
+        /// <returns>True</returns>
         public async Task<ActionResult> ResetPassword(ResetPassword changePassword, int id)
         {
             var user = await _userdbaccess.GetUser(id);
@@ -131,6 +154,12 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(true);
         }
 
+        /// <summary>
+        /// Logs an user in
+        /// </summary>
+        /// <param name="login">Contain an email and password</param>
+        /// <returns>Returns an authresponse that have a name, id, jwt token, role and whether they have to change password 
+        /// on their nex login</returns>
         public async Task<ActionResult<AuthResponse>> Login(UserLogin login)
         {
             var user = await _userdbaccess.GetUserForLogin(login.email);
@@ -156,6 +185,12 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(authresponse);
         }
 
+        /// <summary>
+        /// Edits an user
+        /// </summary>
+        /// <param name="userUpdate">Contains an email and name</param>
+        /// <param name="id">The id of the user to be edited</param>
+        /// <returns>True</returns>
         public async Task<ActionResult> EditUser(UserUpdate userUpdate, int id)
         {
             var user = await _userdbaccess.GetUser(id);
@@ -169,7 +204,7 @@ namespace SwaggerRestApi.BusineesLogic
 
             if (userUpdate.email != user.Email && !string.IsNullOrEmpty(userUpdate.email))
             {
-                if (!EmailCheck(userUpdate.email))
+                if (EmailCheck(userUpdate.email))
                 {
                     user.Email = userUpdate.email;
                 }
@@ -180,6 +215,12 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(true);
         }
 
+        /// <summary>
+        /// Edits an user admin only
+        /// </summary>
+        /// <param name="userUpdate">Contains an email, name, role and whether they have to change their password on next login</param>
+        /// <param name="id">The id of the user to be edited</param>
+        /// <returns>True</returns>
         public async Task<ActionResult> EditUser(UserUpdateAdmin userUpdate, int id)
         {
             var user = await _userdbaccess.GetUser(id);
@@ -193,7 +234,7 @@ namespace SwaggerRestApi.BusineesLogic
 
             if (userUpdate.email != user.Email && !string.IsNullOrEmpty(userUpdate.email))
             {
-                if (!EmailCheck(userUpdate.email))
+                if (EmailCheck(userUpdate.email))
                 {
                     user.Email = userUpdate.email;
                 }
@@ -211,6 +252,11 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(true);
         }
 
+        /// <summary>
+        /// Registers an user
+        /// </summary>
+        /// <param name="newUser">Contains an email, password, name and role</param>
+        /// <returns>True</returns>
         public async Task<ActionResult> RegisterUser(UserCreate newUser)
         {
             if (!EmailCheck(newUser.email))
@@ -256,6 +302,11 @@ namespace SwaggerRestApi.BusineesLogic
 
         }
 
+        /// <summary>
+        /// Deletes an user
+        /// </summary>
+        /// <param name="id">The id of the user to be deleted</param>
+        /// <returns>True</returns>
         public async Task<ActionResult> DeleteUser(int id)
         {
             var user = await _userdbaccess.GetUser(id);
@@ -267,6 +318,7 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(true);
         }
 
+        // Our password security that is checked with regex
         private bool PasswordSecurity(string password)
         {
             var hasMinimum8Chars = new Regex(@".{8,}");
@@ -280,6 +332,7 @@ namespace SwaggerRestApi.BusineesLogic
             return new Regex(@".+@.+\..+").IsMatch(email);
         }
 
+        // Genrerates an jwt token from our user object
         private string GenerateJwtToken(User user)
         {
             var claims = new[]

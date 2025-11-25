@@ -87,11 +87,16 @@ internal class Program
         builder.Services.AddScoped<UserDBAccess>();
         builder.Services.AddScoped<ItemDBAccess>();
         builder.Services.AddScoped<ShelfDBAccess>();
+        builder.Services.AddScoped<RackDBAccess>();
+        builder.Services.AddScoped<StorageDBAccess>();
 
         // Adds Business logic
         builder.Services.AddScoped<UserLogic>();
         builder.Services.AddScoped<BaseItemLogic>();
         builder.Services.AddScoped<SpecificItemLogic>();
+        builder.Services.AddScoped<ShelfLogic>();
+        builder.Services.AddScoped<RackLogic>();
+        builder.Services.AddScoped<StorageLogic>();
 
         builder.Services.AddScoped<SharedLogic>();
 
