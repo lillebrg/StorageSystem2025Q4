@@ -1,16 +1,21 @@
 package tech.mercantec.storagesystem.ui
 
 import android.content.ActivityNotFoundException
-import android.os.Bundle
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 import tech.mercantec.storagesystem.R
 import tech.mercantec.storagesystem.services.Api
+import java.io.ByteArrayOutputStream
+import kotlin.concurrent.thread
 
 class CreateProductActivity : AppCompatActivity() {
     val api = Api(this)
@@ -91,13 +96,13 @@ class CreateProductActivity : AppCompatActivity() {
                             intent.action = Intent.ACTION_GET_CONTENT
                             Intent.createChooser(intent, "Select image")
                         }
-                        else -> throw UnsupportedOperationException("Unreachable code")
+                        else -> return@setItems
                     }
 
                     val request = when (which) {
-                        0 -> PICK_IMAGE_REQUEST
-                        1 -> TAKE_PICTURE_REQUEST
-                        else -> throw UnsupportedOperationException("Unreachable code")
+                        0 -> TAKE_PICTURE_REQUEST
+                        1 -> PICK_IMAGE_REQUEST
+                        else -> return@setItems
                     }
 
                     try {
@@ -109,6 +114,43 @@ class CreateProductActivity : AppCompatActivity() {
                 .create()
 
             dialog.show()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode != RESULT_OK || data == null) return
+
+        // Retrieve selected image
+        val bitmap = when (requestCode) {
+            PICK_IMAGE_REQUEST -> {
+                val inputStream = contentResolver.openInputStream(data.data!!)
+                BitmapFactory.decodeStream(inputStream)
+            }
+            TAKE_PICTURE_REQUEST -> {
+                data.extras!!.get("data") as Bitmap
+            }
+            else -> return
+        }
+
+        // Convert to PNG
+        val outputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        outputStream.flush()
+        outputStream.close()
+
+        // Upload to backend
+        thread {
+            @Serializable
+            data class UploadImageResponse(val path: String)
+
+            val httpResponse = api.request("POST", "/images", outputStream.toByteArray())
+            val response = Json.decodeFromString<UploadImageResponse>(httpResponse.body)
+
+            runOnUiThread {
+                Toast.makeText(this, response.path, Toast.LENGTH_LONG).show()
+            }
         }
     }
 }

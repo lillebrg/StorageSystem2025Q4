@@ -18,7 +18,7 @@ class ApiRequestException(override val message: String, val code: Int, override 
 class HttpResponse(val body: String, val code: Int)
 
 class Api(private val ctx: Context) {
-    fun request(method: String, path: String, data: String?): HttpResponse {
+    fun request(method: String, path: String, data: ByteArray?): HttpResponse {
         val url = URL(BuildConfig.API_BASE_URL + path)
 
         val accessToken = ctx.getSharedPreferences("current_user", Context.MODE_PRIVATE).getString("access_token", null)
@@ -33,7 +33,7 @@ class Api(private val ctx: Context) {
                 if (data != null) {
                     setRequestProperty("Content-Type", "application/json")
 
-                    outputStream.write(data.toByteArray())
+                    outputStream.write(data)
                     outputStream.flush()
                 }
 
@@ -64,7 +64,7 @@ class Api(private val ctx: Context) {
                 Json.encodeToString(serializer<Req>(), data)
             else null
 
-        val response = request(method, path, requestJson)
+        val response = request(method, path, requestJson?.toByteArray())
 
         if (response.code >= 400) {
             try {
