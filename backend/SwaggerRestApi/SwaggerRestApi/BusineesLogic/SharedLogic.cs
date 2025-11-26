@@ -86,7 +86,7 @@ namespace SwaggerRestApi.BusineesLogic
 
             var shelf = await _shelfdbaccess.GetShelfFromBarcode(barcode);
 
-            if (shelf.Id != 0)
+            if (shelf != null)
             {
                 ScannedBarcode scannedItem = new ScannedBarcode
                 {
@@ -97,7 +97,7 @@ namespace SwaggerRestApi.BusineesLogic
                 scannedItem.shelf.id = shelf.Id;
                 scannedItem.shelf.shelf_no = shelf.ShelfNo;
                 scannedItem.shelf.rack_id = shelf.RackId;
-                scannedItem.shelf.BaseItems = new List<BaseItemFromShelfBarcode>();
+                scannedItem.shelf.base_items = new List<BaseItemFromShelfBarcode>();
 
                 foreach (var item in shelf.BaseItems)
                 {
@@ -108,7 +108,7 @@ namespace SwaggerRestApi.BusineesLogic
                         description = item.Description,
                         image_url = imageBaseURL + item.Picture
                     };
-                    scannedItem.shelf.BaseItems.Add(baseItemFromShelf);
+                    scannedItem.shelf.base_items.Add(baseItemFromShelf);
                 }
 
                 return new OkObjectResult(scannedItem);

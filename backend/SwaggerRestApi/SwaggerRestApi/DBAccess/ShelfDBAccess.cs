@@ -26,7 +26,7 @@ namespace SwaggerRestApi.DBAccess
             return shelf != null;
         }
 
-        public async Task<Shelf> GetShelfFromBarcode(string barcode)
+        public async Task<Shelf?> GetShelfFromBarcode(string barcode)
         {
             var shelf = await _context.Shelves.Include(s => s.BaseItems).FirstOrDefaultAsync(s => s.Barcode == barcode);
 
