@@ -14,6 +14,9 @@ export async function request(method, path, body = null) {
     })
       .then(async (response) => {
         try {
+
+          if (response.status == 401) console.log(response.status);
+          
           const json = await response.json();
 
           if (response.ok) return resolve(json);

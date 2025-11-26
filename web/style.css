@@ -19,12 +19,16 @@ main {
     border-radius: 15px;
 }
 
-.toolsBar {
+.toolBar {
   display: flex;
   justify-content: space-between; /* pushes them to opposite sides */
   align-items: center; /* vertically center them */
   width: 98%;
   margin: 1%;
+}
+
+.toolBarbuttons {
+  display: flex;
 }
 
 /* #region Button */
@@ -348,56 +352,7 @@ main {
 /* #endregion */
 
 /* #region NavigationBar */
-nav {
-  width: 100%;
-  margin: 0 auto;
-  box-shadow: 0px 5px 0px lightgray;
-}
 
-/* By Dominik Biedebach @domobch */
-nav ul {
-  list-style: none;
-  text-align: center;
-}
-nav ul li {
-  display: inline-block;
-}
-nav ul li a {
-  display: block;
-  padding: 5px;
-  text-decoration: none;
-  color: #7d2ae8;
-  font-weight: 800;
-  text-transform: uppercase;
-  margin: 0 10px;
-}
-nav ul li a,
-nav ul li a:after,
-nav ul li a:before {
-  transition: all .5s;
-}
-nav ul li a:hover {
-  color: #a885eb;
-}
-nav.stroke ul li a,
-nav.fill ul li a {
-  position: relative;
-}
-nav.stroke ul li a:after,
-nav.fill ul li a:after {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
-  width: 0%;
-  content: '.';
-  color: transparent;
-  height: 1px;
-}
-nav.stroke ul li a:hover:after {
-  width: 100%;
-}
 /* #endregion */
 
 /* #region Modal */
@@ -450,3 +405,23 @@ nav.stroke ul li a:hover:after {
   }
 
 /* #endregion */
+
+.input {
+  border: 2px solid transparent;
+  width: 15em;
+  height: 2.5em;
+  padding-left: 0.8em;
+  outline: none;
+  overflow: hidden;
+  background-color: #F3F3F3;
+  border-radius: 10px;
+  transition: all 0.5s;
+}
+
+.input:hover,
+.input:focus {
+  border: 2px solid #7d2ae8;
+  box-shadow: 0px 0px 0px 7px #7d2ae8 20%;
+  background-color: white;
+}
+

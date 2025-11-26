@@ -1,15 +1,25 @@
-import { create, getAll, uploadImage } from "../services/items.service.js";
+import { create, getAll, uploadImage } from "../services/item.service.js";
+
+var noItems = document.getElementById("noItems");
+noItems.style.display = "none";
+
+var getAllItemsError = document.getElementById("getAllItemsError");
+getAllItemsError.style.display = "none";
 
 await getAll()
   .then((data) => displayTable(data))
   .catch((error) => {
-    console.log(error);
+    getAllItemsError.style.display = "block";
+    getAllItemsError.innerHTML = error
   });
 
 function displayTable(data) {
   var table = document.getElementById("tBody");
   table.innerHTML = ""; // clear old table
   for (let i = 0; i < data.length; i++) {
+     if (data.length <= 0) {
+    noItems.style.display = "block";
+  }
     table.innerHTML += `
          <tr data-id="${data[i].id}">
             <td>${data[i].name}</td>
@@ -26,7 +36,7 @@ function displayTable(data) {
   });
 }
 
-//create User
+//create baseItem
 const createBaseItemModal = document.getElementById("createBaseItemModal");
 var nameInput = document.getElementById("name");
 var descriptionInput = document.getElementById("description");
@@ -66,12 +76,4 @@ async function handleBaseItemUser(event) {
     .catch((error) => {
       console.log(error);
     });
-
-
-
-  // await create(name, description, barcode, savedFileName, null)
-  //   .then(() => window.location.reload())
-  //   .catch((error) => {
-  //     console.log(error);
-  //   });
 }
