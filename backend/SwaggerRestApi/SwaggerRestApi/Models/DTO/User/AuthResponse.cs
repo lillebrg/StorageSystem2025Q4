@@ -10,6 +10,8 @@
 
         public string access_token { get; set; }
 
+        public string refresh_token { get; set; }
+
         public bool change_password_on_next_login { get; set; }
     }
 }
