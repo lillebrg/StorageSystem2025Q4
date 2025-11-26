@@ -1,9 +1,12 @@
 package tech.mercantec.storagesystem.ui
 
+import android.content.ActivityNotFoundException
 import android.os.Bundle
 import android.content.Intent
+import android.provider.MediaStore
 import android.widget.*
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.serialization.Serializable
 import tech.mercantec.storagesystem.R
@@ -11,6 +14,9 @@ import tech.mercantec.storagesystem.services.Api
 
 class CreateProductActivity : AppCompatActivity() {
     val api = Api(this)
+
+    val PICK_IMAGE_REQUEST = 1
+    val TAKE_PICTURE_REQUEST = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +74,41 @@ class CreateProductActivity : AppCompatActivity() {
 
                 finish()
             }
+        }
+
+        findViewById<Button>(R.id.upload_image_button).setOnClickListener {
+            // Prompt user to take picture or choose image
+            val dialog = AlertDialog.Builder(this)
+                .setTitle("Upload image")
+                .setItems(arrayOf("Take a picture", "Select from album")) { dialog, which ->
+                    val intent = when (which) {
+                        // Take picture with camera
+                        0 -> Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                        // Select from album
+                        1 -> {
+                            val intent = Intent()
+                            intent.type = "image/*"
+                            intent.action = Intent.ACTION_GET_CONTENT
+                            Intent.createChooser(intent, "Select image")
+                        }
+                        else -> throw UnsupportedOperationException("Unreachable code")
+                    }
+
+                    val request = when (which) {
+                        0 -> PICK_IMAGE_REQUEST
+                        1 -> TAKE_PICTURE_REQUEST
+                        else -> throw UnsupportedOperationException("Unreachable code")
+                    }
+
+                    try {
+                        startActivityForResult(intent, request)
+                    } catch (e: ActivityNotFoundException) {
+                        Toast.makeText(this, "No matching apps for this request", Toast.LENGTH_LONG).show()
+                    }
+                }
+                .create()
+
+            dialog.show()
         }
     }
 }

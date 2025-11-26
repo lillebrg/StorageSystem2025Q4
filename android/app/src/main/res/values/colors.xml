@@ -4,4 +4,6 @@
     <color name="brand_dark">#FF3E015B</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="light_gray">#FFEEEEEE</color>
+    <color name="dark_gray">#FF5F5F5F</color>
 </resources>

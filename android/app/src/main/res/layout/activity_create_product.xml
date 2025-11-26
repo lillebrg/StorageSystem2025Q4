@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:gravity="center_horizontal"
     android:padding="40dp"
     tools:context=".ui.CreateProductActivity">
 
@@ -51,6 +52,24 @@
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
         android:autofillHints=""
+    />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/image"
+    />
+
+    <Button
+        android:id="@+id/upload_image_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/light_gray"
+        android:textColor="@color/dark_gray"
+        android:drawableLeft="@drawable/ic_camera"
+        android:text="Upload image"
     />
 
     <TextView

@@ -25,4 +25,5 @@
     <string name="edit">Edit</string>
     <string name="product_image">Product image</string>
     <string name="barcode_label">Barcode: %s</string>
+    <string name="image">Image</string>
 </resources>
