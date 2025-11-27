@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.View
 import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
@@ -21,6 +22,8 @@ class CreateProductActivity : AppCompatActivity() {
 
     val PICK_IMAGE_REQUEST = 1
     val TAKE_PICTURE_REQUEST = 2
+
+    var imagePath: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +59,7 @@ class CreateProductActivity : AppCompatActivity() {
 
             // Send create or update request
             Api.makeRequest(this, {
-                val request = UpdateBaseItemRequest(newName, newDescription, barcode, null, null)
+                val request = UpdateBaseItemRequest(newName, newDescription, barcode, imagePath, null)
 
                 return@makeRequest when (id) {
                     0 -> api.requestJson<UpdateBaseItemRequest, CreateBaseItemResponse>("POST", "/base-items", request)
@@ -114,6 +117,14 @@ class CreateProductActivity : AppCompatActivity() {
 
             dialog.show()
         }
+
+        findViewById<Button>(R.id.remove_image_button).setOnClickListener { view ->
+            imagePath = null
+
+            view.visibility = View.GONE
+            findViewById<ImageView>(R.id.image).visibility = View.GONE
+            findViewById<Button>(R.id.upload_image_button).visibility = View.VISIBLE
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -146,9 +157,16 @@ class CreateProductActivity : AppCompatActivity() {
 
             val response = Json.decodeFromString<UploadImageResponse>(http.body)
 
-            runOnUiThread {
-                Toast.makeText(this, response.path, Toast.LENGTH_LONG).show()
+            imagePath = response.path
+
+            // Show image
+            findViewById<ImageView>(R.id.image).apply {
+                visibility = View.VISIBLE
+                setImageBitmap(bitmap)
             }
+
+            findViewById<Button>(R.id.upload_image_button).visibility = View.GONE
+            findViewById<TextView>(R.id.remove_image_button).visibility = View.VISIBLE
         }
     }
 }

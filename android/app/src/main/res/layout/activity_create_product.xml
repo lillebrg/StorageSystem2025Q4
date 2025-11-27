@@ -69,7 +69,30 @@
         android:backgroundTint="@color/light_gray"
         android:textColor="@color/dark_gray"
         android:drawableLeft="@drawable/ic_camera"
-        android:text="Upload image"
+        android:text="@string/upload_image"
+    />
+
+    <ImageView
+        android:id="@+id/image"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="20dp"
+        android:scaleType="fitCenter"
+        android:contentDescription="@string/product_image"
+    />
+
+    <Button
+        android:id="@+id/remove_image_button"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/dark_gray"
+        android:drawableLeft="@drawable/ic_delete"
+        android:text="@string/remove_image"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
     />
 
     <TextView
