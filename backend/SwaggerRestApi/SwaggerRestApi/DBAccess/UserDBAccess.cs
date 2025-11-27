@@ -27,6 +27,18 @@ namespace SwaggerRestApi.DBAccess
             return user;
         }
 
+        public async Task<bool> CheckIfAdminOrOperator(int userId)
+        {
+            var user = await _context.Users.Where(u => u.Id == userId && u.Role != "User").FirstOrDefaultAsync();
+
+            if (user != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public async Task<List<User>> GetAllUsers()
         {
             return await _context.Users.ToListAsync();

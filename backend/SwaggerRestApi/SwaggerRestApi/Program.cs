@@ -90,6 +90,7 @@ internal class Program
         builder.Services.AddScoped<RackDBAccess>();
         builder.Services.AddScoped<StorageDBAccess>();
         builder.Services.AddScoped<BorrowedRequestDBAccess>();
+        builder.Services.AddScoped<NotificationDBAccess>();
 
         // Adds Business logic so it gets dependency injected
         builder.Services.AddScoped<UserLogic>();

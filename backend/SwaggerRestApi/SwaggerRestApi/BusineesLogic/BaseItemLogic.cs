@@ -54,7 +54,8 @@ namespace SwaggerRestApi.BusineesLogic
                     description = item.Description,
                     barcode = item.ModelBarcode,
                     image_url = imageBaseURL + item.Picture,
-                    specific_items_count = item.SpecificItems.Count
+                    specific_items_count = item.SpecificItems.Count,
+                    specific_items_available_count = item.SpecificItems.Where(s => s.BorrowedTo == null).Count()
                 };
 
                 if (baseItem.image_url == imageBaseURL) { baseItem.image_url = null; }
@@ -110,7 +111,7 @@ namespace SwaggerRestApi.BusineesLogic
                 name = baseItem.Name,
                 description = baseItem.Description,
                 barcode = baseItem.ModelBarcode,
-                image_url = baseItem.Picture != null ? imageBaseURL + baseItem.Picture : null,
+                image_url = imageBaseURL + baseItem.Picture,
                 specific_items = new List<SpecificItemsGet>()
             };
 

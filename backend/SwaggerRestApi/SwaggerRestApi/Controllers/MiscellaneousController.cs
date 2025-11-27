@@ -21,27 +21,31 @@ namespace SwaggerRestApi.Controllers
 
         [HttpPost("/images")]
         [Authorize(Roles = "Admin, Operator")]
-        public async Task<ActionResult<ImagePost>> SaveImage(IFormFile image)
+        public async Task<ActionResult<ImagePost>> SaveImage()
         {
             string imageBasePath = _configuration["ImageSavePath"];
 
-            if (image == null || image.Length == 0) { return BadRequest(new { message = "Could not find image" }); }
-            if (Path.GetExtension(image.FileName).ToLower() != ".png" && Path.GetExtension(image.FileName).ToLower() != ".jpeg"
-                && Path.GetExtension(image.FileName).ToLower() != ".jpg") { return BadRequest(new { message = "Invalid file format" }); }
+            if (HttpContext.Request.ContentType != "image/png" && HttpContext.Request.ContentType != "image/jpeg") { return BadRequest(new { message = "Invalid file format" }); }
 
             if (!System.IO.File.Exists(imageBasePath))
             {
                 Directory.CreateDirectory(imageBasePath);
             }
 
+            string extension = HttpContext.Request.ContentType switch
+            {
+                "image/png" => ".png",
+                "image/jpeg" => ".jpg",
+            };
+
             var fileName = Path.GetRandomFileName();
-            fileName = Path.ChangeExtension(fileName, Path.GetExtension(image.FileName));
+            fileName = Path.ChangeExtension(fileName, extension);
 
             var filePath = Path.Combine(imageBasePath, fileName);
 
-            using (var stream = System.IO.File.Create(filePath)) { await image.CopyToAsync(stream); }
+            using (var stream = System.IO.File.Create(filePath)) { await Request.Body.CopyToAsync(stream); }
 
-            return Ok(fileName);
+            return Ok(new ImagePost { path = fileName });
         }
 
         [HttpGet("/images/{filename}")]
