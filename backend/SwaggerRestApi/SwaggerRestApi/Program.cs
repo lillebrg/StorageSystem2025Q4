@@ -124,8 +124,6 @@ internal class Program
         await seedData.StartStorageData();
         await seedData.StartItemsData();
 
-        app.UseHttpsRedirection();
-
         app.UseCors("AllowAll");
 
         app.UseAuthorization();
