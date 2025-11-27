@@ -12,13 +12,20 @@ namespace SwaggerRestApi.BusineesLogic
         private readonly ItemDBAccess _itemdbaccess;
         private readonly UserDBAccess _userdbaccess;
         private readonly IConfiguration _configuration;
+        private readonly SharedLogic _sharedlogic;
 
-        public BorrowedRequestLogic(BorrowedRequestDBAccess borrowedRequestDBAccess, ItemDBAccess itemDBAccess, UserDBAccess userDBAccess, IConfiguration configuration)
+        public BorrowedRequestLogic(
+            BorrowedRequestDBAccess borrowedRequestDBAccess, 
+            ItemDBAccess itemDBAccess, 
+            UserDBAccess userDBAccess, 
+            IConfiguration configuration, 
+            SharedLogic sheredlogic)
         {
             _borrowedbaccess = borrowedRequestDBAccess;
             _itemdbaccess = itemDBAccess;
             _userdbaccess = userDBAccess;
             _configuration = configuration;
+            _sharedlogic = sheredlogic;
         }
 
         public async Task<ActionResult<List<BorrowGet>>> GetAllBorrowRequest()
@@ -72,12 +79,23 @@ namespace SwaggerRestApi.BusineesLogic
 
             await _borrowedbaccess.CreateBorrowRequest(borrowRequest);
 
+            var user = await _userdbaccess.GetUser(userId);
+            var specificItem = await _itemdbaccess.GetSpecificItemAndBaseItem(borrowRequestCreate.specific_item);
+            Notifications notification = new Notifications
+            {
+                SentBy = userId,
+                Message = $"{user.Name} has created a borrow request for {specificItem.BaseItem.Name}"
+            };
+
+            await _sharedlogic.CreateNotification(notification);
+            await _sharedlogic.SendAllNotifications();
+
             return new OkObjectResult(true);
         }
 
-        public async Task<ActionResult> AcceptBorrowRequest(int id)
+        public async Task<ActionResult> AcceptBorrowRequest(int id, int userId)
         {
-            var borrowRequest = await _borrowedbaccess.GetBorrwRequest(id);
+            var borrowRequest = await _borrowedbaccess.GetBorrowRequest(id);
 
             if (borrowRequest == null) { return new NotFoundObjectResult(new { message = "Could not find borrow request" }); }
 
@@ -92,23 +110,47 @@ namespace SwaggerRestApi.BusineesLogic
             await _userdbaccess.UpdateUser(user);
             await _itemdbaccess.UpdateSpecificItem(specificItem);
 
+            var acceptedBy = await _userdbaccess.GetUser(userId);
+            var specificItemAndBaseItem = await _itemdbaccess.GetSpecificItemAndBaseItem(borrowRequest.SpecificItem);
+            Notifications notification = new Notifications
+            {
+                SentBy = userId,
+                Message = $"Your borrow request for {specificItemAndBaseItem.BaseItem.Name} was accepted by {acceptedBy.Name}",
+                SentTo = user.Id
+            };
+
+            await _sharedlogic.CreateNotification(notification);
+            await _sharedlogic.SendAllNotifications();
+
             return new OkObjectResult(true);
         }
 
-        public async Task<ActionResult> RejectBorrowRequest(int id)
+        public async Task<ActionResult> RejectBorrowRequest(int id, int userId)
         {
-            var borrowRequest = await _borrowedbaccess.GetBorrwRequest(id);
+            var borrowRequest = await _borrowedbaccess.GetBorrowRequest(id);
 
-            if (borrowRequest == null) { return new NotFoundObjectResult(new { message = "Could not find borrow request" }); }
+            if (borrowRequest == null || borrowRequest.Accepted == true) { return new NotFoundObjectResult(new { message = "Could not find borrow request" }); }
 
             await _borrowedbaccess.DeleteBorrowRequest(borrowRequest);
+
+            var acceptedBy = await _userdbaccess.GetUser(userId);
+            var specificItemAndBaseItem = await _itemdbaccess.GetSpecificItemAndBaseItem(borrowRequest.SpecificItem);
+            Notifications notification = new Notifications
+            {
+                SentBy = userId,
+                Message = $"Your borrow request for {specificItemAndBaseItem.BaseItem.Name} was rejected by {acceptedBy.Name}",
+                SentTo = borrowRequest.LoanTo
+            };
+
+            await _sharedlogic.CreateNotification(notification);
+            await _sharedlogic.SendAllNotifications();
 
             return new OkObjectResult(true);
         }
 
         public async Task<ActionResult> ReturnBorrowRequest(int id)
         {
-            var borrowRequest = await _borrowedbaccess.GetBorrwRequest(id);
+            var borrowRequest = await _borrowedbaccess.GetBorrowRequest(id);
 
             if (borrowRequest == null) { return new NotFoundObjectResult(new { message = "Could not find borrow request" }); }
 

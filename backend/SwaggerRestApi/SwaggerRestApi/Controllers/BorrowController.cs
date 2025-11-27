@@ -38,7 +38,10 @@ namespace SwaggerRestApi.Controllers
         [Authorize(Roles = "Admin, Operator")]
         public async Task<ActionResult> AcceptBorrowRequest(int id)
         {
-            return await _borrowedlogic.AcceptBorrowRequest(id);
+            var claims = HttpContext.User.Claims;
+            string userIdString = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            int userId = Convert.ToInt32(userIdString);
+            return await _borrowedlogic.AcceptBorrowRequest(id, userId);
         }
 
         // send notification to user
@@ -46,7 +49,10 @@ namespace SwaggerRestApi.Controllers
         [Authorize(Roles = "Admin, Operator")]
         public async Task<ActionResult> RejectBorrowRequest(int id)
         {
-            return await _borrowedlogic.RejectBorrowRequest(id);
+            var claims = HttpContext.User.Claims;
+            string userIdString = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            int userId = Convert.ToInt32(userIdString);
+            return await _borrowedlogic.RejectBorrowRequest(id, userId);
         }
 
         [HttpPost("{id}/return")]

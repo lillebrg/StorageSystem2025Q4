@@ -19,7 +19,7 @@ namespace SwaggerRestApi.DBAccess
             return borrowRequests;
         }
 
-        public async Task<BorrowRequest> GetBorrwRequest(int id)
+        public async Task<BorrowRequest> GetBorrowRequest(int id)
         {
             var borrowRequests = await _context.BorrowRequests.FirstOrDefaultAsync(b => b.Id == id);
 
