@@ -22,6 +22,8 @@ namespace SwaggerRestApi.DBAccess
 
         public DbSet<BorrowRequest> BorrowRequests { get; set; }
 
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -56,6 +58,16 @@ namespace SwaggerRestApi.DBAccess
                 .WithOne(r => r.BaseItem)
                 .HasForeignKey(r => r.BaseItemId)
                 .IsRequired();
+
+            modelBuilder.Entity<RefreshToken>()
+                .HasOne(rt => rt.User)
+                .WithMany()
+                .HasForeignKey(rt => rt.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<RefreshToken>()
+                .HasIndex(rt => rt.Token)
+                .IsUnique();
         }
     }
 }

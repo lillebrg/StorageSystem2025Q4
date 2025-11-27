@@ -8,6 +8,7 @@ using SwaggerRestApi.Models.DTO.Borrowed;
 using SwaggerRestApi.Models.DTO.User;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -183,7 +184,8 @@ namespace SwaggerRestApi.BusineesLogic
                 email = user.Email,
                 access_token = token,
                 role = user.Role,
-                change_password_on_next_login = user.ChangePasswordOnNextLogin
+                change_password_on_next_login = user.ChangePasswordOnNextLogin,
+                refresh_token = await GenerateRefreshToken(user.Id)
             };
 
             return new OkObjectResult(authresponse);
@@ -356,6 +358,45 @@ namespace SwaggerRestApi.BusineesLogic
 
             return new OkObjectResult(result);
         }
+      
+        public async Task<ActionResult<AuthResponse>> RefreshJWTToken(RefreshTokenRequest refreshToken)
+        {
+            var tokenEntity = await _userdbaccess.GetRefreshToken(refreshToken.refresh_token);
+
+            if (tokenEntity == null) { return new NotFoundObjectResult(new { message = "Could not find token" }); }
+
+            if (tokenEntity.ExpiresAt <= DateTime.Now)
+            {
+                return new BadRequestObjectResult(new { message = "Refresh token is not valid" });
+            }
+
+            var token = GenerateJwtToken(tokenEntity.User);
+
+            var authresponse = new AuthResponse
+            {
+                name = tokenEntity.User.Name,
+                email = tokenEntity.User.Email,
+                access_token = token,
+                role = tokenEntity.User.Role,
+                change_password_on_next_login = tokenEntity.User.ChangePasswordOnNextLogin,
+                refresh_token = await GenerateRefreshToken(tokenEntity.User.Id)
+            };
+
+            await _userdbaccess.DeleteRefreshToken(tokenEntity);
+
+            return new OkObjectResult(authresponse);
+        }
+
+        public async Task<ActionResult> DeleteRefreshToken(RefreshTokenRequest refreshToken)
+        {
+            var tokenEntity = await _userdbaccess.GetRefreshToken(refreshToken.refresh_token);
+
+            if (tokenEntity == null) { return new NotFoundObjectResult(new { message = "Could not find token" }); }
+
+            await _userdbaccess.DeleteRefreshToken(tokenEntity);
+
+            return new OkObjectResult(true);
+        }
 
         // Our password security that is checked with regex
         private bool PasswordSecurity(string password)
@@ -394,6 +435,23 @@ namespace SwaggerRestApi.BusineesLogic
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        private async Task<string> GenerateRefreshToken(int userId)
+        {
+            var randomNumber = new byte[64];
+            var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+            var refreshtoken = Convert.ToBase64String(randomNumber);
+
+            RefreshToken token = new RefreshToken
+            {
+                Token = refreshtoken,
+                UserId = userId,
+                ExpiresAt = DateTime.Now.AddDays(7)
+            };
+
+            return await _userdbaccess.AddRefreshToken(token);
         }
     }
 }
