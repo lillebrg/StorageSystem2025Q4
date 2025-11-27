@@ -15,7 +15,6 @@ import kotlinx.serialization.json.Json
 import tech.mercantec.storagesystem.R
 import tech.mercantec.storagesystem.services.Api
 import java.io.ByteArrayOutputStream
-import kotlin.concurrent.thread
 
 class CreateProductActivity : AppCompatActivity() {
     val api = Api(this)
@@ -141,12 +140,11 @@ class CreateProductActivity : AppCompatActivity() {
         outputStream.close()
 
         // Upload to backend
-        thread {
+        Api.makeRequest(this, { api.request("POST", "/images", outputStream.toByteArray(), mapOf("Content-Type" to "image/png")) }) { http ->
             @Serializable
             data class UploadImageResponse(val path: String)
 
-            val httpResponse = api.request("POST", "/images", outputStream.toByteArray())
-            val response = Json.decodeFromString<UploadImageResponse>(httpResponse.body)
+            val response = Json.decodeFromString<UploadImageResponse>(http.body)
 
             runOnUiThread {
                 Toast.makeText(this, response.path, Toast.LENGTH_LONG).show()
