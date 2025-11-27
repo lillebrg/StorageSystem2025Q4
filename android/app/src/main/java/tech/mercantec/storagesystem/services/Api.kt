@@ -3,6 +3,7 @@ package tech.mercantec.storagesystem.services
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import kotlinx.serialization.*
@@ -10,6 +11,7 @@ import kotlinx.serialization.json.Json
 import java.io.IOException
 import java.net.*
 import tech.mercantec.storagesystem.BuildConfig
+import tech.mercantec.storagesystem.ui.LoginActivity
 import kotlin.concurrent.thread
 
 class ApiRequestException(override val message: String, val code: Int, override val cause: Throwable?)
@@ -18,7 +20,7 @@ class ApiRequestException(override val message: String, val code: Int, override 
 class HttpResponse(val body: String, val code: Int)
 
 class Api(private val ctx: Context) {
-    fun request(method: String, path: String, data: String?): HttpResponse {
+    fun request(method: String, path: String, data: String?, canRetry: Boolean = true): HttpResponse {
         val url = URL(BuildConfig.API_BASE_URL + path)
 
         val accessToken = ctx.getSharedPreferences("current_user", Context.MODE_PRIVATE).getString("access_token", null)
@@ -35,6 +37,19 @@ class Api(private val ctx: Context) {
 
                     outputStream.write(data.toByteArray())
                     outputStream.flush()
+                }
+
+                if (responseCode == 401) {
+                    if (canRetry) {
+                        Auth(ctx).refreshAuthToken()
+                        return request(method, path, data, false)
+                    }
+
+                    val intent = Intent(ctx, LoginActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    ctx.startActivity(intent)
+
+                    throw ApiRequestException("Please sign in again", -1, null)
                 }
 
                 if (responseCode >= 400)
