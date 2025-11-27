@@ -36,27 +36,21 @@ class ViewProductActivity : AppCompatActivity() {
         setContentView(R.layout.activity_view_product)
 
         api = Api(this)
+    }
 
+    override fun onResume() {
+        super.onResume()
+
+        fetchProduct()
+    }
+
+    private fun fetchProduct() {
         val id = intent.extras!!.getInt("baseItemId")
 
         Api.makeRequest(this, { api.requestJson<Unit, BaseItem>("GET", "/base-items/${id}", null) }, showLoading = false) {
             baseItem = it
 
             showProductInfo()
-
-            if (baseItem.image_url != null) {
-                thread {
-                    val stream = URL(baseItem.image_url!!).content as InputStream
-                    val drawable = Drawable.createFromStream(stream, "src")
-
-                    runOnUiThread {
-                        findViewById<ImageView>(R.id.image).apply {
-                            visibility = View.VISIBLE
-                            setImageDrawable(drawable)
-                        }
-                    }
-                }
-            }
         }
     }
 
@@ -64,6 +58,20 @@ class ViewProductActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.title).setText(baseItem.name, TextView.BufferType.SPANNABLE)
         findViewById<TextView>(R.id.description).setText(baseItem.description, TextView.BufferType.SPANNABLE)
         findViewById<TextView>(R.id.barcode).setText(getString(R.string.barcode_label, baseItem.barcode), TextView.BufferType.SPANNABLE)
+
+        if (baseItem.image_url != null) {
+            thread {
+                val stream = URL(baseItem.image_url!!).content as InputStream
+                val drawable = Drawable.createFromStream(stream, "src")
+
+                runOnUiThread {
+                    findViewById<ImageView>(R.id.image).apply {
+                        visibility = View.VISIBLE
+                        setImageDrawable(drawable)
+                    }
+                }
+            }
+        }
     }
 
     override fun onActivityResult(
@@ -76,12 +84,7 @@ class ViewProductActivity : AppCompatActivity() {
 
         // Update information after returning from editing the product
         if (requestCode == UPDATE_PRODUCT_REQUEST) {
-            data?.run {
-                baseItem.name = getStringExtra("name") ?: baseItem.name
-                baseItem.description = getStringExtra("description") ?: baseItem.description
-            }
-
-            showProductInfo()
+            fetchProduct()
         }
     }
 

@@ -97,8 +97,6 @@ class CreateProductActivity : AppCompatActivity() {
                 } else {
                     // Return with new information after updating
                     val intent = Intent()
-                    intent.putExtra("name", newName)
-                    intent.putExtra("description", newDescription)
                     setResult(RESULT_OK, intent)
                 }
 
