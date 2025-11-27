@@ -1,16 +1,33 @@
 package tech.mercantec.storagesystem.ui
 
-import android.os.Bundle
+import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.Drawable
+import android.os.Bundle
+import android.provider.MediaStore
+import android.view.View
 import android.widget.*
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 import tech.mercantec.storagesystem.R
 import tech.mercantec.storagesystem.services.Api
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
+import java.net.URL
+import kotlin.concurrent.thread
 
 class CreateProductActivity : AppCompatActivity() {
     val api = Api(this)
+
+    val PICK_IMAGE_REQUEST = 1
+    val TAKE_PICTURE_REQUEST = 2
+
+    var newImagePath: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +39,25 @@ class CreateProductActivity : AppCompatActivity() {
         val name = intent.extras?.getString("name") ?: ""
         val description = intent.extras?.getString("description") ?: ""
         val barcode = intent.extras?.getString("barcode") ?: ""
+        val imageUrl = intent.extras?.getString("imageUrl")
+
+        // Show existing image if applicable
+        if (imageUrl != null) {
+            thread {
+                val stream = URL(imageUrl).content as InputStream
+                val drawable = Drawable.createFromStream(stream, "src")
+
+                runOnUiThread {
+                    findViewById<ImageView>(R.id.image).apply {
+                        visibility = View.VISIBLE
+                        setImageDrawable(drawable)
+                    }
+
+                    findViewById<Button>(R.id.remove_image_button).visibility = View.VISIBLE
+                    findViewById<Button>(R.id.upload_image_button).visibility = View.GONE
+                }
+            }
+        }
 
         // Change text on page if updating instead of creating
         if (id != 0) {
@@ -46,7 +82,7 @@ class CreateProductActivity : AppCompatActivity() {
 
             // Send create or update request
             Api.makeRequest(this, {
-                val request = UpdateBaseItemRequest(newName, newDescription, barcode, null, null)
+                val request = UpdateBaseItemRequest(newName, newDescription, barcode, newImagePath, null)
 
                 return@makeRequest when (id) {
                     0 -> api.requestJson<UpdateBaseItemRequest, CreateBaseItemResponse>("POST", "/base-items", request)
@@ -61,13 +97,101 @@ class CreateProductActivity : AppCompatActivity() {
                 } else {
                     // Return with new information after updating
                     val intent = Intent()
-                    intent.putExtra("name", newName)
-                    intent.putExtra("description", newDescription)
                     setResult(RESULT_OK, intent)
                 }
 
                 finish()
             }
+        }
+
+        findViewById<Button>(R.id.upload_image_button).setOnClickListener {
+            // Prompt user to take picture or choose image
+            val dialog = AlertDialog.Builder(this)
+                .setTitle("Upload image")
+                .setItems(arrayOf("Take a picture", "Select from album")) { dialog, which ->
+                    val intent = when (which) {
+                        // Take picture with camera
+                        0 -> Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                        // Select from album
+                        1 -> {
+                            val intent = Intent()
+                            intent.type = "image/*"
+                            intent.action = Intent.ACTION_GET_CONTENT
+                            Intent.createChooser(intent, "Select image")
+                        }
+                        else -> return@setItems
+                    }
+
+                    val request = when (which) {
+                        0 -> TAKE_PICTURE_REQUEST
+                        1 -> PICK_IMAGE_REQUEST
+                        else -> return@setItems
+                    }
+
+                    try {
+                        startActivityForResult(intent, request)
+                    } catch (e: ActivityNotFoundException) {
+                        Toast.makeText(this, "No matching apps for this request", Toast.LENGTH_LONG).show()
+                    }
+                }
+                .create()
+
+            dialog.show()
+        }
+
+        findViewById<Button>(R.id.remove_image_button).setOnClickListener { view ->
+            if (newImagePath == null) {
+                newImagePath = "" // If no image was uploaded, override path with empty string
+            } else {
+                newImagePath = null // Remove uploaded image
+            }
+
+            view.visibility = View.GONE
+            findViewById<ImageView>(R.id.image).visibility = View.GONE
+            findViewById<Button>(R.id.upload_image_button).visibility = View.VISIBLE
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode != RESULT_OK || data == null) return
+
+        // Retrieve selected image
+        val bitmap = when (requestCode) {
+            PICK_IMAGE_REQUEST -> {
+                val inputStream = contentResolver.openInputStream(data.data!!)
+                BitmapFactory.decodeStream(inputStream)
+            }
+            TAKE_PICTURE_REQUEST -> {
+                data.extras!!.get("data") as Bitmap
+            }
+            else -> return
+        }
+
+        // Convert to PNG
+        val outputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        outputStream.flush()
+        outputStream.close()
+
+        // Upload to backend
+        Api.makeRequest(this, { api.request("POST", "/images", outputStream.toByteArray(), mapOf("Content-Type" to "image/png")) }) { http ->
+            @Serializable
+            data class UploadImageResponse(val path: String)
+
+            val response = Json.decodeFromString<UploadImageResponse>(http.body)
+
+            newImagePath = response.path
+
+            // Show image
+            findViewById<ImageView>(R.id.image).apply {
+                visibility = View.VISIBLE
+                setImageBitmap(bitmap)
+            }
+
+            findViewById<Button>(R.id.upload_image_button).visibility = View.GONE
+            findViewById<TextView>(R.id.remove_image_button).visibility = View.VISIBLE
         }
     }
 }

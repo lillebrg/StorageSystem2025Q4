@@ -116,7 +116,7 @@ namespace SwaggerRestApi.BusineesLogic
                 name = baseItem.Name,
                 description = baseItem.Description,
                 barcode = baseItem.ModelBarcode,
-                image_url = baseItem.Picture != null ? imageBaseURL + baseItem.Picture : null,
+                image_url = imageBaseURL + baseItem.Picture,
                 specific_items = new List<SpecificItemsGet>()
             };
 
