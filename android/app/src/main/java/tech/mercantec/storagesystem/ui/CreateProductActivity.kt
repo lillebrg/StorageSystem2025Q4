@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
@@ -16,6 +17,9 @@ import kotlinx.serialization.json.Json
 import tech.mercantec.storagesystem.R
 import tech.mercantec.storagesystem.services.Api
 import java.io.ByteArrayOutputStream
+import java.io.InputStream
+import java.net.URL
+import kotlin.concurrent.thread
 
 class CreateProductActivity : AppCompatActivity() {
     val api = Api(this)
@@ -23,7 +27,7 @@ class CreateProductActivity : AppCompatActivity() {
     val PICK_IMAGE_REQUEST = 1
     val TAKE_PICTURE_REQUEST = 2
 
-    var imagePath: String? = null
+    var newImagePath: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +39,25 @@ class CreateProductActivity : AppCompatActivity() {
         val name = intent.extras?.getString("name") ?: ""
         val description = intent.extras?.getString("description") ?: ""
         val barcode = intent.extras?.getString("barcode") ?: ""
+        val imageUrl = intent.extras?.getString("imageUrl")
+
+        // Show existing image if applicable
+        if (imageUrl != null) {
+            thread {
+                val stream = URL(imageUrl).content as InputStream
+                val drawable = Drawable.createFromStream(stream, "src")
+
+                runOnUiThread {
+                    findViewById<ImageView>(R.id.image).apply {
+                        visibility = View.VISIBLE
+                        setImageDrawable(drawable)
+                    }
+
+                    findViewById<Button>(R.id.remove_image_button).visibility = View.VISIBLE
+                    findViewById<Button>(R.id.upload_image_button).visibility = View.GONE
+                }
+            }
+        }
 
         // Change text on page if updating instead of creating
         if (id != 0) {
@@ -59,7 +82,7 @@ class CreateProductActivity : AppCompatActivity() {
 
             // Send create or update request
             Api.makeRequest(this, {
-                val request = UpdateBaseItemRequest(newName, newDescription, barcode, imagePath, null)
+                val request = UpdateBaseItemRequest(newName, newDescription, barcode, newImagePath, null)
 
                 return@makeRequest when (id) {
                     0 -> api.requestJson<UpdateBaseItemRequest, CreateBaseItemResponse>("POST", "/base-items", request)
@@ -119,7 +142,11 @@ class CreateProductActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.remove_image_button).setOnClickListener { view ->
-            imagePath = null
+            if (newImagePath == null) {
+                newImagePath = "" // If no image was uploaded, override path with empty string
+            } else {
+                newImagePath = null // Remove uploaded image
+            }
 
             view.visibility = View.GONE
             findViewById<ImageView>(R.id.image).visibility = View.GONE
@@ -157,7 +184,7 @@ class CreateProductActivity : AppCompatActivity() {
 
             val response = Json.decodeFromString<UploadImageResponse>(http.body)
 
-            imagePath = response.path
+            newImagePath = response.path
 
             // Show image
             findViewById<ImageView>(R.id.image).apply {

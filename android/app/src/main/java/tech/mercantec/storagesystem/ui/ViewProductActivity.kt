@@ -97,6 +97,7 @@ class ViewProductActivity : AppCompatActivity() {
             intent.putExtra("name", baseItem.name)
             intent.putExtra("description", baseItem.description)
             intent.putExtra("barcode", baseItem.barcode)
+            intent.putExtra("imageUrl", baseItem.image_url)
             startActivityForResult(intent, UPDATE_PRODUCT_REQUEST)
 
             true
