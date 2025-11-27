@@ -54,8 +54,14 @@ namespace SwaggerRestApi.BusineesLogic
                     description = item.Description,
                     barcode = item.ModelBarcode,
                     image_url = imageBaseURL + item.Picture,
-                    specific_items_count = item.SpecificItems.Count
+                    specific_items_count = item.SpecificItems.Count,
+                    specific_items_available_count = 0
                 };
+
+                foreach (var specificItem in item.SpecificItems)
+                {
+                    if (specificItem.BorrowedTo == null) { baseItem.specific_items_available_count++; }
+                }
 
                 if (baseItem.image_url == imageBaseURL) { baseItem.image_url = null; }
 
