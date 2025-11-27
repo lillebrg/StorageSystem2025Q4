@@ -163,7 +163,12 @@ namespace SwaggerRestApi.BusineesLogic
             }
 
             if (baseItemCreate.barcode != null && baseItemCreate.barcode != "") { baseItem.ModelBarcode = baseItemCreate.barcode; }
-            if (baseItemCreate.image_path != null) { baseItem.Picture = baseItemCreate.image_path; }
+            if (baseItemCreate.image_path != null || baseItemCreate.image_path == "") 
+            {
+                await DeleteImage(baseItem.Picture);
+                baseItem.Picture = baseItemCreate.image_path; 
+            }
+            if (baseItem.Picture == "") { baseItem.Picture = null; }
 
             baseItem.Name = baseItemCreate.name;
             baseItem.Description = baseItemCreate.description;
@@ -187,6 +192,16 @@ namespace SwaggerRestApi.BusineesLogic
             await _itemdbaccess.DeleteBaseItem(baseItem);
 
             return new OkObjectResult(true);
+        }
+
+        private async Task DeleteImage(string imageUrl)
+        {
+            var imageBaseURL = _configuration["ImageUrl"];
+
+            if (File.Exists(Path.Combine(imageBaseURL, imageUrl)))
+            {
+                File.Delete(Path.Combine(imageBaseURL, imageUrl));
+            }
         }
     }
 }
