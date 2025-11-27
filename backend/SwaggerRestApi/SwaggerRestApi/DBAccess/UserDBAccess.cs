@@ -67,5 +67,12 @@ namespace SwaggerRestApi.DBAccess
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
+
+        public async Task<List<BorrowRequest>> GetAllBorrowRequest(int id)
+        {
+            var borrowRequests = await _context.BorrowRequests.Where(br => br.LoanTo == id).ToListAsync();
+
+            return borrowRequests;
+        }
     }
 }

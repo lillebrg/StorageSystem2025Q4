@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using SwaggerRestApi.DBAccess;
 using SwaggerRestApi.Models;
+using SwaggerRestApi.Models.DTO.Borrowed;
 using SwaggerRestApi.Models.DTO.User;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -319,6 +320,41 @@ namespace SwaggerRestApi.BusineesLogic
             await _userdbaccess.DeleteUser(user);
 
             return new OkObjectResult(true);
+        }
+
+        public async Task<ActionResult<List<UserBorroweGet>>> GetAllBorrowedItems(int id)
+        {
+            var imageBaseURL = _configuration["ImageUrl"];
+            var borrowRequests = await _userdbaccess.GetAllBorrowRequest(id);
+
+            List<UserBorroweGet> result = new List<UserBorroweGet>();
+
+            foreach (var item in borrowRequests)
+            {
+                UserBorroweGet borrowGet = new UserBorroweGet
+                {
+                    accepted = item.Accepted,
+                    id = item.Id,
+                    base_item = new BaseItemFromBorrowed(),
+                    specific_item = new SpecificItemFromBorrowed()
+                };
+                var specificItem = await _itemdbaccess.GetSpecificItem(item.SpecificItem);
+                var baseItem = await _itemdbaccess.GetBaseItem(specificItem.BaseItemId);
+
+                borrowGet.base_item.id = baseItem.Id;
+                borrowGet.base_item.name = baseItem.Name;
+                borrowGet.base_item.description = baseItem.Description;
+                borrowGet.base_item.image_url = imageBaseURL + baseItem.Picture;
+
+                borrowGet.specific_item.id = specificItem.Id;
+                borrowGet.specific_item.description = specificItem.Description;
+
+                if (borrowGet.base_item.image_url == imageBaseURL) { borrowGet.base_item.image_url = null; }
+
+                result.Add(borrowGet);
+            }
+
+            return new OkObjectResult(result);
         }
 
         // Our password security that is checked with regex
