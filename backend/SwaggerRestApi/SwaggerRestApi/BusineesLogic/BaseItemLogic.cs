@@ -3,6 +3,7 @@ using SwaggerRestApi.DBAccess;
 using SwaggerRestApi.Models;
 using SwaggerRestApi.Models.DTO;
 using SwaggerRestApi.Models.DTO.BaseItems;
+using SwaggerRestApi.Models.DTO.Borrowed;
 using SwaggerRestApi.Models.DTO.SpecificItems;
 using SwaggerRestApi.Models.DTO.User;
 
@@ -55,6 +56,8 @@ namespace SwaggerRestApi.BusineesLogic
                     image_url = imageBaseURL + item.Picture,
                     specific_items_count = item.SpecificItems.Count
                 };
+
+                if (baseItem.image_url == imageBaseURL) { baseItem.image_url = null; }
 
                 result.Add(baseItem);
             }
@@ -110,6 +113,8 @@ namespace SwaggerRestApi.BusineesLogic
                 image_url = baseItem.Picture != null ? imageBaseURL + baseItem.Picture : null,
                 specific_items = new List<SpecificItemsGet>()
             };
+
+            if (result.image_url == imageBaseURL) { result.image_url = null; }
 
             foreach (var item in baseItem.SpecificItems)
             {

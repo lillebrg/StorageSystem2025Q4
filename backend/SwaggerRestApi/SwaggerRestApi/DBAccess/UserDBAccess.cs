@@ -20,9 +20,11 @@ namespace SwaggerRestApi.DBAccess
             await _context.SaveChangesAsync();
         }
 
-        public async Task<User?> GetUser(int userId)
+        public async Task<User> GetUser(int userId)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+            return user;
         }
 
         public async Task<List<User>> GetAllUsers()
@@ -66,6 +68,13 @@ namespace SwaggerRestApi.DBAccess
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
+        public async Task<List<BorrowRequest>> GetAllBorrowRequest(int id)
+        {
+            var borrowRequests = await _context.BorrowRequests.Where(br => br.LoanTo == id).ToListAsync();
+
+            return borrowRequests;
+        }
+          
         public async Task<string> AddRefreshToken(RefreshToken refreshToken)
         {
             _context.RefreshTokens.Add(refreshToken);
