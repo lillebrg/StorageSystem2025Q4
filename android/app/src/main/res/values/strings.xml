@@ -15,4 +15,14 @@
     <string name="change_password">Change password</string>
     <string name="new_password">New password</string>
     <string name="current_password">Current password</string>
+    <string name="create_new_product">Create new product</string>
+    <string name="update_product">Update product</string>
+    <string name="name">Name</string>
+    <string name="description">Description</string>
+    <string name="create">Create</string>
+    <string name="save">Save</string>
+    <string name="barcode">Barcode</string>
+    <string name="edit">Edit</string>
+    <string name="product_image">Product image</string>
+    <string name="barcode_label">Barcode: %s</string>
 </resources>

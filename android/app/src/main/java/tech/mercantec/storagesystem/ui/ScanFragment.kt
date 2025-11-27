@@ -1,9 +1,9 @@
 package tech.mercantec.storagesystem.ui
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.*
 import android.widget.*
@@ -13,10 +13,8 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
-import com.google.mlkit.common.MlKitException
-import com.google.mlkit.vision.barcode.BarcodeScanning
-import com.google.mlkit.vision.common.InputImage
 import tech.mercantec.storagesystem.R
+import tech.mercantec.storagesystem.ImageAnalyzer
 import java.util.concurrent.Executors
 
 class ScanFragment : Fragment() {
@@ -24,10 +22,10 @@ class ScanFragment : Fragment() {
     private lateinit var previewView: PreviewView
     private lateinit var permissionNoticeView: TextView
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
 
-        val cameraPermission = checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
+        val cameraPermission = checkSelfPermission(context, Manifest.permission.CAMERA)
 
         if (cameraPermission == PERMISSION_GRANTED) {
             showCamera()
@@ -64,33 +62,12 @@ class ScanFragment : Fragment() {
 
             val preview = Preview.Builder().build().apply { surfaceProvider = previewView.surfaceProvider }
 
-            val scanner = BarcodeScanning.getClient()
-
-            val imageAnalyzer = ImageAnalysis.Builder().build().also {
-                it.setAnalyzer(Executors.newSingleThreadExecutor()) { imageProxy ->
-                    if (imageProxy.image == null) return@setAnalyzer
-                    val image = InputImage.fromMediaImage(imageProxy.image!!, imageProxy.imageInfo.rotationDegrees)
-
-                    scanner.process(image)
-                        .addOnSuccessListener { barcodes ->
-                            if (barcodes.isEmpty()) return@addOnSuccessListener
-
-                            val barcode = barcodes[0]
-
-                            requireActivity().runOnUiThread {
-                                Toast.makeText(requireContext(), barcode.rawValue, Toast.LENGTH_LONG).show()
-                                it.clearAnalyzer()
-                            }
-                        }
-                        .addOnFailureListener { e ->
-                            Log.e("StorageSystem", e.toString() + " (error code ${(e as MlKitException).errorCode})")
-                        }
-                        .addOnCompleteListener { imageProxy.close() }
-                }
+            val imageAnalysis = ImageAnalysis.Builder().build().apply {
+                setAnalyzer(Executors.newSingleThreadExecutor(), ImageAnalyzer(this, requireActivity()))
             }
 
             cameraProvider.unbindAll()
-            cameraProvider.bindToLifecycle(this, CameraSelector.DEFAULT_BACK_CAMERA, preview, imageAnalyzer)
+            cameraProvider.bindToLifecycle(this, CameraSelector.DEFAULT_BACK_CAMERA, preview, imageAnalysis)
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 

@@ -1,25 +1,31 @@
-import { request } from "./api.js";
+import { request, requestUploadImage } from "./api.js";
 
 export function get(id) {
   return request("GET", `/items/${id}`);
 }
 
 export function getAll(limit, offset, search) {
-  return request("GET", `/base-items`,{
+  return request("GET", `/base-items`, {
     limit,
     offset,
-    search
+    search,
   });
 }
 
 export function create(name, description, barcode, image_path, shelf_id) {
-  return request("POST", "/bate-items", {
+  return request("POST", "/base-items", {
     name,
     description,
     barcode,
     image_path,
-    shelf_id
+    shelf_id,
   });
+}
+
+export function uploadImage(image) {
+  const formData = new FormData();
+  formData.append("image", image);
+  return requestUploadImage(formData);
 }
 
 export function update(id, name, description, barcode, image_path, shelf_id) {
@@ -28,6 +34,6 @@ export function update(id, name, description, barcode, image_path, shelf_id) {
     description,
     barcode,
     image_path,
-    shelf_id
+    shelf_id,
   });
 }

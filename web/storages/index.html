@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Storage System</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <script src="/services/checklogin.js"></script>
+    <script src="/components/menu.js"></script>
+    <script src="/components/alert.js"></script>
+    <script type="module" src="/storages/script.js"></script>
+  </head>
+  <body>
+    <menu-nav></menu-nav>
+    <div class="container">
+      <table class="responsive-table">
+        <h2 class="tableTitle">All Storage Units</h2>
+        <div class="toolBar">
+          <input class="input" placeholder="Search..." />
+          <button class="button" id="createBtn">
+            <i class="fa fa-plus"></i>
+          </button>
+        </div>
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+          </tr>
+        </thead>
+        <tbody id="tBody"></tbody>
+      </table>
+      <my-alert id="getError" color="#7d2ae8"></my-alert>
+
+      <div id="createModal" class="modal">
+        <form class="form modalContent" id="createForm">
+          <span class="closeModal" id="closeCreateModalBtn">&times;</span>
+          <p class="form-title">Create Storage</p>
+          <div class="input-container">
+            <input placeholder="Enter name" id="name" required />
+          </div>
+          <my-alert id="createError" color="red"></my-alert>
+          <button class="button submit" type="submit">Create</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

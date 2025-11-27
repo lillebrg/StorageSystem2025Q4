@@ -2,6 +2,7 @@
 using SwaggerRestApi.DBAccess;
 using SwaggerRestApi.Models;
 using SwaggerRestApi.Models.DTO.BaseItems;
+using SwaggerRestApi.Models.DTO.Borrowed;
 using SwaggerRestApi.Models.DTO.Shelf;
 
 namespace SwaggerRestApi.BusineesLogic
@@ -52,6 +53,8 @@ namespace SwaggerRestApi.BusineesLogic
                     image_url = imageBaseURL + item.Picture,
                     name = item.Name
                 };
+
+                if (baseItem.image_url == imageBaseURL) { baseItem.image_url = null; }
 
                 result.base_items.Add(baseItem);
             }

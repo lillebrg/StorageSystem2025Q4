@@ -21,6 +21,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StorageSystem">
         <activity
+            android:name=".ui.ViewProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.CreateProductActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.ChangePasswordActivity"
             android:exported="false" />
         <activity

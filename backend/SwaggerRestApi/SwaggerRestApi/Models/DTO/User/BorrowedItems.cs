@@ -1,4 +1,4 @@
-﻿namespace SwaggerRestApi.Models.DTO
+﻿namespace SwaggerRestApi.Models.DTO.User
 {
     public class BorrowedItems
     {
@@ -8,8 +8,8 @@
 
         public string base_item_name { get; set; }
 
-        public string base_item_picture { get; set; }
+        public string? base_item_picture { get; set; }
 
-        public string specific_item_description { get; set; }
+        public string? specific_item_description { get; set; }
     }
 }
