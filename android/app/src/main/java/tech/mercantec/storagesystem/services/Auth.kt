@@ -71,6 +71,19 @@ class Auth(ctx: Context) {
     }
 
     fun logout() {
+        @Serializable
+        data class LogoutRequest(val refresh_token: String)
+
+        val refreshToken = prefs.getString("refresh_token", null)
+
+        if (refreshToken != null) {
+            try {
+                api.requestJson<LogoutRequest, Boolean>("POST", "/user/logout", LogoutRequest(refreshToken))
+            } catch (e: ApiRequestException) {
+                Log.e("StorageSystem", e.toString())
+            }
+        }
+
         prefs.edit {
             remove("name")
             remove("email")

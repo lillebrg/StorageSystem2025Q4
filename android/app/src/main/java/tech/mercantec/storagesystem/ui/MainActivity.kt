@@ -10,6 +10,7 @@ import androidx.fragment.app.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import tech.mercantec.storagesystem.R
 import tech.mercantec.storagesystem.services.Auth
+import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
     lateinit var auth: Auth
@@ -58,7 +59,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.logout -> {
-            auth.logout()
+            thread { auth.logout() }
 
             val intent = Intent(this, LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // Prevent going back to authorized pages
