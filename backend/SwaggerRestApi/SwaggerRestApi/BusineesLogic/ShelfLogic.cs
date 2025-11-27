@@ -37,6 +37,7 @@ namespace SwaggerRestApi.BusineesLogic
             {
                 barcode = shelf.Barcode,
                 id = shelf.Id,
+                shelf_no = shelf.ShelfNo,
                 base_items = new List<BaseItemFromShelf>()
             };
 
