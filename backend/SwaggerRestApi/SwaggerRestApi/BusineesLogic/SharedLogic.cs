@@ -115,7 +115,7 @@ namespace SwaggerRestApi.BusineesLogic
 
                     if (baseItemFromShelf.image_url == imageBaseURL) { baseItemFromShelf.image_url = null; }
 
-                    scannedItem.shelf.BaseItems.Add(baseItemFromShelf);
+                    scannedItem.shelf.base_items.Add(baseItemFromShelf);
                 }
 
                 return new OkObjectResult(scannedItem);
