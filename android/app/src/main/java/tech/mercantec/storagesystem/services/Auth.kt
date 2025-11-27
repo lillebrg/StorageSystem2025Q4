@@ -47,11 +47,15 @@ class Auth(ctx: Context) {
 
         val refreshToken = prefs.getString("refresh_token", null) ?: return
 
-        val response = api.requestJson<RefreshRequest, RefreshResponse>("POST", "/user/refresh", RefreshRequest(refreshToken))
+        try {
+            val response = api.requestJson<RefreshRequest, RefreshResponse>("POST", "/user/refresh", RefreshRequest(refreshToken))
 
-        prefs.edit {
-            putString("access_token", response.access_token)
-            putString("refresh_token", response.refresh_token)
+            prefs.edit {
+                putString("access_token", response.access_token)
+                putString("refresh_token", response.refresh_token)
+            }
+        } catch (e: ApiRequestException) {
+            Log.e("StorageSystem", e.toString())
         }
 
         Log.d("StorageSystemDebug", "Refreshed auth tokens")
