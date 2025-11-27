@@ -45,7 +45,7 @@ namespace SwaggerRestApi.Controllers
 
             using (var stream = System.IO.File.Create(filePath)) { await Request.Body.CopyToAsync(stream); }
 
-            return Ok(new { path = fileName });
+            return Ok(new ImagePost { path = fileName });
         }
 
         [HttpGet("/images/{filename}")]
