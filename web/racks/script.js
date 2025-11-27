@@ -1,5 +1,5 @@
 import { deleteRack, get } from "../services/racks.service.js"
-import { create } from "../services/shelfs.service.js"
+import { create } from "../services/shelves.service.js"
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 const storageId = params.get("storageId");
@@ -37,7 +37,7 @@ function displayTable(data) {
   document.querySelectorAll("#tBody tr").forEach((row) => {
     row.addEventListener("click", () => {
       const id = row.dataset.id;
-      window.location.href = "/shelfs/?id=" + id;
+      window.location.href = "/shelves/?id=" + id;
     });
   });
 }

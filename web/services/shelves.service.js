@@ -1,7 +1,7 @@
 import { request } from "./api.js";
 
 export function get(id) {
-  return request("GET", `/shelfs/${id}`);
+  return request("GET", `/shelves/${id}`);
 }
 
 export function create(rackId, shelf_no) {
@@ -11,11 +11,11 @@ export function create(rackId, shelf_no) {
 }
 
 export function update(id, rack_no) {
-  return request("PUT", `/shelfs/${id}`, {
+  return request("PUT", `/shelves/${id}`, {
     rack_no,
   });
 }
 
 export function deleteRack(id) {
-  return request("DELETE", `/shelfs/${id}`);
+  return request("DELETE", `/shelves/${id}`);
 }
