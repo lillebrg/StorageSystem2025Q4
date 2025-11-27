@@ -3,7 +3,6 @@
   <head>
     <title>Storage System</title>
     <link rel="stylesheet" href="/style.css" />
-    <link rel="stylesheet" href="/users/style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -15,20 +14,17 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     />
     <script src="/services/checklogin.js"></script>
+    <script src="/components/menu.js"></script>
+    <script src="/components/alert.js"></script>
     <script type="module" src="/users/script.js"></script>
+
   </head>
   <body>
-    <nav class="stroke">
-      <ul>
-        <li><a href="/users">Users</a></li>
-      <li><a href="/profile">Profile</a></li>
-      <li><a href="/items">Items</a></li>
-      </ul>
-    </nav>
+      <menu-nav></menu-nav>
     <div class="container">
       <table class="responsive-table">
         <h2 class="tableTitle">All Users</h2>
-        <div class="toolsBar">
+        <div class="toolBar">
           <input class="input" placeholder="Search...">
           <button class="button" id="createUserBtn">
             <i class="fa fa-plus"></i>
@@ -53,7 +49,7 @@
       </table>
 
       <div id="createUserModal" class="modal">
-        <form class="form modalContent">
+        <form class="form modalContent" id="createUserForm">
           <span class="closeModal" id="closeCreateUserBtn">&times;</span>
           <p class="form-title">Create User</p>
           <div class="input-container">
@@ -78,6 +74,7 @@
               <option value="User">User</option>
             </select>
           </div>
+          <my-alert id="createUserError" color="red"></my-alert>
           <button class="button submit" type="submit">Create user</button>
         </form>
       </div>

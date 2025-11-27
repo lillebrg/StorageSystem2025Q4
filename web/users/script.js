@@ -9,15 +9,17 @@ await getAll()
 function displayTable(data) {
   var table = document.getElementById("tBody");
   table.innerHTML = ""; // clear old table
-  for (let i = 0; i < data.length; i++) {
+
+  data.forEach(user => {
     table.innerHTML += `
-         <tr data-id="${data[i].id}">
-            <td>${data[i].name}</td>
-            <td>${data[i].email}</td>
-            <td>${data[i].role}</td>
-            <td>${data[i].borrowed_items}</td>
+         <tr data-id="${user.id}">
+            <td>${user.name}</td>
+            <td>${user.email}</td>
+            <td>${user.role}</td>
+            <td>${user.borrowed_items}</td>
           </tr>`;
-  }
+  })
+
   document.querySelectorAll("#tBody tr").forEach((row) => {
     row.addEventListener("click", () => {
       const id = row.dataset.id;
@@ -32,6 +34,8 @@ var nameInput = document.getElementById("name");
 var emailInput = document.getElementById("email");
 var passwordInput = document.getElementById("password");
 var roleInput = document.getElementById("role");
+var createUserError = document.getElementById("createUserError");
+createUserError.style.display = "none";
 
 document.getElementById("createUserBtn").onclick = () => {
   createUserModal.style.display = "block";
@@ -45,11 +49,11 @@ document.getElementById("closeCreateUserBtn").onclick = () => {
   createUserModal.style.display = "none";
 };
 
-const createUserForm = document.querySelector(".form");
+const createUserForm = document.getElementById("createUserForm");
 createUserForm.addEventListener("submit", handleCreateUser);
 
 async function handleCreateUser(event) {
-    event.preventDefault();
+  event.preventDefault();
   if (!createUserForm.reportValidity()) {
     return;
   }
@@ -62,6 +66,7 @@ async function handleCreateUser(event) {
  await create(name, email, password, role)
     .then(() => location.reload())
     .catch((error) => {
-      console.log(error);
+      createUserError.style.display = "block";
+      createUserError.innerText = error;
     });
 }

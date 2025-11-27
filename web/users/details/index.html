@@ -11,18 +11,16 @@
       rel="stylesheet"
     />
     <script src="/services/checklogin.js"></script>
+    <script src="/components/alert.js"></script>
+    <script src="/components/menu.js"></script>
     <script type="module" src="/users/details/script.js"></script>
   </head>
   <body>
-    <nav class="stroke">
-      <ul>
-        <li><a href="/users">Users</a></li>
-        <li><a href="/profile">Profile</a></li>
-        <li><a href="/items">Items</a></li>
-      </ul>
-    </nav>
+  <menu-nav></menu-nav>
     <div class="container">
+    <my-alert id="getUserDetailsError" color="red"></my-alert>
       <div class="componentContainer">
+        <my-alert id="getUserError" color="red"></my-alert>
         <div class="card" id="profileCard"></div>
         <div class="table">
           <table class="responsive-table">
@@ -35,13 +33,8 @@
               </tr>
             </thead>
             <tbody id="tBody"></tbody>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
           </table>
+          <my-alert id="noItemsBorrowed" color="#7d2ae8">No items borrowed</my-alert>
         </div>
       </div>
 
@@ -98,6 +91,7 @@
               required
             />
           </div>
+          <my-alert id="changePasswordError" color="red"></my-alert>
           <button class="button submit" type="submit">
             Reset Password
           </button>

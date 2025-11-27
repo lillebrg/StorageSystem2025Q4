@@ -5,9 +5,13 @@ const passwordInput = document.getElementById("password");
 
 const loginForm = document.getElementById("loginForm");
 loginForm.addEventListener("submit", handleLogin);
+var loginAlert = document.getElementById("loginError");
+loginAlert.style.display = "none";
 
 const newPasswordForm = document.getElementById("newPasswordForm");
 newPasswordForm.addEventListener("submit", handleNewPassword);
+var newPasswordError = document.getElementById("newPasswordError");
+newPasswordError.style.display = "none";
 
 async function handleLogin(event) {
   event.preventDefault();
@@ -34,7 +38,8 @@ async function handleLogin(event) {
       }
     })
     .catch((error) => {
-      console.log(error);
+      loginAlert.style.display = "block";
+      loginAlert.innerText = error;
     });
 }
 
@@ -54,6 +59,7 @@ async function handleNewPassword(event) {
   updatePassword(null, passwordInput.value, newPasswordInput)
     .then(() => (window.location.href = "/items"))
     .catch((error) => {
-      console.log(error);
+      newPasswordError.style.display = "block";
+      newPasswordError.innerText = error;
     });
 }

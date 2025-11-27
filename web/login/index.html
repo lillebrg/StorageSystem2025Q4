@@ -12,6 +12,7 @@
       rel="stylesheet"
     />
     <script type="module" src="/login/script.js"></script>
+    <script src="/components/alert.js"></script>
   </head>
   <body>
     <main>
@@ -20,39 +21,44 @@
         <form class="form" id="loginForm">
           <p class="form-title">Sign in to your account</p>
           <div class="input-container">
-            <input placeholder="Enter email" id="email" required/>
+            <input placeholder="Enter email" id="email" required />
           </div>
           <div class="input-container">
-            <input placeholder="Enter password" type="password" id="password" required/>
+            <input
+              placeholder="Enter password"
+              type="password"
+              id="password"
+              required
+            />
           </div>
+          <my-alert id="loginError" color="red"></my-alert>
           <button class="button submit" type="submit">Sign in</button>
         </form>
-
-         <div id="changePasswordModal" class="modal">
-        <form class="form modalContent" id="newPasswordForm">
-          <p class="form-title">You need to change your password before gaining access</p>
-          <div class="input-container">
-            <input
-              placeholder="Enter new password"
-              type="password"
-              id="newPassword"
-              required
-            />
-          </div>
-          <div class="input-container">
-            <input
-              placeholder="Repeat new password"
-              type="password"
-              id="repeatNewPassword"
-              required
-            />
-          </div>
-          <button class="button submit" type="submit">
-            Save changes
-          </button>
-        </form>
-      </div>
-
+        <div id="changePasswordModal" class="modal">
+          <form class="form modalContent" id="newPasswordForm">
+            <p class="form-title">
+              You need to change your password before gaining access
+            </p>
+            <div class="input-container">
+              <input
+                placeholder="Enter new password"
+                type="password"
+                id="newPassword"
+                required
+              />
+            </div>
+            <div class="input-container">
+              <input
+                placeholder="Repeat new password"
+                type="password"
+                id="repeatNewPassword"
+                required
+              />
+            </div>
+            <my-alert id="newPasswordError" color="red"></my-alert>
+            <button class="button submit" type="submit">Save changes</button>
+          </form>
+        </div>
       </div>
     </main>
   </body>
