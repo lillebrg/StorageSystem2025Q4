@@ -12,11 +12,12 @@ import java.net.*
 import tech.mercantec.storagesystem.BuildConfig
 import kotlin.concurrent.thread
 
-class ApiRequestException(message: String, cause: Throwable?) : Exception(message, cause)
+class ApiRequestException(override val message: String, val code: Int, override val cause: Throwable?)
+    : Exception(message, cause)
 
 class HttpResponse(val body: String, val code: Int)
 
-class Api(val ctx: Context) {
+class Api(private val ctx: Context) {
     fun request(method: String, path: String, data: String?): HttpResponse {
         val url = URL(BuildConfig.API_BASE_URL + path)
 
@@ -44,7 +45,7 @@ class Api(val ctx: Context) {
         } catch (e: IOException) {
             Log.e("StorageSystem", e.toString())
 
-            throw ApiRequestException("Failed to connect to server: " + e.message, e)
+            throw ApiRequestException("Failed to connect to server: " + e.message, -1, e)
         }
     }
 
@@ -69,7 +70,7 @@ class Api(val ctx: Context) {
             try {
                 val error = Json.decodeFromString<HttpErrorResponse>(response.body)
 
-                throw ApiRequestException(error.message, null)
+                throw ApiRequestException(error.message, response.code, null)
             } catch (e: SerializationException) {
                 if (e.message != null)
                     Log.e("StorageSystem", e.message!!)
@@ -77,6 +78,7 @@ class Api(val ctx: Context) {
 
                 throw ApiRequestException(
                     "Request failed with HTTP status code ${response.code}",
+                    response.code,
                     e
                 )
             }
@@ -86,7 +88,7 @@ class Api(val ctx: Context) {
             // Return Unit or an empty default value depending on Res
             return when (Res::class) {
                 Unit::class -> Unit as Res
-                else -> throw ApiRequestException("Expected JSON but got empty response", null)
+                else -> throw ApiRequestException("Expected JSON but got empty response", response.code, null)
             }
         }
 
@@ -97,7 +99,7 @@ class Api(val ctx: Context) {
                 Log.e("StorageSystem", e.message!!)
             Log.e("StorageSystem", response.body)
 
-            throw ApiRequestException("Failed to parse response: ${response.body}", e)
+            throw ApiRequestException("Failed to parse response: ${response.body}", response.code, e)
         }
     }
 

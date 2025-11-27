@@ -54,5 +54,28 @@ namespace SwaggerRestApi.Controllers
             int userId = Convert.ToInt32(userIdString);
             return await _userlogic.EditUser(user, userId);
         }
+
+        [HttpGet("borrow-requests")]
+        [Authorize(Roles = "Admin, Operator, User")]
+        public async Task<ActionResult<List<UserBorroweGet>>> BorrowRequestGet()
+        {
+            var claims = HttpContext.User.Claims;
+            string userIdString = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            int userId = Convert.ToInt32(userIdString);
+            return await _userlogic.GetAllBorrowedItems(userId);
+        }
+        
+        [HttpPost("refresh")]
+        public async Task<ActionResult<AuthResponse>> RefreshJWTToken([FromBody] RefreshTokenRequest tokenRequest)
+        {
+            return await _userlogic.RefreshJWTToken(tokenRequest);
+        }
+
+        [HttpPost("logout")]
+        [Authorize(Roles = "Admin, Operator, User")]
+        public async Task<ActionResult> DeleteRefreshToken([FromBody] RefreshTokenRequest tokenRequest)
+        {
+            return await _userlogic.DeleteRefreshToken(tokenRequest);
+        }
     }
 }

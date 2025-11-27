@@ -83,21 +83,23 @@ internal class Program
             });
         });
 
-        // Adds DBAccess
+        // Adds DBAccess so it gets dependency injected
         builder.Services.AddScoped<UserDBAccess>();
         builder.Services.AddScoped<ItemDBAccess>();
         builder.Services.AddScoped<ShelfDBAccess>();
         builder.Services.AddScoped<RackDBAccess>();
         builder.Services.AddScoped<StorageDBAccess>();
+        builder.Services.AddScoped<BorrowedRequestDBAccess>();
         builder.Services.AddScoped<NotificationDBAccess>();
 
-        // Adds Business logic
+        // Adds Business logic so it gets dependency injected
         builder.Services.AddScoped<UserLogic>();
         builder.Services.AddScoped<BaseItemLogic>();
         builder.Services.AddScoped<SpecificItemLogic>();
         builder.Services.AddScoped<ShelfLogic>();
         builder.Services.AddScoped<RackLogic>();
         builder.Services.AddScoped<StorageLogic>();
+        builder.Services.AddScoped<BorrowedRequestLogic>();
 
         builder.Services.AddScoped<SharedLogic>();
 

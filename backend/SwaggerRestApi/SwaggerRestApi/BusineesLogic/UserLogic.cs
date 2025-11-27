@@ -4,10 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using SwaggerRestApi.DBAccess;
 using SwaggerRestApi.Models;
-using SwaggerRestApi.Models.DTO;
+using SwaggerRestApi.Models.DTO.Borrowed;
 using SwaggerRestApi.Models.DTO.User;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -33,6 +34,7 @@ namespace SwaggerRestApi.BusineesLogic
         /// <returns>User</returns>
         public async Task<ActionResult<UserGet>> GetUser(int id)
         {
+            var imageBaseURL = _configuration["ImageUrl"];
             var user = await _userdbaccess.GetUser(id);
 
             if (user == null || user.Id == 0) { return new NotFoundObjectResult(new { message = "Could not find the user" }); }
@@ -60,8 +62,11 @@ namespace SwaggerRestApi.BusineesLogic
                         specific_item_id = specicItem.Id,
                         base_item_id = specicItem.BaseItemId,
                         base_item_name = specicItem.BaseItem.Name,
-                        base_item_picture = specicItem.BaseItem.Picture
+                        base_item_picture = imageBaseURL + specicItem.BaseItem.Picture
                     };
+
+                    if (items.base_item_picture == imageBaseURL) { items.base_item_picture = null; }
+
                     userReturn.borrowed_items.Add(items);
                 }
             }
@@ -179,7 +184,8 @@ namespace SwaggerRestApi.BusineesLogic
                 email = user.Email,
                 access_token = token,
                 role = user.Role,
-                change_password_on_next_login = user.ChangePasswordOnNextLogin
+                change_password_on_next_login = user.ChangePasswordOnNextLogin,
+                refresh_token = await GenerateRefreshToken(user.Id)
             };
 
             return new OkObjectResult(authresponse);
@@ -318,6 +324,80 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(true);
         }
 
+        public async Task<ActionResult<List<UserBorroweGet>>> GetAllBorrowedItems(int id)
+        {
+            var imageBaseURL = _configuration["ImageUrl"];
+            var borrowRequests = await _userdbaccess.GetAllBorrowRequest(id);
+
+            List<UserBorroweGet> result = new List<UserBorroweGet>();
+
+            foreach (var item in borrowRequests)
+            {
+                UserBorroweGet borrowGet = new UserBorroweGet
+                {
+                    accepted = item.Accepted,
+                    id = item.Id,
+                    base_item = new BaseItemFromBorrowed(),
+                    specific_item = new SpecificItemFromBorrowed()
+                };
+                var specificItem = await _itemdbaccess.GetSpecificItem(item.SpecificItem);
+                var baseItem = await _itemdbaccess.GetBaseItem(specificItem.BaseItemId);
+
+                borrowGet.base_item.id = baseItem.Id;
+                borrowGet.base_item.name = baseItem.Name;
+                borrowGet.base_item.description = baseItem.Description;
+                borrowGet.base_item.image_url = imageBaseURL + baseItem.Picture;
+
+                borrowGet.specific_item.id = specificItem.Id;
+                borrowGet.specific_item.description = specificItem.Description;
+
+                if (borrowGet.base_item.image_url == imageBaseURL) { borrowGet.base_item.image_url = null; }
+
+                result.Add(borrowGet);
+            }
+
+            return new OkObjectResult(result);
+        }
+      
+        public async Task<ActionResult<AuthResponse>> RefreshJWTToken(RefreshTokenRequest refreshToken)
+        {
+            var tokenEntity = await _userdbaccess.GetRefreshToken(refreshToken.refresh_token);
+
+            if (tokenEntity == null) { return new NotFoundObjectResult(new { message = "Could not find token" }); }
+
+            if (tokenEntity.ExpiresAt <= DateTime.Now)
+            {
+                return new BadRequestObjectResult(new { message = "Refresh token is not valid" });
+            }
+
+            var token = GenerateJwtToken(tokenEntity.User);
+
+            var authresponse = new AuthResponse
+            {
+                name = tokenEntity.User.Name,
+                email = tokenEntity.User.Email,
+                access_token = token,
+                role = tokenEntity.User.Role,
+                change_password_on_next_login = tokenEntity.User.ChangePasswordOnNextLogin,
+                refresh_token = await GenerateRefreshToken(tokenEntity.User.Id)
+            };
+
+            await _userdbaccess.DeleteRefreshToken(tokenEntity);
+
+            return new OkObjectResult(authresponse);
+        }
+
+        public async Task<ActionResult> DeleteRefreshToken(RefreshTokenRequest refreshToken)
+        {
+            var tokenEntity = await _userdbaccess.GetRefreshToken(refreshToken.refresh_token);
+
+            if (tokenEntity == null) { return new NotFoundObjectResult(new { message = "Could not find token" }); }
+
+            await _userdbaccess.DeleteRefreshToken(tokenEntity);
+
+            return new OkObjectResult(true);
+        }
+
         // Our password security that is checked with regex
         private bool PasswordSecurity(string password)
         {
@@ -355,6 +435,23 @@ namespace SwaggerRestApi.BusineesLogic
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        private async Task<string> GenerateRefreshToken(int userId)
+        {
+            var randomNumber = new byte[64];
+            var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+            var refreshtoken = Convert.ToBase64String(randomNumber);
+
+            RefreshToken token = new RefreshToken
+            {
+                Token = refreshtoken,
+                UserId = userId,
+                ExpiresAt = DateTime.Now.AddDays(7)
+            };
+
+            return await _userdbaccess.AddRefreshToken(token);
         }
     }
 }

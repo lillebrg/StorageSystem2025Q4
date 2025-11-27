@@ -2,6 +2,7 @@
 using SwaggerRestApi.DBAccess;
 using SwaggerRestApi.Models.DTO;
 using SwaggerRestApi.Models.DTO.Barcode;
+using SwaggerRestApi.Models.DTO.Borrowed;
 using SwaggerRestApi.Models.DTO.User;
 
 namespace SwaggerRestApi.BusineesLogic
@@ -43,6 +44,8 @@ namespace SwaggerRestApi.BusineesLogic
                 scannedItem.base_item.description = baseItem.Description;
                 scannedItem.base_item.specific_items = new List<SpecificItemFromBaseItemBarcode>();
 
+                if (scannedItem.base_item.image_url == imageBaseURL) { scannedItem.base_item.image_url = null; }
+
                 foreach (var item in baseItem.SpecificItems)
                 {
                     SpecificItemFromBaseItemBarcode specificItemFromBaseItem = new SpecificItemFromBaseItemBarcode
@@ -74,6 +77,7 @@ namespace SwaggerRestApi.BusineesLogic
                 scannedItem.specific_item.base_item.image_url = imageBaseURL + specificItem.BaseItem.Picture;
                 scannedItem.specific_item.base_item.description = specificItem.BaseItem.Description;
 
+                if (scannedItem.specific_item.base_item.image_url == imageBaseURL) { scannedItem.specific_item.base_item.image_url = null; }
 
                 if (specificItem.BorrowedTo != null)
                 {
@@ -89,7 +93,7 @@ namespace SwaggerRestApi.BusineesLogic
 
             var shelf = await _shelfdbaccess.GetShelfFromBarcode(barcode);
 
-            if (shelf.Id != 0)
+            if (shelf != null)
             {
                 ScannedBarcode scannedItem = new ScannedBarcode
                 {
@@ -100,7 +104,7 @@ namespace SwaggerRestApi.BusineesLogic
                 scannedItem.shelf.id = shelf.Id;
                 scannedItem.shelf.shelf_no = shelf.ShelfNo;
                 scannedItem.shelf.rack_id = shelf.RackId;
-                scannedItem.shelf.BaseItems = new List<BaseItemFromShelfBarcode>();
+                scannedItem.shelf.base_items = new List<BaseItemFromShelfBarcode>();
 
                 foreach (var item in shelf.BaseItems)
                 {
@@ -111,7 +115,10 @@ namespace SwaggerRestApi.BusineesLogic
                         description = item.Description,
                         image_url = imageBaseURL + item.Picture
                     };
-                    scannedItem.shelf.BaseItems.Add(baseItemFromShelf);
+
+                    if (baseItemFromShelf.image_url == imageBaseURL) { baseItemFromShelf.image_url = null; }
+
+                    scannedItem.shelf.base_items.Add(baseItemFromShelf);
                 }
 
                 return new OkObjectResult(scannedItem);

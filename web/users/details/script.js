@@ -11,16 +11,24 @@ var name;
 var email;
 var role;
 
-await get(id).then((data) => {
-  if (!data) {
-    //displayError()
-  }
-  name = data.name;
-  email = data.email;
-  role = data.role;
-  displayProfile();
-  displayTable(data.borrowed_items);
-});
+  var getUserError = document.getElementById("getUserError");
+  getUserError.style.display = "none";
+
+  var noItemsBorrowed = document.getElementById("noItemsBorrowed");
+    noItemsBorrowed.style.display = "none";
+
+await get(id)
+  .then((data) => {
+    name = data.name;
+    email = data.email;
+    role = data.role;
+    displayProfile();
+    displayTable(data.borrowed_items);
+  })
+  .catch((error) => {
+    getUserError.style.display = "block";
+    getUserError.innerText = error;
+  });
 
 function displayProfile() {
   var table = document.getElementById(`profileCard`);
@@ -42,21 +50,26 @@ function displayTable(data) {
   //todo, specific items shown
   var table = document.getElementById("tBody");
   table.innerHTML = ""; // clear old table
-  for (let i = 0; i < data.length; i++) {
-    table.innerHTML += `
-         <tr data-id="${data[i].id}">
-            <td>${data[i].name}</td>
-            <td>${data[i].email}</td>
-            <td>${data[i].role}</td>
-            <td>${data[i].borrowed_items}</td>
-          </tr>`;
+  if(data.length <= 0) {
+    noItemsBorrowed.style.display = "block"
   }
-}
 
+    data.forEach(user => {
+    table.innerHTML += `
+         <tr data-id="${user.id}">
+            <td>${user.name}</td>
+            <td>${user.email}</td>
+            <td>${user.role}</td>
+            <td>${user.borrowed_items}</td>
+          </tr>`;
+  })
+}
 //change Password
 const changePasswordModal = document.getElementById("changePasswordModal");
 document.getElementById("changePasswordBtn").onclick = () =>
   (changePasswordModal.style.display = "block");
+var changePasswordError = document.getElementById("changePasswordError");
+changePasswordError.style.display = "none";
 
 const changePasswordForm = document.getElementById("changePasswordForm");
 changePasswordForm.addEventListener("submit", handleChangePassword);
