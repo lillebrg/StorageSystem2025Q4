@@ -7,7 +7,7 @@ using System.Security.Claims;
 namespace SwaggerRestApi.Controllers
 {
     [ApiController]
-    [Route("/borrow-request")]
+    [Route("/borrow-requests")]
     public class BorrowController : Controller
     {
         private readonly BorrowedRequestLogic _borrowedlogic;
