@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SwaggerRestApi.DBAccess;
+using SwaggerRestApi.Models;
 using SwaggerRestApi.Models.DTO;
 using SwaggerRestApi.Models.DTO.Barcode;
 using SwaggerRestApi.Models.DTO.Borrowed;
 using SwaggerRestApi.Models.DTO.User;
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
+using WebPush;
 
 namespace SwaggerRestApi.BusineesLogic
 {
@@ -181,9 +185,85 @@ namespace SwaggerRestApi.BusineesLogic
             return barcode;
         }
 
-        public async Task<ActionResult> CreateNotificationSubscription(NotificationSub subscribe)
+        public async Task<ActionResult> CreateNotificationSubscription(NotificationSub subscribe, int userId)
         {
+            NotificationSubscriptions notificationSubscription = new NotificationSubscriptions
+            {
+                Auth = subscribe.auth,
+                Endpoint = subscribe.endpoint,
+                P256dh = subscribe.p256dh,
+                UserId = userId
+            };
 
+            await _notificationdbaccess.CreateNotificationSubscription(notificationSubscription);
+
+            SendAllNotifications();
+
+            return new OkObjectResult(true);
+        }
+
+        public async Task<ActionResult> CreateNotification(Notifications notification)
+        {
+            await _notificationdbaccess.CreateNotification(notification);
+
+            return new OkObjectResult(true);
+        }
+
+        public async Task SendAllNotifications()
+        {
+            var notifications = await _notificationdbaccess.GetNotifications();
+
+            foreach (var item in notifications)
+            {
+                if (item.SentTo != null)
+                {
+                    var subscription = await _notificationdbaccess.GetNotificationSubscription((int)item.SentTo);
+
+                    if (subscription != null)
+                    {
+                        await SendNotification(subscription, item.Message);
+
+                        _notificationdbaccess.DeleteNotification(item);
+                    }
+                }
+                else
+                {
+                    var subsciptions = await _notificationdbaccess.GetAllNotificationSubscriptions();
+
+                    foreach (var subscription in subsciptions)
+                    {
+                        var adminOrOperator = await _userdbaccess.CheckIfAdminOrOperator(subscription.UserId);
+
+                        if (adminOrOperator)
+                        {
+                            await SendNotification(subscription, item.Message);
+                        }
+                    }
+
+                    _notificationdbaccess.DeleteNotification(item);
+                }
+            }
+        }
+
+        private async Task SendNotification(NotificationSubscriptions subscription, string message)
+        {
+            PushSubscription sub = new PushSubscription();
+            sub.Auth = subscription.Auth;
+            sub.P256DH = subscription.P256dh;
+            sub.Endpoint = subscription.Endpoint;
+
+            var webPushClient = new WebPushClient();
+            try
+            {
+                await webPushClient.SendNotificationAsync(sub, message);
+            }
+            catch (WebPushException exception)
+            {
+                if (exception.StatusCode == (HttpStatusCode)410)
+                {
+                    _notificationdbaccess.DeleteNotificationSubscription(subscription);
+                }
+            }
         }
     }
 }

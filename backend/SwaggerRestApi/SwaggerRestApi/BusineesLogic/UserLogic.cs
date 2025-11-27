@@ -19,12 +19,14 @@ namespace SwaggerRestApi.BusineesLogic
         private readonly IConfiguration _configuration;
         private readonly UserDBAccess _userdbaccess;
         private readonly ItemDBAccess _itemdbaccess;
+        private readonly SharedLogic _sharedlogic;
 
-        public UserLogic(IConfiguration configuration, UserDBAccess userDBAccess, ItemDBAccess itemDBAccess)
+        public UserLogic(IConfiguration configuration, UserDBAccess userDBAccess, ItemDBAccess itemDBAccess, SharedLogic sharedlogic)
         {
             _configuration = configuration;
             _userdbaccess = userDBAccess;
             _itemdbaccess = itemDBAccess;
+            _sharedlogic = sharedlogic;
         }
 
         /// <summary>
