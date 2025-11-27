@@ -1,4 +1,4 @@
-import { get, create } from "../../services/racks.service.js";
+import { get, create } from "../services/shelves.service.js";
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 
@@ -10,8 +10,9 @@ noRacks.style.display = "none";
 
 await get(id)
   .then((data) => {
-    document.getElementById("tableTitle").innerHTML = "rack: "+data.rack_no;
-    displayTable(data.shelves);
+    console.log(data);
+    document.getElementById("tableTitle").innerHTML = "Shelf: "+data.shelf_no;
+    displayTable(data.base_items);
   })
   .catch((error) => {
     getStorageDetailsError.style.display = "block";
@@ -82,8 +83,6 @@ async function handleUserDelete(event) {
 // Close modals when clicking on any close button
 document.querySelectorAll(".closeModal").forEach((closeBtn) => {
   closeBtn.onclick = () => {
-    createRackModal.style.display = "none";
-    changePasswordModal.style.display = "none";
     deleteStorageModal.style.display = "none";
   };
 });

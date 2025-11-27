@@ -9,6 +9,7 @@ getError.style.display = "none";
 
 await get(id)
   .then((data) => {
+    console.log(data)
     document.getElementById("tableTitle").innerHTML = "rack: "+data.rack_no;
     displayTable(data.shelves);
   })
