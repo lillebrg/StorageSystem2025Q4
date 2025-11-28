@@ -1,7 +1,7 @@
 import { url } from "/services/apiurl.js";
 
-export async function request(method, path, body = null) {
-  var token = localStorage.getItem("token");
+export async function request(method, path, body = null, image = undefined) {
+  let token = localStorage.getItem("token");
   const headers = {};
   headers["Authorization"] = `Bearer ${token}`;
 
@@ -10,7 +10,7 @@ export async function request(method, path, body = null) {
     fetch(url + path, {
       method,
       headers,
-      body: body ? JSON.stringify(body) : undefined,
+      body: body ? JSON.stringify(body) : image,
     })
       .then(async (response) => {
         try {
@@ -36,10 +36,12 @@ export async function request(method, path, body = null) {
   });
 }
 
+//TODO, implement requestupload inside the normal request, just make it a nullable value and then go from there
 export async function requestUploadImage(image) {
-  var token = localStorage.getItem("token");
-  const headers = {};
-  headers["Authorization"] = `Bearer ${token}`;
+  const token = localStorage.getItem("token");
+  const headers = {
+    "Authorization": `Bearer ${token}`,
+  };
 
   return new Promise((resolve, reject) => {
     fetch(url + "/images", {
@@ -48,17 +50,14 @@ export async function requestUploadImage(image) {
       body: image,
     })
       .then(async (response) => {
-        console.log(response)
-        const json = await response.json();
-          console.log(json)
-        try {
-          
-
-          if (response.ok) return resolve(json);
-
-        } finally {
+        if (!response.ok) {
           reject("Request failed with HTTP code " + response.status);
+          return;
         }
+
+        // If the backend returns a plain string
+        const text = await response.text();
+        resolve(text);
       })
       .catch((err) => reject(err.message));
   });

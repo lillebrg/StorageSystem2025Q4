@@ -5,12 +5,12 @@ const passwordInput = document.getElementById("password");
 
 const loginForm = document.getElementById("loginForm");
 loginForm.addEventListener("submit", handleLogin);
-var loginAlert = document.getElementById("loginError");
+let loginAlert = document.getElementById("loginError");
 loginAlert.style.display = "none";
 
 const newPasswordForm = document.getElementById("newPasswordForm");
 newPasswordForm.addEventListener("submit", handleNewPassword);
-var newPasswordError = document.getElementById("newPasswordError");
+let newPasswordError = document.getElementById("newPasswordError");
 newPasswordError.style.display = "none";
 
 async function handleLogin(event) {
@@ -29,12 +29,12 @@ async function handleLogin(event) {
       localStorage.setItem("token", response.access_token);
       localStorage.setItem("role", response.role);
       if (response.change_password_on_next_login) {
-        const changePasswordModal = document.getElementById(
-          "changePasswordModal"
+        let changePasswordModal = document.getElementById("changePasswordModal"
         );
         changePasswordModal.style.display = "block";
       } else {
-        window.location.href = "/items";
+        window.location.href = "/baseitems";
+        //TODO: call subscribetonotifications to get notifications on borrowrequests
       }
     })
     .catch((error) => {
@@ -49,15 +49,14 @@ async function handleNewPassword(event) {
     return;
   }
 
-  var newPasswordInput = document.getElementById("newPassword").value;
-  var repeatNewPasswordInput =
-    document.getElementById("repeatNewPassword").value;
+  let newPasswordInput = document.getElementById("newPassword").value;
+  let repeatNewPasswordInput = document.getElementById("repeatNewPassword").value;
   if (newPasswordInput != repeatNewPasswordInput) {
     alert("New passwords do not match");
     return;
   }
   updatePassword(null, passwordInput.value, newPasswordInput)
-    .then(() => (window.location.href = "/items"))
+    .then(() => (window.location.href = "/baseitems"))
     .catch((error) => {
       newPasswordError.style.display = "block";
       newPasswordError.innerText = error;

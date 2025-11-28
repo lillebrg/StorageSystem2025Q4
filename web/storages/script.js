@@ -1,6 +1,6 @@
 import { create, getAll } from "../services/storage.service.js";
 
-var getError = document.getElementById("getError");
+let getError = document.getElementById("getError");
 getError.style.display = "none";
 
 await getAll()
@@ -12,7 +12,7 @@ await getAll()
   });
 
 function displayTable(data) {
-  var table = document.getElementById("tBody");
+  let table = document.getElementById("tBody");
   table.innerHTML = ""; // clear old table
     if (data.length <= 0) {
     getError.style.display = "block";
@@ -34,9 +34,9 @@ function displayTable(data) {
 }
 
 //create Storage
-var createModal = document.getElementById("createModal");
-var nameInput = document.getElementById("name");
-var createError = document.getElementById("createError");
+let createModal = document.getElementById("createModal");
+let nameInput = document.getElementById("name");
+let createError = document.getElementById("createError");
 createError.style.display = "none";
 
 document.getElementById("createBtn").onclick = () => {
