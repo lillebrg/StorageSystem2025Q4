@@ -3,6 +3,8 @@
   <head>
     <title>Storage System</title>
     <link rel="stylesheet" href="/style.css" />
+    <link rel="icon" href="../assets/images/telia.png" type="image/x-icon" />
+    <link rel="stylesheet" href="../baseitems/style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -16,7 +18,7 @@
     <script src="/services/checklogin.js"></script>
     <script src="/components/alert.js"></script>
     <script src="/components/menu.js"></script>
-    <script type="module" src="/Items/script.js"></script>
+    <script type="module" src="/baseitems/script.js"></script>
   </head>
   <body>
      <menu-nav></menu-nav>
@@ -24,28 +26,40 @@
       <table class="responsive-table">
         <h2 class="tableTitle">All Items</h2>
         <div class="toolBar">
-          <input class="input" placeholder="Search..." />
-          <button class="button" id="createUserBtn">
+          <div>
+          <input id="searchInput" class="input" placeholder="Search..." />
+                 <button class="button" id="searchBtn">
+            <i class="fa fa-search"></i>
+          </button>
+          </div>
+        <button class="button" id="createBtn">
             <i class="fa fa-plus"></i>
           </button>
         </div>
+        <h4 id="pageCount" style="margin: 0;"></h4>
         <thead>
           <tr>
             <th scope="col">Name</th>
             <th scope="col">Description</th>
-            <th scope="col">Count</th>
             <th scope="col">Image</th>
+            <th scope="col">Total Count</th>
+            <th scope="col">Avaliable to Borrow</th>
+
           </tr>
         </thead>
         <tbody id="tBody">
         </tbody>
       </table>
-      <my-alert id="getAllItemsError" color="red">No items in the system</my-alert>
-      <my-alert id="noItems" color="#7d2ae8">No items in the system</my-alert>
+      <my-alert id="getError" color="#7d2ae8"></my-alert>
+      <ul class="pagination">
+      <li id="pageBack">&laquo;</a></li>
+      <li id="pageNext">&raquo;</a></li>
+      </ul>
+            
 
-      <div id="createBaseItemModal" class="modal">
-        <form class="form modalContent" id="createBaseItemForm">
-          <span class="closeModal" id="closeCreateUserBtn">&times;</span>
+      <div id="createModal" class="modal">
+        <form class="form modalContent" id="createForm">
+          <span class="closeModal" id="closeCreateBtn">&times;</span>
           <p class="form-title">Create BaseItem</p>
           <div class="input-container">
             <input placeholder="Enter name" id="name" required />
@@ -64,11 +78,10 @@
               type="file"
               id="image"
               accept="image/png, image.jpeg"
-              required
             />
           </div>
-
-          <button class="button submit">Create user</button>
+          <my-alert id="createError" color="red"></my-alert>
+          <button class="button submit">Create</button>
         </form>
       </div>
     </div>

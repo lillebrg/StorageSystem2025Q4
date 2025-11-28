@@ -1,7 +1,7 @@
 import { get, update, logout, updatePassword } from "../../services/user.service.js";
 //displayUserDetails
-var name;
-var email;
+let name;
+let email;
 
 await get().then((data) => {
   if (!data) {
@@ -14,7 +14,7 @@ await get().then((data) => {
 });
 
 function displayProfile(data) {
-  var table = document.getElementById(`profileCard`);
+  let table = document.getElementById(`profileCard`);
   table.innerHTML += `
        <div class="card-border-top"></div>
           <div class="img">
@@ -31,7 +31,7 @@ function displayProfile(data) {
 
 function displayTable(data) {
   //todo, specific items shown
-  var table = document.getElementById("tBody");
+  let table = document.getElementById("tBody");
   table.innerHTML = ""; // clear old table
   for (let i = 0; i < data.length; i++) {
     table.innerHTML += `
@@ -57,9 +57,9 @@ async function handleChangePassword(event) {
     return;
   }
 
-  var oldPasswordInput = document.getElementById("oldPassword").value;
-  var newPasswordInput = document.getElementById("newPassword").value;
-  var repeatNewPasswordInput = document.getElementById("repeatNewPassword").value;
+  let oldPasswordInput = document.getElementById("oldPassword").value;
+  let newPasswordInput = document.getElementById("newPassword").value;
+  let repeatNewPasswordInput = document.getElementById("repeatNewPassword").value;
 
   if (newPasswordInput != repeatNewPasswordInput) {
     alert("New passwords do not match");
@@ -75,8 +75,8 @@ async function handleChangePassword(event) {
 
 //edit User
 const editUserModal = document.getElementById("editUserModal");
-var emailInput = document.getElementById("email");
-var nameInput = document.getElementById("name");
+let emailInput = document.getElementById("email");
+let nameInput = document.getElementById("name");
 document.getElementById("editBtn").onclick = () => {
   nameInput.value = name;
   emailInput.value  = email;
