@@ -21,14 +21,14 @@ namespace SwaggerRestApi.Controllers
         [Authorize(Roles = "Admin, Operator")]
         public async Task<ActionResult> UpdateSpecificItem([FromBody] SpecificItemUpdate specificItemUpdate, int id)
         {
-            return Ok();
+            return await _specificitemlogic.UpdateSpecificItem(specificItemUpdate, id);
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin, Operator")]
         public async Task<ActionResult> DeleteSpecificItem(int id)
         {
-            return Ok();
+            return await _specificitemlogic.DeleteSpecificItem(id);
         }
     }
 }
