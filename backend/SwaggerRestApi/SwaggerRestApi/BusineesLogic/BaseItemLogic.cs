@@ -134,6 +134,7 @@ namespace SwaggerRestApi.BusineesLogic
 
                 specificItem.id = item.Id;
                 specificItem.description = item.Description;
+                specificItem.barcode = item.Barcode;
 
                 result.specific_items.Add(specificItem);
             }
