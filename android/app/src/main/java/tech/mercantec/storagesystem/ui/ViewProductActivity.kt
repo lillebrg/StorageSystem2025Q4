@@ -32,25 +32,9 @@ class ViewProductActivity : AppCompatActivity() {
         api = Api(this)
 
         findViewById<Button>(R.id.add_specific_item_button).setOnClickListener {
-            // Show dialog to add a specific item
-            val layout = LinearLayout(this)
-            layout.orientation = LinearLayout.VERTICAL
-            layout.setPadding(60, 40, 60, 0)
-
-            val editText = EditText(this)
-            editText.hint = "Description (optional)"
-            layout.addView(editText)
-
-            val dialog = AlertDialog.Builder(this)
-                .setTitle("Add item")
-                .setView(layout)
-                .setPositiveButton("Add") { dialog, which ->
-                    createSpecificItem(editText.text.toString())
-                }
-                .setNegativeButton("Cancel") { dialog, which -> }
-                .create()
-
-            dialog.show()
+            showInputDialog("Add", "") { text ->
+                createSpecificItem(text)
+            }
         }
 
         findViewById<ListView>(R.id.specific_items_list).setOnItemLongClickListener { parent, view, position, id ->
@@ -64,25 +48,33 @@ class ViewProductActivity : AppCompatActivity() {
                 setOnMenuItemClickListener {
                     when (it.itemId) {
                         R.id.edit -> {
+                            showInputDialog("Edit", item.description) { newDesc ->
+                                @Serializable
+                                data class Req(val description: String)
+
+                                Api.makeRequest(activity, { api.requestJson<Req, Boolean>("PUT", "/specific-items/${item.id}", Req(newDesc)) }) {
+                                    for (specificItem in baseItem.specific_items) {
+                                        if (specificItem.id != item.id) continue
+
+                                        specificItem.description = newDesc
+                                    }
+
+                                    showProductInfo()
+                                }
+                            }
+
                             true
                         }
                         R.id.delete -> {
-                            val dialog = AlertDialog.Builder(activity)
-                                .setTitle("Delete item")
-                                .setMessage("Delete this item? This action cannot be undone")
-                                .setPositiveButton("Delete") { dialog, which ->
-                                    Api.makeRequest(activity, { api.requestJson<Unit, Boolean>("DELETE", "/specific-items/${item.id}", null) }) {
-                                        baseItem.specific_items.removeIf { it.id == item.id }
+                            confirm("Delete item", "Delete this item? This action cannot be undone") {
+                                Api.makeRequest(activity, { api.requestJson<Unit, Boolean>("DELETE", "/specific-items/${item.id}", null) }) {
+                                    baseItem.specific_items.removeIf { it.id == item.id }
 
-                                        showProductInfo()
+                                    showProductInfo()
 
-                                        Toast.makeText(applicationContext, "Item deleted", Toast.LENGTH_SHORT).show()
-                                    }
+                                    Toast.makeText(applicationContext, "Item deleted", Toast.LENGTH_SHORT).show()
                                 }
-                                .setNegativeButton("Cancel") { dialog, which -> }
-                                .create()
-
-                            dialog.show()
+                            }
 
                             true
                         }
@@ -159,6 +151,41 @@ class ViewProductActivity : AppCompatActivity() {
 
     private fun dpToPx(dp: Int): Int {
         return (dp * resources.displayMetrics.density).toInt()
+    }
+
+    private fun showInputDialog(action: String, text: String, callback: (String) -> Unit) {
+        val layout = LinearLayout(this)
+        layout.orientation = LinearLayout.VERTICAL
+        layout.setPadding(60, 40, 60, 0)
+
+        val editText = EditText(this)
+        editText.hint = "Description (optional)"
+        editText.setText(text, TextView.BufferType.SPANNABLE)
+        layout.addView(editText)
+
+        val dialog = AlertDialog.Builder(this)
+            .setTitle("$action item")
+            .setView(layout)
+            .setPositiveButton(action) { dialog, which ->
+                callback(editText.text.toString())
+            }
+            .setNegativeButton("Cancel") { dialog, which -> }
+            .create()
+
+        dialog.show()
+    }
+
+    private fun confirm(title: String, message: String, callback: () -> Unit) {
+        val dialog = AlertDialog.Builder(this)
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("Delete") { dialog, which ->
+                callback()
+            }
+            .setNegativeButton("Cancel") { dialog, which -> }
+            .create()
+
+        dialog.show()
     }
 
     override fun onActivityResult(
