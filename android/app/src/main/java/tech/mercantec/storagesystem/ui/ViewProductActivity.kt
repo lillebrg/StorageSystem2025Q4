@@ -88,7 +88,15 @@ class ViewProductActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.description).setText(baseItem.description, TextView.BufferType.SPANNABLE)
         findViewById<TextView>(R.id.barcode).setText(getString(R.string.barcode_label, baseItem.barcode), TextView.BufferType.SPANNABLE)
 
-        findViewById<ListView>(R.id.specific_items_list).adapter = SpecificItemAdapter(this, baseItem.specific_items)
+        findViewById<ListView>(R.id.specific_items_list).apply {
+            adapter = SpecificItemAdapter(applicationContext, baseItem.specific_items)
+
+            val height = dpToPx(70) * adapter.count + dividerHeight * (adapter.count - 1)
+            val params = layoutParams
+            params.height = height
+            layoutParams = params
+            requestLayout()
+        }
 
         if (baseItem.image_url != null) {
             thread {
@@ -103,6 +111,10 @@ class ViewProductActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun dpToPx(dp: Int): Int {
+        return (dp * resources.displayMetrics.density).toInt()
     }
 
     override fun onActivityResult(
