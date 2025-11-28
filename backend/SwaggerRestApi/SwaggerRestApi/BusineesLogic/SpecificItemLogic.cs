@@ -23,7 +23,7 @@ namespace SwaggerRestApi.BusineesLogic
         /// <param name="specificItemsCreate">Contains a description and a barcode</param>
         /// <param name="baseItemId">The id of the base item that the specific item belongs to</param>
         /// <returns>An int that is the id of the rack that was created</returns>
-        public async Task<ActionResult<CreateReturnInt>> CreateSpecificItem(SpecificItemsCreate specificItemsCreate, int baseItemId)
+        public async Task<ActionResult<SpecificItemsGet>> CreateSpecificItem(SpecificItemsCreate specificItemsCreate, int baseItemId)
         {
             if (specificItemsCreate == null) { return new BadRequestObjectResult(new { message = "Specific Items can not be null" }); }
 
@@ -32,9 +32,12 @@ namespace SwaggerRestApi.BusineesLogic
             specificItem.Description = specificItemsCreate.description;
             specificItem.Barcode = await _sharedlogic.CreateRandomBarcode();
 
-            CreateReturnInt result = new CreateReturnInt();
+            SpecificItemsGet result = new SpecificItemsGet();
 
             result.id = await _itemdbaccess.CreateSpecificItem(specificItem, baseItemId);
+            result.description = specificItem.Description;
+            result.barcode = specificItem.Barcode;
+            result.loaned_to = null;
 
             if (result.id == -1) { return new NotFoundObjectResult(new { message = "Could not find base item" }); }
 

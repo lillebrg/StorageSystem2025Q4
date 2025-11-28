@@ -1,5 +1,6 @@
 package tech.mercantec.storagesystem.ui
 
+import android.app.AlertDialog
 import android.app.ComponentCaller
 import android.content.Intent
 import android.graphics.drawable.Drawable
@@ -8,8 +9,9 @@ import android.view.*
 import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.serialization.Serializable
 import tech.mercantec.storagesystem.R
-import tech.mercantec.storagesystem.models.BaseItem
+import tech.mercantec.storagesystem.models.*
 import tech.mercantec.storagesystem.services.Api
 import tech.mercantec.storagesystem.ui.adapters.SpecificItemAdapter
 import java.io.InputStream
@@ -28,6 +30,27 @@ class ViewProductActivity : AppCompatActivity() {
         setContentView(R.layout.activity_view_product)
 
         api = Api(this)
+
+        findViewById<Button>(R.id.add_specific_item_button).setOnClickListener {
+            val layout = LinearLayout(this)
+            layout.orientation = LinearLayout.VERTICAL
+            layout.setPadding(60, 40, 60, 0)
+
+            val editText = EditText(this)
+            editText.hint = "Description (optional)"
+            layout.addView(editText)
+
+            val dialog = AlertDialog.Builder(this)
+                .setTitle("Add item")
+                .setView(layout)
+                .setPositiveButton("Add") { dialog, which ->
+                    createSpecificItem(editText.text.toString())
+                }
+                .setNegativeButton("Cancel") { dialog, which -> }
+                .create()
+
+            dialog.show()
+        }
     }
 
     override fun onResume() {
@@ -41,6 +64,20 @@ class ViewProductActivity : AppCompatActivity() {
 
         Api.makeRequest(this, { api.requestJson<Unit, BaseItem>("GET", "/base-items/${id}", null) }, showLoading = false) {
             baseItem = it
+
+            showProductInfo()
+        }
+    }
+
+    private fun createSpecificItem(description: String) {
+        @Serializable
+        data class CreateSpecificItemRequest(val description: String)
+
+        val req = CreateSpecificItemRequest(description)
+        Api.makeRequest(this, {
+            api.requestJson<CreateSpecificItemRequest, SpecificItem>("POST", "/base-items/${baseItem.id}/specific-items", req)
+        }) { response ->
+            baseItem.specific_items.add(response)
 
             showProductInfo()
         }

@@ -9,7 +9,7 @@ import android.widget.TextView
 import tech.mercantec.storagesystem.R
 import tech.mercantec.storagesystem.models.SpecificItem
 
-class SpecificItemAdapter(val ctx: Context, val items: Array<SpecificItem>) : BaseAdapter() {
+class SpecificItemAdapter(val ctx: Context, val items: ArrayList<SpecificItem>) : BaseAdapter() {
     val layoutInflater = ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
     override fun getCount() = items.size
@@ -27,7 +27,13 @@ class SpecificItemAdapter(val ctx: Context, val items: Array<SpecificItem>) : Ba
         val item = getItem(position)
 
         view.findViewById<TextView>(R.id.barcode).setText(item.barcode, TextView.BufferType.SPANNABLE)
-        view.findViewById<TextView>(R.id.description).setText(item.description, TextView.BufferType.SPANNABLE)
+
+        if (item.description.isNotEmpty()) {
+            view.findViewById<TextView>(R.id.description).apply {
+                visibility = View.VISIBLE
+                setText(item.description, TextView.BufferType.SPANNABLE)
+            }
+        }
 
         if (item.loaned_to != null) {
             view.findViewById<TextView>(R.id.loaned_to).apply {
