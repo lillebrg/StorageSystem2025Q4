@@ -1,5 +1,4 @@
-import { create, getAll, uploadImage } from "../services/baseitem.service.js";
-
+import { create, getAll, uploadImage } from "../services/pages/baseitem.service.js"
 //paginator
 let currentPage = 0;
 document.getElementById("pageBack").onclick = () =>{
@@ -34,6 +33,7 @@ document.getElementById("pageCount").innerHTML = `Page ${currentPage+1}`
 
 await getAll(10, 10 * currentPage, search)
   .then((data) => {
+    console.log(data)
     displayTable(data);
   })
   .catch((error) => {

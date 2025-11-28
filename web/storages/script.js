@@ -1,4 +1,4 @@
-import { create, getAll } from "../services/storage.service.js";
+import { create, getAll } from "../services/pages/storage.service.js";
 
 let getError = document.getElementById("getError");
 getError.style.display = "none";

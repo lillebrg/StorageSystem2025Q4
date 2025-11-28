@@ -3,7 +3,7 @@
   <head>
     <title>Storage System</title>
     <link rel="stylesheet" href="/style.css" />
-    <link rel="icon" href="../assets/images/telia.png" type="image/x-icon" />
+    <link rel="icon" href="../../assets/images/telia.png" type="image/x-icon" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -12,8 +12,9 @@
     />
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     />
+
     <script src="/services/checklogin.js"></script>
     <script src="/components/alert.js"></script>
     <script src="/components/menu.js"></script>
@@ -23,12 +24,22 @@
     <menu-nav></menu-nav>
     <div class="container">
       <table class="responsive-table">
-        <h2 class="tableTitle" id="tableTitle"></h2>
         <div class="toolBar">
-          <div></div>
-          <div>
+          <div style="width: 33.33%; display: flex; justify-content: start">
+            <button class="button" id="backBtn">
+              <i class="fa fa-arrow-left"></i>
+            </button>
+          </div>
+          <div style="width: 33.33%; justify-content: center">
+            <i class="fa fa-warehouse fa-2x"></i>
+            <h2 class="tableTitle" id="tableTitle"></h2>
+          </div>
+          <div style="width: 33.33%; display: flex; justify-content: end">
             <button class="button" id="deleteBtn">
               <i class="fa fa-trash"></i>
+            </button>
+            <button class="button" id="updateBtn">
+              <i class="fa fa-edit"></i>
             </button>
             <button class="button" id="createBtn">
               <i class="fa fa-plus"></i>
@@ -60,6 +71,22 @@
           </div>
           <my-alert id="createError" color="red"></my-alert>
           <button class="button submit" type="submit">Create</button>
+        </form>
+      </div>
+
+      <div id="updateModal" class="modal">
+        <form class="form modalContent" id="updateForm">
+          <span class="closeModal">&times;</span>
+          <p class="form-title">Update storage</p>
+          <div class="input-container">
+            <input
+              placeholder="Enter storage name"
+              id="name"
+              required
+            />
+          </div>
+          <my-alert id="updateError" color="red"></my-alert>
+          <button class="button submit" type="submit">Update</button>
         </form>
       </div>
 

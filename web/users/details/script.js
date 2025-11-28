@@ -3,7 +3,7 @@ import {
   update,
   deleteUser,
   updatePassword,
-} from "../../services/user.service.js";
+} from "../../services/pages/user.service.js";
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 //displayUserDetails
@@ -11,11 +11,8 @@ let name;
 let email;
 let role;
 
-  let getUserError = document.getElementById("getUserError");
-  getUserError.style.display = "none";
-
-  let noItemsBorrowed = document.getElementById("noItemsBorrowed");
-    noItemsBorrowed.style.display = "none";
+  let getError = document.getElementById("getError");
+  getError.style.display = "none";
 
 await get(id)
   .then((data) => {
@@ -26,8 +23,9 @@ await get(id)
     displayTable(data.borrowed_items);
   })
   .catch((error) => {
-    getUserError.style.display = "block";
-    getUserError.innerText = error;
+    getError.style.display = "block";
+    getError.color = "red"
+    getError.innerText = error;
   });
 
 function displayProfile() {
@@ -51,7 +49,8 @@ function displayTable(data) {
   let table = document.getElementById("tBody");
   table.innerHTML = ""; // clear old table
   if(data.length <= 0) {
-    noItemsBorrowed.style.display = "block"
+    getError.style.display = "block"
+    getError.innerHTML = "No items borrowed"
   }
 
     data.forEach(user => {

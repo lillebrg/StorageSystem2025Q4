@@ -1,4 +1,4 @@
-import { request, requestUploadImage } from "./api.js";
+import { request } from "../api.js";
 
 export function get(id) {
   return request("GET", `/items/${id}`);

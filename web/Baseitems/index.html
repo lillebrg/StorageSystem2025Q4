@@ -3,18 +3,19 @@
   <head>
     <title>Storage System</title>
     <link rel="stylesheet" href="/style.css" />
-    <link rel="icon" href="../assets/images/telia.png" type="image/x-icon" />
     <link rel="stylesheet" href="../baseitems/style.css" />
+    <link rel="icon" href="../assets/images/telia.png" type="image/x-icon" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
       rel="stylesheet"
     />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
+ <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+/>
+
     <script src="/services/checklogin.js"></script>
     <script src="/components/alert.js"></script>
     <script src="/components/menu.js"></script>
@@ -24,17 +25,21 @@
      <menu-nav></menu-nav>
     <div class="container">
       <table class="responsive-table">
-        <h2 class="tableTitle">All Items</h2>
         <div class="toolBar">
-          <div>
-          <input id="searchInput" class="input" placeholder="Search..." />
+          <div style="width: 33.33%; display: flex; justify-content: start">
+            <input id="searchInput" class="input" placeholder="Search..." />
                  <button class="button" id="searchBtn">
             <i class="fa fa-search"></i>
           </button>
           </div>
-        <button class="button" id="createBtn">
-            <i class="fa fa-plus"></i>
-          </button>
+          <div style="width: 33.33%; justify-content: center">
+          <h2 class="tableTitle">All Items</h2>
+          </div>
+          <div style="width: 33.33%; display: flex; justify-content: end">
+            <button class="button" id="createBtn">
+              <i class="fa fa-plus"></i>
+            </button>
+          </div>
         </div>
         <h4 id="pageCount" style="margin: 0;"></h4>
         <thead>

@@ -10,10 +10,11 @@
       href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
       rel="stylesheet"
     />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
+ <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+/>
+
     <script src="/services/checklogin.js"></script>
     <script src="/components/menu.js"></script>
     <script src="/components/alert.js"></script>
@@ -24,12 +25,17 @@
       <menu-nav></menu-nav>
     <div class="container">
       <table class="responsive-table">
-        <h2 class="tableTitle">All Users</h2>
-        <div class="toolBar">
-          <input class="input" placeholder="Search...">
-          <button class="button" id="createUserBtn">
-            <i class="fa fa-plus"></i>
-          </button>
+             <div class="toolBar">
+          <div style="width: 33.33%; display: flex; justify-content: start">
+          </div>
+          <div style="width: 33.33%; justify-content: center">
+            <h2 class="tableTitle">All Users</h2>
+          </div>
+          <div style="width: 33.33%; display: flex; justify-content: end">
+            <button class="button" id="createBtn">
+              <i class="fa fa-plus"></i>
+            </button>
+          </div>
         </div>
         <thead>
           <tr>
@@ -40,18 +46,12 @@
           </tr>
         </thead>
         <tbody id="tBody">
-           <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
         </tbody>
       </table>
 
-      <div id="createUserModal" class="modal">
-        <form class="form modalContent" id="createUserForm">
-          <span class="closeModal" id="closeCreateUserBtn">&times;</span>
+      <div id="createModal" class="modal">
+        <form class="form modalContent" id="createForm">
+          <span class="closeModal">&times;</span>
           <p class="form-title">Create User</p>
           <div class="input-container">
             <input placeholder="Enter name" id="name" required />
@@ -75,8 +75,8 @@
               <option value="User">User</option>
             </select>
           </div>
-          <my-alert id="createUserError" color="red"></my-alert>
-          <button class="button submit" type="submit">Create user</button>
+          <my-alert id="createError" color="red"></my-alert>
+          <button class="button submit" type="submit">Create</button>
         </form>
       </div>
     </div>

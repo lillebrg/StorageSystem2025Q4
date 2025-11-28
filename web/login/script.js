@@ -1,4 +1,5 @@
-import { login, updatePassword } from "../services/user.service.js";
+import { login } from "../services/auth.js";
+import { updatePassword } from "../services/pages/user.service.js";
 
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
@@ -25,8 +26,8 @@ async function handleLogin(event) {
 
   await login(email, password)
     .then((response) => {
-      console.log(response);
       localStorage.setItem("token", response.access_token);
+      localStorage.setItem("refreshToken", response.refresh_token);
       localStorage.setItem("role", response.role);
       if (response.change_password_on_next_login) {
         let changePasswordModal = document.getElementById("changePasswordModal"

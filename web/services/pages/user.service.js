@@ -1,4 +1,4 @@
-import { request } from "./api.js";
+import { request } from "../api.js";
 
 export function get(id = null) {
   if (id) {
@@ -52,17 +52,4 @@ export function updatePassword(id = null, current_password = null, new_password)
 
 export function deleteUser(id) {
   return request("DELETE", `/users/${id}`);
-}
-
-export function login(email, password) {
-  return request("POST", "/user/login", {
-    email,
-    password,
-  });
-}
-
-export function logout() {
-  localStorage.removeItem("token");
-  localStorage.removeItem("role");
-  window.location.href = "/";
 }

@@ -1,6 +1,7 @@
 import { url } from "/services/apiurl.js";
+import { refreshAuthToken } from "./auth.js";
 
-export async function request(method, path, body = null, image = undefined) {
+export async function request(method, path, body = null, image = undefined, canRetry = true) {
   let token = localStorage.getItem("token");
   const headers = {};
   headers["Authorization"] = `Bearer ${token}`;
@@ -13,9 +14,17 @@ export async function request(method, path, body = null, image = undefined) {
       body: body ? JSON.stringify(body) : image,
     })
       .then(async (response) => {
+        console.log(response.status)
         try {
-
-          if (response.status == 401) console.log(response.status);
+        if(response.status == 401) {
+          if (canRetry){
+            console.log(canRetry)
+            await refreshAuthToken();
+            return request(method, path, body, image, false)
+          };
+          window.location.href = "/"
+        }
+          
           
           const json = await response.json();
 

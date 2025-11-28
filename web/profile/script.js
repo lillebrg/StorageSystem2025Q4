@@ -1,4 +1,5 @@
-import { get, update, logout, updatePassword } from "../../services/user.service.js";
+import { get, update, updatePassword } from "../../services/pages/user.service.js";
+import { logout } from "../services/auth.js";
 //displayUserDetails
 let name;
 let email;

@@ -1,4 +1,4 @@
-import { create, getAll } from "../services/user.service.js";
+import { create, getAll } from "../services/pages/user.service.js";
 
 await getAll()
   .then((data) => displayTable(data))
@@ -29,32 +29,29 @@ function displayTable(data) {
 }
 
 //create User
-const createUserModal = document.getElementById("createUserModal");
+const createModal = document.getElementById("createModal");
 let nameInput = document.getElementById("name");
 let emailInput = document.getElementById("email");
 let passwordInput = document.getElementById("password");
 let roleInput = document.getElementById("role");
-let createUserError = document.getElementById("createUserError");
-createUserError.style.display = "none";
+let createError = document.getElementById("createError");
+createError.style.display = "none";
 
-document.getElementById("createUserBtn").onclick = () => {
-  createUserModal.style.display = "block";
+document.getElementById("createBtn").onclick = () => {
+  createModal.style.display = "block";
   nameInput.value = "";
   emailInput.value = "";
   passwordInput.value = "";
   roleInput.value = "";
 };
 
-document.getElementById("closeCreateUserBtn").onclick = () => {
-  createUserModal.style.display = "none";
-};
 
-const createUserForm = document.getElementById("createUserForm");
-createUserForm.addEventListener("submit", handleCreateUser);
+const createForm = document.getElementById("createForm");
+createForm.addEventListener("submit", handleCreate);
 
-async function handleCreateUser(event) {
+async function handleCreate(event) {
   event.preventDefault();
-  if (!createUserForm.reportValidity()) {
+  if (!createForm.reportValidity()) {
     return;
   }
 
@@ -66,7 +63,14 @@ async function handleCreateUser(event) {
  await create(name, email, password, role)
     .then(() => location.reload())
     .catch((error) => {
-      createUserError.style.display = "block";
-      createUserError.innerText = error;
+      createError.style.display = "block";
+      createError.innerText = error;
     });
 }
+
+// Close modals when clicking on any close button
+document.querySelectorAll(".closeModal").forEach((closeBtn) => {
+  closeBtn.onclick = () => {
+    createModal.style.display = "none";
+  };
+});

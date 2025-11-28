@@ -1,7 +1,9 @@
-import { get, update, deleteShelf } from "../services/shelves.service.js";
-import { create, uploadImage} from "../services/baseitem.service.js";
+import { get, update, deleteShelf } from "../services/pages/shelves.service.js";
+import { create, uploadImage} from "../services/pages/baseitem.service.js";
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
+const rackId = params.get("rackId");
+const storageId = params.get("storageId");
 
 let getError = document.getElementById("getError");
 getError.style.display = "none";
@@ -34,6 +36,7 @@ function displayTable(data) {
          <tr data-id="${baseItem.id}">
             <td>${baseItem.name}</td>
             <td>${baseItem.description}</td>
+            <td>${baseItem.barcode}</td>
             <td><img src="${baseItem.image_url}" style="width: 100px;"/></td>
             <td>${baseItem.specific_items_count}</td>
             <td>${baseItem.specific_items_available_count}</td>
@@ -89,7 +92,7 @@ async function handleCreate(event) {
   }
 }
 
-//Create shelf
+//update shelf
 let updateModal = document.getElementById("updateModal");
 let shelf_noInput = document.getElementById("shelf_no");
 
@@ -102,9 +105,9 @@ document.getElementById("updateBtn").onclick = () => {
 };
 
 const updateForm = document.getElementById("updateForm");
-updateForm.addEventListener("submit", submitCreate);
+updateForm.addEventListener("submit", submitUpdate);
 
-async function submitCreate(event) {
+async function submitUpdate(event) {
   event.preventDefault();
   if (!updateForm.reportValidity()) {
     return;
@@ -113,14 +116,17 @@ async function submitCreate(event) {
   update(id, shelf_noInput.value)
     .then(() => window.location.reload())
     .catch((error) => {
-      createError.style.display = "block";
-      createError.innerText = error;
+      updateError.style.display = "block";
+      updateError.innerText = error;
     });
 }
 
 //delete shelf
 let deleteForm = document.getElementById("deleteForm");
 deleteForm.addEventListener("submit", handleUserDelete);
+
+let deleteError = document.getElementById("deleteError");
+deleteError.style.display = "none";
 
 let deleteModal = document.getElementById("deleteModal");
 document.getElementById("deleteBtn").onclick = () =>
@@ -131,9 +137,10 @@ async function handleUserDelete(event) {
     return;
   }
   deleteShelf(id)
-    .then(() => (window.location.href = "/storages"))
+    .then(() => goBack())
     .catch((error) => {
-      console.log(error);
+      deleteError.style.display = "block";
+      deleteError.innerText = error;
     });
 }
 
@@ -145,3 +152,10 @@ document.querySelectorAll(".closeModal").forEach((closeBtn) => {
     deleteModal.style.display = "none";
   };
 });
+
+//go back btn
+document.getElementById("backBtn").onclick = () => {goBack();};
+
+function goBack() {
+  window.location.href = `/racks/?id=${rackId}&storageId=${storageId}`
+}

@@ -27,14 +27,11 @@ main {
   margin: 1%;
 }
 
-.toolBarbuttons {
-  display: flex;
-}
-
 /* #region Button */
 .button {
   position: relative;
   padding: 10px 15px;
+  margin: 2px;
   border-radius: 6px;
   border: none;
   color: #fff;
@@ -68,7 +65,7 @@ main {
 @media (min-width: 30em) { }  /* bp-lisa = 480px */
 
 .tableTitle{
-  margin: 5px 0 5px 0;
+  margin: 0px
 }
 
 .responsive-table tbody tr {
@@ -153,11 +150,13 @@ main {
   padding: 0;
   text-align: left;
   white-space: normal;
+  
 }
 
 @media (min-width: 768px) {
   .responsive-table tr {
     display: table-row;
+    
   }
 }
 
