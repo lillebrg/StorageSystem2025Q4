@@ -19,7 +19,7 @@ class Auth(ctx: Context) {
         data class LoginRequest(val email: String, val password: String)
 
         @Serializable
-        data class LoginResponse(val name: String, val email: String, val role: String, val access_token: String, val change_password_on_next_login: Boolean)
+        data class LoginResponse(val name: String, val email: String, val role: String, val access_token: String, val refresh_token: String, val change_password_on_next_login: Boolean)
 
         val request = LoginRequest(email, password)
 
