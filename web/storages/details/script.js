@@ -3,7 +3,7 @@ import { create } from "../../services/racks.service.js";
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 
-var getError = document.getElementById("getError");
+let getError = document.getElementById("getError");
 getError.style.display = "none";
 
 await get(id)
@@ -45,9 +45,9 @@ function displayTable(data) {
 
 
 //Create Rack
-var createModal = document.getElementById("createModal");
-var rack_noInput = document.getElementById("rack_no");
-var createError = document.getElementById("createError");
+let createModal = document.getElementById("createModal");
+let rack_noInput = document.getElementById("rack_no");
+let createError = document.getElementById("createError");
 createError.style.display = "none";
 
 document.getElementById("createBtn").onclick = () => {
@@ -73,8 +73,8 @@ async function submitCreate(event) {
 }
 
 //delete Storage
-var deleteModal = document.getElementById("deleteModal");
-var deleteError = document.getElementById("deleteError");
+let deleteModal = document.getElementById("deleteModal");
+let deleteError = document.getElementById("deleteError");
 deleteError.style.display = "none";
 
 document.getElementById("deleteBtn").onclick = () => {

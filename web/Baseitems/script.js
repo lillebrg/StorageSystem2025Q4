@@ -1,7 +1,7 @@
 import { create, getAll, uploadImage } from "../services/baseitem.service.js";
 
 //paginator
-var currentPage = 0;
+let currentPage = 0;
 document.getElementById("pageBack").onclick = () =>{
    if(currentPage >= 1){
     currentPage -= 1;
@@ -18,13 +18,13 @@ document.getElementById("pageNext").onclick = () =>{
 
 
 //search
-var search;
+let search;
 document.getElementById("searchBtn").onclick = () => {
   search = document.getElementById("searchInput").value;
   getItems();
 };
 
-var getError = document.getElementById("getError");
+let getError = document.getElementById("getError");
 getError.style.display = "none";
 getItems();
 
@@ -34,30 +34,28 @@ document.getElementById("pageCount").innerHTML = `Page ${currentPage+1}`
 
 await getAll(10, 10 * currentPage, search)
   .then((data) => {
-    console.log(data);
     displayTable(data);
   })
   .catch((error) => {
     getError.style.display = "block";
+    getError.color = "red";
     getError.innerHTML = error;
   });
 
 function displayTable(data) {
-  var table = document.getElementById("tBody");
+  let table = document.getElementById("tBody");
   table.innerHTML = ""; // clear old table
-
-  data.forEach(baseItem => {
     if (data.length <= 0) {
       getError.style.display = "block";
       getError.innerHTML = "No items in the system";
       }
+  data.forEach(baseItem => {
     table.innerHTML += `
          <tr data-id="${baseItem.id}">
             <td>${baseItem.name}</td>
             <td>${baseItem.description}</td>
-            <td>${baseItem.barcode}</td>
-            <td>${baseItem.specific_items_count}</td>
             <td><img src="${baseItem.image_url}" style="width: 100px;"/></td>
+            <td>${baseItem.specific_items_count}</td>
             <td>${baseItem.specific_items_available_count}</td>
           </tr>`;
   });
@@ -75,13 +73,13 @@ function displayTable(data) {
 
 
 //create baseItem
-var createModal = document.getElementById("createModal");
-var nameInput = document.getElementById("name");
-var descriptionInput = document.getElementById("description");
-var imageInput = document.getElementById("image");
-var barcodeInput = document.getElementById("barcode");
+let createModal = document.getElementById("createModal");
+let nameInput = document.getElementById("name");
+let descriptionInput = document.getElementById("description");
+let imageInput = document.getElementById("image");
+let barcodeInput = document.getElementById("barcode");
 
-var createError = document.getElementById("createError");
+let createError = document.getElementById("createError");
 createError.style.display = "none";
 
 document.getElementById("createBtn").onclick = () => {

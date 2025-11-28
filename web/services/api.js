@@ -1,7 +1,7 @@
 import { url } from "/services/apiurl.js";
 
 export async function request(method, path, body = null, image = undefined) {
-  var token = localStorage.getItem("token");
+  let token = localStorage.getItem("token");
   const headers = {};
   headers["Authorization"] = `Bearer ${token}`;
 

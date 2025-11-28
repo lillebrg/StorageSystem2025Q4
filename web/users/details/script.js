@@ -7,14 +7,14 @@ import {
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 //displayUserDetails
-var name;
-var email;
-var role;
+let name;
+let email;
+let role;
 
-  var getUserError = document.getElementById("getUserError");
+  let getUserError = document.getElementById("getUserError");
   getUserError.style.display = "none";
 
-  var noItemsBorrowed = document.getElementById("noItemsBorrowed");
+  let noItemsBorrowed = document.getElementById("noItemsBorrowed");
     noItemsBorrowed.style.display = "none";
 
 await get(id)
@@ -31,7 +31,7 @@ await get(id)
   });
 
 function displayProfile() {
-  var table = document.getElementById(`profileCard`);
+  let table = document.getElementById(`profileCard`);
   table.innerHTML += `
        <div class="card-border-top"></div>
           <div class="img">
@@ -48,7 +48,7 @@ function displayProfile() {
 
 function displayTable(data) {
   //todo, specific items shown
-  var table = document.getElementById("tBody");
+  let table = document.getElementById("tBody");
   table.innerHTML = ""; // clear old table
   if(data.length <= 0) {
     noItemsBorrowed.style.display = "block"
@@ -68,7 +68,7 @@ function displayTable(data) {
 const changePasswordModal = document.getElementById("changePasswordModal");
 document.getElementById("changePasswordBtn").onclick = () =>
   (changePasswordModal.style.display = "block");
-var changePasswordError = document.getElementById("changePasswordError");
+let changePasswordError = document.getElementById("changePasswordError");
 changePasswordError.style.display = "none";
 
 const changePasswordForm = document.getElementById("changePasswordForm");
@@ -79,7 +79,7 @@ async function handleChangePassword(event) {
   if (!changePasswordForm.reportValidity()) {
     return;
   }
-  var newPasswordInput = document.getElementById("newPassword").value;
+  let newPasswordInput = document.getElementById("newPassword").value;
   updatePassword(id, null, newPasswordInput)
     .then(() => window.location.reload())
     .catch((error) => {
@@ -89,10 +89,10 @@ async function handleChangePassword(event) {
 
 //edit User
 const editUserModal = document.getElementById("editUserModal");
-var emailInput = document.getElementById("email");
-var nameInput = document.getElementById("name");
-var roleInput = document.getElementById("role");
-var cponlInput = document.getElementById("cponl");
+let emailInput = document.getElementById("email");
+let nameInput = document.getElementById("name");
+let roleInput = document.getElementById("role");
+let cponlInput = document.getElementById("cponl");
 document.getElementById("editBtn").onclick = () => {
   nameInput.value = name;
   emailInput.value = email;

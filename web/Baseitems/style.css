@@ -16,6 +16,7 @@
   transition: background-color 1s;  
 }
 
-.pagination li:hover:not(.active) {
+.pagination li:hover {
   background-color: #a885eb;
+    cursor: pointer;
 }

@@ -1,1 +1,1 @@
-export var url = ""
+export let url = ""

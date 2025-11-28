@@ -4,7 +4,7 @@ const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 const storageId = params.get("storageId");
 
-var getError = document.getElementById("getError");
+let getError = document.getElementById("getError");
 getError.style.display = "none";
 
 await get(id)
@@ -20,11 +20,11 @@ await get(id)
   });
 
 function displayTable(data) {
-  var table = document.getElementById("tBody");
+  let table = document.getElementById("tBody");
   table.innerHTML = ""; // clear old table
   if (data.length <= 0) {
     getError.style.display = "block";
-    getError.innerHTML = "Rack is empty";
+    getError.innerHTML = "Shelf is empty";
   }
 
     data.forEach(item => {
@@ -43,10 +43,10 @@ function displayTable(data) {
   });
 }
 //Create shelf
-var createModal = document.getElementById("createModal");
-var shelf_noInput = document.getElementById("shelf_no");
+let createModal = document.getElementById("createModal");
+let shelf_noInput = document.getElementById("shelf_no");
 
-var createError = document.getElementById("createError");
+let createError = document.getElementById("createError");
 createError.style.display = "none";
 
 document.getElementById("createBtn").onclick = () => {
@@ -72,10 +72,10 @@ async function submitCreate(event) {
 }
 
 //delete rack
-var deleteModal = document.getElementById("deleteModal");
+let deleteModal = document.getElementById("deleteModal");
 document.getElementById("deleteBtn").onclick = () => (deleteModal.style.display = "block");
 
-var deleteError = document.getElementById("deleteError");
+let deleteError = document.getElementById("deleteError");
 deleteError.style.display = "none";
 
 const deleteForm = document.getElementById("deleteForm");
