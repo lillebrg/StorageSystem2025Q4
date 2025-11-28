@@ -31,4 +31,5 @@
     <string name="items">Items</string>
     <string name="add_item">Add item</string>
     <string name="loaned_to">Loaned to: %s</string>
+    <string name="delete">Delete</string>
 </resources>

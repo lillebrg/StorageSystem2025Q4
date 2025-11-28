@@ -32,6 +32,7 @@ class ViewProductActivity : AppCompatActivity() {
         api = Api(this)
 
         findViewById<Button>(R.id.add_specific_item_button).setOnClickListener {
+            // Show dialog to add a specific item
             val layout = LinearLayout(this)
             layout.orientation = LinearLayout.VERTICAL
             layout.setPadding(60, 40, 60, 0)
@@ -50,6 +51,49 @@ class ViewProductActivity : AppCompatActivity() {
                 .create()
 
             dialog.show()
+        }
+
+        findViewById<ListView>(R.id.specific_items_list).setOnItemLongClickListener { parent, view, position, id ->
+            val item = parent.getItemAtPosition(position) as SpecificItem
+
+            val activity = this
+            val popup = PopupMenu(this, view)
+            popup.apply {
+                menuInflater.inflate(R.menu.specific_item_actions, menu)
+
+                setOnMenuItemClickListener {
+                    when (it.itemId) {
+                        R.id.edit -> {
+                            true
+                        }
+                        R.id.delete -> {
+                            val dialog = AlertDialog.Builder(activity)
+                                .setTitle("Delete item")
+                                .setMessage("Delete this item? This action cannot be undone")
+                                .setPositiveButton("Delete") { dialog, which ->
+                                    Api.makeRequest(activity, { api.requestJson<Unit, Boolean>("DELETE", "/specific-items/${item.id}", null) }) {
+                                        baseItem.specific_items.removeIf { it.id == item.id }
+
+                                        showProductInfo()
+
+                                        Toast.makeText(applicationContext, "Item deleted", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                                .setNegativeButton("Cancel") { dialog, which -> }
+                                .create()
+
+                            dialog.show()
+
+                            true
+                        }
+                        else -> false
+                    }
+                }
+
+                show()
+            }
+
+            true
         }
     }
 
