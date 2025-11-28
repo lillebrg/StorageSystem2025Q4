@@ -48,6 +48,7 @@ namespace SwaggerRestApi.BusineesLogic
                 {
                     id = item.Id,
                     specific_items_count = item.SpecificItems.Count,
+                    specific_items_available_count = item.SpecificItems.Where(s => s.BorrowedTo == null).Count(),
                     barcode = item.ModelBarcode,
                     description = item.Description,
                     image_url = imageBaseURL + item.Picture,
