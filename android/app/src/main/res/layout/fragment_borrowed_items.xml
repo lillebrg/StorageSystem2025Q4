@@ -4,12 +4,13 @@
     android:gravity="center"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/action_bar_default_height">
 
-    <TextView
+    <ListView
+        android:id="@+id/borrowed_items_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="Borrowed items list" />
+        android:layout_height="match_parent"
+    />
 
 </LinearLayout>
