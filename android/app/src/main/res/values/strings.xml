@@ -28,4 +28,5 @@
     <string name="image">Image</string>
     <string name="upload_image">Upload image</string>
     <string name="remove_image">Remove image</string>
+    <string name="shelf_no">Shelf %d</string>
 </resources>

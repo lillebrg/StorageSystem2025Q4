@@ -18,6 +18,7 @@ import tech.mercantec.storagesystem.services.Api
 import tech.mercantec.storagesystem.services.ApiRequestException
 import tech.mercantec.storagesystem.ui.CreateProductActivity
 import tech.mercantec.storagesystem.ui.ViewProductActivity
+import tech.mercantec.storagesystem.ui.ViewShelfActivity
 import java.util.concurrent.Executors
 import kotlin.concurrent.thread
 
@@ -85,7 +86,9 @@ class ImageAnalyzer(val analysis: ImageAnalysis, val ctx: Activity) : ImageAnaly
                             Toast.makeText(ctx, "Found specific item: ${response.specific_item!!.name}", Toast.LENGTH_LONG).show()
                         }
                         "shelf" -> {
-                            Toast.makeText(ctx, "Found shelf: ${response.shelf!!.shelf_no}", Toast.LENGTH_LONG).show()
+                            val intent = Intent(ctx, ViewShelfActivity::class.java)
+                            intent.putExtra("shelfId", response.shelf!!.id)
+                            ctx.startActivity(intent)
                         }
                         else -> Toast.makeText(ctx, "Invalid response type: ${response.type}", Toast.LENGTH_LONG).show()
                     }
