@@ -26,6 +26,20 @@ namespace SwaggerRestApi.DBAccess
             return borrowRequests;
         }
 
+        public async Task<bool> CheckIfBorrowRequestExist(int userId, int specificItemId)
+        {
+            var borrowRequests = await _context.BorrowRequests.Where(b => b.LoanTo == userId && b.SpecificItem == specificItemId).FirstOrDefaultAsync();
+
+            return borrowRequests != null;
+        }
+
+        public async Task<bool> CheckIfSpecificItemIsAlreadyBorrowed(int specificItemId)
+        {
+            var borrowRequests = await _context.BorrowRequests.Where(b => b.Accepted == true && b.SpecificItem == specificItemId).FirstOrDefaultAsync();
+
+            return borrowRequests != null;
+        }
+
         public async Task CreateBorrowRequest(BorrowRequest borrowRequest)
         {
             _context.BorrowRequests.Add(borrowRequest);
@@ -45,6 +59,13 @@ namespace SwaggerRestApi.DBAccess
             _context.BorrowRequests.Remove(borrowRequest);
 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<BorrowRequest>> GetAllBorrowRequestWithSpecificItemId(int specificItemId)
+        {
+            var borrowRequests = await _context.BorrowRequests.Where(b => b.SpecificItem == specificItemId && b.Accepted != true).ToListAsync();
+
+            return borrowRequests;
         }
     }
 }

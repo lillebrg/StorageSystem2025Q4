@@ -31,6 +31,7 @@ namespace SwaggerRestApi.BusineesLogic
 
             RackGet result = new RackGet
             {
+                id = rack.Id,
                 rack_no = rack.RackNo,
                 shelves = new List<ShelfFromRack>()
             };
@@ -60,6 +61,10 @@ namespace SwaggerRestApi.BusineesLogic
             var rack = await _rackdbaccess.GetRack(id);
 
             if (rack == null) { return new NotFoundObjectResult(new { message = "Could not find rack" }); }
+
+            bool exist = await _rackdbaccess.CheckForExistingRackInStorage(rackUpdate.rack_no, rack.StorageId);
+
+            if (exist) { return new BadRequestObjectResult(new { message = "Rack number already exists" }); }
 
             rack.RackNo = rackUpdate.rack_no;
 
