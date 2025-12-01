@@ -31,6 +31,7 @@ namespace SwaggerRestApi.BusineesLogic
 
             RackGet result = new RackGet
             {
+                id = rack.Id,
                 rack_no = rack.RackNo,
                 shelves = new List<ShelfFromRack>()
             };
