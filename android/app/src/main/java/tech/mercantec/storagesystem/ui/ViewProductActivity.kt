@@ -47,6 +47,18 @@ class ViewProductActivity : AppCompatActivity() {
 
                 setOnMenuItemClickListener {
                     when (it.itemId) {
+                        R.id.borrow -> {
+                            confirm("Borrow item", "Send a borrow request for this item? You will be notified when it is approved or rejected", "Send") {
+                                @Serializable
+                                data class Req(val specific_item: Int)
+
+                                Api.makeRequest(activity, { api.requestJson<Req, Boolean>("POST", "/borrow-requests", Req(item.id)) }) {
+                                    Toast.makeText(applicationContext, "Borrow request sent", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+
+                            true
+                        }
                         R.id.edit -> {
                             showInputDialog("Edit", item.description) { newDesc ->
                                 @Serializable
@@ -66,7 +78,7 @@ class ViewProductActivity : AppCompatActivity() {
                             true
                         }
                         R.id.delete -> {
-                            confirm("Delete item", "Delete this item? This action cannot be undone") {
+                            confirm("Delete item", "Delete this item? This action cannot be undone", "Delete") {
                                 Api.makeRequest(activity, { api.requestJson<Unit, Boolean>("DELETE", "/specific-items/${item.id}", null) }) {
                                     baseItem.specific_items.removeIf { it.id == item.id }
 
@@ -93,6 +105,40 @@ class ViewProductActivity : AppCompatActivity() {
         super.onResume()
 
         fetchProduct()
+    }
+
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?,
+        caller: ComponentCaller
+    ) {
+        super.onActivityResult(requestCode, resultCode, data, caller)
+
+        // Update information after returning from editing the product
+        if (requestCode == UPDATE_PRODUCT_REQUEST) {
+            fetchProduct()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.view_product_actions, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.edit -> {
+            val intent = Intent(this, CreateProductActivity::class.java)
+            intent.putExtra("id", baseItem.id)
+            intent.putExtra("name", baseItem.name)
+            intent.putExtra("description", baseItem.description)
+            intent.putExtra("barcode", baseItem.barcode)
+            intent.putExtra("imageUrl", baseItem.image_url)
+            startActivityForResult(intent, UPDATE_PRODUCT_REQUEST)
+
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     private fun fetchProduct() {
@@ -175,50 +221,16 @@ class ViewProductActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun confirm(title: String, message: String, callback: () -> Unit) {
+    private fun confirm(title: String, message: String, action: String, callback: () -> Unit) {
         val dialog = AlertDialog.Builder(this)
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton("Delete") { dialog, which ->
+            .setPositiveButton(action) { dialog, which ->
                 callback()
             }
             .setNegativeButton("Cancel") { dialog, which -> }
             .create()
 
         dialog.show()
-    }
-
-    override fun onActivityResult(
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?,
-        caller: ComponentCaller
-    ) {
-        super.onActivityResult(requestCode, resultCode, data, caller)
-
-        // Update information after returning from editing the product
-        if (requestCode == UPDATE_PRODUCT_REQUEST) {
-            fetchProduct()
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.view_product_actions, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.edit -> {
-            val intent = Intent(this, CreateProductActivity::class.java)
-            intent.putExtra("id", baseItem.id)
-            intent.putExtra("name", baseItem.name)
-            intent.putExtra("description", baseItem.description)
-            intent.putExtra("barcode", baseItem.barcode)
-            intent.putExtra("imageUrl", baseItem.image_url)
-            startActivityForResult(intent, UPDATE_PRODUCT_REQUEST)
-
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
     }
 }
