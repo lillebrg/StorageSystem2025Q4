@@ -10,6 +10,7 @@
 
         public List<BaseItem> BaseItems { get; set; }
 
+
         public int RackId { get; set; }
 
         public Rack Rack { get; set; }

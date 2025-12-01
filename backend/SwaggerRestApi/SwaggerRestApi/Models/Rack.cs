@@ -6,8 +6,8 @@
 
         public int RackNo { get; set; }
 
-
         public List<Shelf> Shelves { get; set; }
+
 
         public int StorageId { get; set; }
 
