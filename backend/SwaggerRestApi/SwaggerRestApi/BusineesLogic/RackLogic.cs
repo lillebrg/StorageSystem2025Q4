@@ -62,6 +62,10 @@ namespace SwaggerRestApi.BusineesLogic
 
             if (rack == null) { return new NotFoundObjectResult(new { message = "Could not find rack" }); }
 
+            bool exist = await _rackdbaccess.CheckForExistingRackInStorage(rackUpdate.rack_no, rack.StorageId);
+
+            if (exist) { return new BadRequestObjectResult(new { message = "Rack number already exists" }); }
+
             rack.RackNo = rackUpdate.rack_no;
 
             await _rackdbaccess.UpdateRack(rack);

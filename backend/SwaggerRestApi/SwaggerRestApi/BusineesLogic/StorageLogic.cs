@@ -102,6 +102,11 @@ namespace SwaggerRestApi.BusineesLogic
         /// <returns>True</returns>
         public async Task<ActionResult> UpdateStorage(StorageUpdate storageUpdate, int id)
         {
+
+            bool exist = await _storagedbaccess.CheckForExistingStorage(storageUpdate.name);
+
+            if (exist) { return new BadRequestObjectResult(new { message = "Storage name already exists" }); }
+
             var storage = await _storagedbaccess.GetStorage(id);
 
             if (storage == null) { return new NotFoundObjectResult(new { message = "Could not find storage" }); }
