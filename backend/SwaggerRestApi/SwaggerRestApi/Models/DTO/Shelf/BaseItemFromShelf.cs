@@ -13,5 +13,7 @@
         public string? image_url { get; set; }
 
         public int specific_items_count { get; set; }
+
+        public int specific_items_available_count { get; set; }
     }
 }

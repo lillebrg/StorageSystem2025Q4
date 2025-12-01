@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import tech.mercantec.storagesystem.R
 import tech.mercantec.storagesystem.services.*
+import kotlin.concurrent.thread
 
 class ChangePasswordActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +41,7 @@ class ChangePasswordActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.logout_button).setOnClickListener {
-            auth.logout()
+            thread { auth.logout() }
 
             val intent = Intent(this, LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

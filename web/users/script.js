@@ -7,7 +7,7 @@ await getAll()
   });
 
 function displayTable(data) {
-  var table = document.getElementById("tBody");
+  let table = document.getElementById("tBody");
   table.innerHTML = ""; // clear old table
 
   data.forEach(user => {
@@ -30,11 +30,11 @@ function displayTable(data) {
 
 //create User
 const createUserModal = document.getElementById("createUserModal");
-var nameInput = document.getElementById("name");
-var emailInput = document.getElementById("email");
-var passwordInput = document.getElementById("password");
-var roleInput = document.getElementById("role");
-var createUserError = document.getElementById("createUserError");
+let nameInput = document.getElementById("name");
+let emailInput = document.getElementById("email");
+let passwordInput = document.getElementById("password");
+let roleInput = document.getElementById("role");
+let createUserError = document.getElementById("createUserError");
 createUserError.style.display = "none";
 
 document.getElementById("createUserBtn").onclick = () => {
