@@ -1,15 +1,18 @@
 package tech.mercantec.storagesystem.adapters
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.view.*
 import android.widget.*
 import tech.mercantec.storagesystem.models.BorrowRequest
 import tech.mercantec.storagesystem.R
+import tech.mercantec.storagesystem.services.Api
 import tech.mercantec.storagesystem.ui.ViewProductActivity
 
-class BorrowedItemAdapter(val ctx: Context, val items: ArrayList<BorrowRequest>) : BaseAdapter() {
+class BorrowedItemAdapter(val ctx: Context, val items: ArrayList<BorrowRequest>, val onReturnItem: (Int) -> Unit) : BaseAdapter() {
     val layoutInflater = ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    val api = Api(ctx)
 
     override fun getCount() = items.size
 
@@ -34,7 +37,16 @@ class BorrowedItemAdapter(val ctx: Context, val items: ArrayList<BorrowRequest>)
                 visibility = View.VISIBLE
 
                 setOnClickListener {
-                    Toast.makeText(ctx, "Return", Toast.LENGTH_SHORT).show()
+                    val dialog = AlertDialog.Builder(ctx)
+                        .setTitle("Return item")
+                        .setMessage("Are you sure you want to return this item?")
+                        .setPositiveButton("Return") { dialog, which ->
+                            onReturnItem(item.id)
+                        }
+                        .setNegativeButton("Cancel") { dialog, which -> }
+                        .create()
+
+                    dialog.show()
                 }
             }
         }
