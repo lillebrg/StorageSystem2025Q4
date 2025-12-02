@@ -94,8 +94,6 @@ class ImageAnalyzer(val analysis: ImageAnalysis, val ctx: Activity) : ImageAnaly
                         }
                         else -> Toast.makeText(ctx, "Invalid response type: ${response.type}", Toast.LENGTH_LONG).show()
                     }
-
-                    analysis.setAnalyzer(Executors.newSingleThreadExecutor(), this)
                 }
             } catch (e: ApiRequestException) {
                 if (e.code == 404) {

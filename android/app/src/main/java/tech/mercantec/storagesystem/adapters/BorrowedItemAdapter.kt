@@ -30,9 +30,9 @@ class BorrowedItemAdapter(val ctx: Context, val items: ArrayList<BorrowRequest>,
 
         view.findViewById<TextView>(R.id.item_name).setText(item.base_item.name, TextView.BufferType.SPANNABLE)
 
-        view.findViewById<TextView>(R.id.borrow_status).setText(if (item.loaned_to == null) "Waiting for approval" else "Approved", TextView.BufferType.SPANNABLE)
+        view.findViewById<TextView>(R.id.borrow_status).setText(if (item.accepted) "Approved" else "Waiting for approval" , TextView.BufferType.SPANNABLE)
 
-        if (item.loaned_to != null) {
+        if (item.accepted) {
             view.findViewById<Button>(R.id.return_button).apply {
                 visibility = View.VISIBLE
 

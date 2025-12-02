@@ -180,7 +180,7 @@ class ViewProductActivity : AppCompatActivity() {
             requestLayout()
         }
 
-        if (baseItem.image_url != null) {
+        if (baseItem.image_url != null && baseItem.image_url!!.isNotEmpty()) {
             thread {
                 val stream = URL(baseItem.image_url!!).content as InputStream
                 val drawable = Drawable.createFromStream(stream, "src")
