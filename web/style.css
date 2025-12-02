@@ -1,22 +1,24 @@
 body {
-	background-color: #F9F9F9;
-	color: #424242;
-	font-family: "Open Sans", sans-serif;
-	text-align: center;
+  background-color: #f9f9f9;
+  color: #424242;
+  font-family: "Open Sans", sans-serif;
+  text-align: center;
 }
 
 main {
-	max-width: 800px;
-	margin: auto;
+  max-width: 800px;
+  margin: auto;
 }
 
-.container{
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
+.container {
+  margin: 2em auto;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   background: lightgray;
-    border-radius: 15px;
+  border-radius: 15px;
 }
 
 .toolBar {
@@ -58,14 +60,8 @@ main {
 /* #endregion */
 
 /* #region Table */
-/* Breakpoints converted to px (1em = 16px) */
-@media (min-width: 48em) { }  /* bp-bart = 768px */
-@media (min-width: 62em) { }  /* bp-marge = 992px */
-@media (min-width: 75em) { }  /* bp-homer = 1200px */
-@media (min-width: 30em) { }  /* bp-lisa = 480px */
-
-.tableTitle{
-  margin: 0px
+.tableTitle {
+  margin: 0px;
 }
 
 .responsive-table tbody tr {
@@ -73,41 +69,15 @@ main {
 }
 
 .responsive-table tbody tr:hover {
-/* light highlight, added important to make hover work for gray table rows */
-  background-color: rgba(125, 44, 231, 0.2) !important; 
+  /* light highlight, added important to make hover work for gray table rows */
+  background-color: rgba(125, 44, 231, 0.2) !important;
   cursor: pointer;
-}
-
-
-@media (min-width: 768px) {
-  .container {
-    margin: 2%;
-  }
-}
-
-@media (min-width: 1200px) {
-  .container {
-    margin: 2em auto;
-    max-width: 1200px;
-  }
 }
 
 .responsive-table {
   width: 98%;
   margin-bottom: 1.5em;
   border-spacing: 0;
-}
-
-@media (min-width: 768px) {
-  .responsive-table {
-    font-size: .9em;
-  }
-}
-
-@media (min-width: 992px) {
-  .responsive-table {
-    font-size: 1em;
-  }
 }
 
 .responsive-table thead {
@@ -118,16 +88,11 @@ main {
   height: 1px;
   width: 1px;
   overflow: hidden;
-}
-
-@media (min-width: 768px) {
-  .responsive-table thead {
-    position: relative;
-    clip: auto;
-    height: auto;
-    width: auto;
-    overflow: auto;
-  }
+  position: relative;
+  clip: auto;
+  height: auto;
+  width: auto;
+  overflow: auto;
 }
 
 .responsive-table thead th {
@@ -150,80 +115,32 @@ main {
   padding: 0;
   text-align: left;
   white-space: normal;
-  
-}
-
-@media (min-width: 768px) {
-  .responsive-table tr {
-    display: table-row;
-    
-  }
+  display: table-row;
 }
 
 .responsive-table th,
 .responsive-table td {
-  padding: .5em;
   vertical-align: middle;
-}
-
-@media (min-width: 480px) {
-  .responsive-table th,
-  .responsive-table td {
-    padding: .75em .5em;
-  }
-}
-
-@media (min-width: 768px) {
-  .responsive-table th,
-  .responsive-table td {
-    display: table-cell;
-    padding: .5em;
-  }
-}
-
-@media (min-width: 992px) {
-  .responsive-table th,
-  .responsive-table td {
-    padding: .75em .5em;
-  }
-}
-
-@media (min-width: 1200px) {
-  .responsive-table th,
-  .responsive-table td {
-    padding: .75em;
-  }
+  padding: 0.75em 0.5em;
+  display: table-cell;
 }
 
 .responsive-table caption {
   margin-bottom: 1em;
-  font-size: 1em;
+  font-size: 1.5em;
   font-weight: bold;
   text-align: center;
 }
 
-@media (min-width: 768px) {
-  .responsive-table caption {
-    font-size: 1.5em;
-  }
-}
-
 .responsive-table tfoot {
-  font-size: .8em;
+  font-size: 0.9em;
   font-style: italic;
 }
 
-@media (min-width: 992px) {
-  .responsive-table tfoot {
-    font-size: .9em;
-  }
+.responsive-table tbody {
+  display: table-row-group;
 }
 
-@media (min-width: 768px) {
-  .responsive-table tbody {
-    display: table-row-group;
-  }
-}
 
 .responsive-table tbody tr {
   margin-bottom: 1em;
@@ -242,7 +159,7 @@ main {
 
 @media (min-width: 768px) {
   .responsive-table tbody tr:nth-of-type(even) {
-    background-color: rgba(0,0,0,.12);
+    background-color: rgba(0, 0, 0, 0.12);
   }
 }
 
@@ -261,7 +178,7 @@ main {
 @media (min-width: 768px) {
   .responsive-table tbody th[scope="row"] {
     background-color: transparent;
-    color: rgba(0,0,0,.87);
+    color: rgba(0, 0, 0, 0.87);
     text-align: left;
   }
 }
@@ -289,13 +206,13 @@ main {
 .responsive-table tbody td[data-title]:before {
   content: attr(data-title);
   float: left;
-  font-size: .8em;
-  color: rgba(0,0,0,.54);
+  font-size: 0.8em;
+  color: rgba(0, 0, 0, 0.54);
 }
 
 @media (min-width: 480px) {
   .responsive-table tbody td[data-title]:before {
-    font-size: .9em;
+    font-size: 0.9em;
   }
 }
 
@@ -314,7 +231,8 @@ main {
   padding: 1rem;
   max-width: 350px;
   border-radius: 0.5rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 .form-title {
@@ -329,13 +247,16 @@ main {
   position: relative;
 }
 
-.input-container input, .input-container select, .form button {
+.input-container input,
+.input-container select,
+.form button {
   outline: none;
   border: 1px solid #e5e7eb;
   margin: 8px 0;
 }
 
-.input-container input, .input-container select {
+.input-container input,
+.input-container select {
   background-color: #fff;
   padding: 1rem;
   font-size: 0.875rem;
@@ -356,52 +277,64 @@ main {
 
 /* #region Modal */
 .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    padding-top: 100px; /* Location of the box */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  }
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
 
-    .modalContent {
-    margin: auto;
-    -webkit-animation-name: animatetop;
-    -webkit-animation-duration: 0.4s;
-    animation-name: animatetop;
-    animation-duration: 0.4s
+.modalContent {
+  margin: auto;
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 0.4s;
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+  from {
+    top: -300px;
+    opacity: 0;
   }
-  
-  /* Add Animation */
-  @-webkit-keyframes animatetop {
-    from {top:-300px; opacity:0} 
-    to {top:0; opacity:1}
+  to {
+    top: 0;
+    opacity: 1;
   }
-  
-  @keyframes animatetop {
-    from {top:-300px; opacity:0}
-    to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+  from {
+    top: -300px;
+    opacity: 0;
   }
-  
-  /* The Close Button */
+  to {
+    top: 0;
+    opacity: 1;
+  }
+}
+
+/* The Close Button */
 .closeModal {
-    color: #aaaaaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-  }
-  
-  .closeModal:hover,
-  .closeModal:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
-  }
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.closeModal:hover,
+.closeModal:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
 
 /* #endregion */
 
@@ -412,7 +345,7 @@ main {
   padding-left: 0.8em;
   outline: none;
   overflow: hidden;
-  background-color: #F3F3F3;
+  background-color: #f3f3f3;
   border-radius: 10px;
   transition: all 0.5s;
 }
@@ -423,4 +356,3 @@ main {
   box-shadow: 0px 0px 0px 7px #7d2ae8 20%;
   background-color: white;
 }
-

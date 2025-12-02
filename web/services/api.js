@@ -24,7 +24,7 @@ export async function request(
           if (response.status == 401) {
             if (canRetry) {
               try {
-                refreshAuthToken();
+                await refreshAuthToken();
                 console.log("refreshtoken done");
                 console.log(method);
                 console.log(path);

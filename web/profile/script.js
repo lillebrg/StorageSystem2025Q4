@@ -1,21 +1,29 @@
 import { get, update, updatePassword } from "../../services/pages/user.service.js";
 import { logout } from "../services/auth.js";
+import { returnItem } from "../services/pages/borrowrequest.service.js";
 //displayUserDetails
 let name;
 let email;
 
+  let getError = document.getElementById("getError");
+  getError.style.display = "none";
+
 await get().then((data) => {
-  if (!data) {
-    //displayError()
-  }
   name = data.name;
   email = data.email;
   displayProfile(data);
   displayTable(data.borrowed_items);
+})
+.catch((error) => {
+  console.log(error)
+  getError.style.display = "block";
+  getError.color = "red"
+  getError.innerText = error;
 });
 
 function displayProfile(data) {
   let table = document.getElementById(`profileCard`);
+
   table.innerHTML += `
        <div class="card-border-top"></div>
           <div class="img">
@@ -31,19 +39,59 @@ function displayProfile(data) {
 }
 
 function displayTable(data) {
-  //todo, specific items shown
+  console.log(data)
   let table = document.getElementById("tBody");
   table.innerHTML = ""; // clear old table
-  for (let i = 0; i < data.length; i++) {
-    table.innerHTML += `
-         <tr data-id="${data[i].id}">
-            <td>${data[i].name}</td>
-            <td>${data[i].email}</td>
-            <td>${data[i].role}</td>
-            <td>${data[i].borrowed_items}</td>
-          </tr>`;
+  if(data.length <= 0) {
+    getError.style.display = "block"
+    getError.innerHTML = "No items borrowed"
   }
+  data.forEach(data => {
+        table.innerHTML += `
+      <tr data-id="${data.specific_item_id}" data-name="${data.base_item_name}" data-description="${data.specific_item_description}" data-image="${data.base_item_picture}">
+            <td>${data.specific_item_id}</td>
+            <td>${data.base_item_name}</td>
+            <td><img src="${data.base_item_picture}" style="max-height: 80px; max-width: 80px;"/></td>
+            <td>${data.specific_item_description}</td>
+          </tr>`;
+  });
 }
+
+//return item
+let specificItemId;
+const returnError = document.getElementById("returnError");
+returnError.style.display = "none";
+
+const returnModal = document.getElementById("returnModal");
+const returnForm = document.getElementById("returnForm");
+returnForm.addEventListener("submit", submitReturn);
+
+async function submitReturn(event) {
+  event.preventDefault();
+  if (!returnForm.reportValidity()) {
+    return;
+  }
+
+  returnItem(specificItemId)
+    .then(() => window.location.reload())
+    .catch((error) => {
+      returnError.style.display = "block";
+      returnError.innerText = error;
+    });
+}
+
+document.querySelectorAll("#tBody tr").forEach((row) => {
+  row.addEventListener("click", () => {
+    specificItemId = row.dataset.id;
+    document.getElementById(
+      "borrowTitle"
+    ).innerHTML = `Do you want to return item "${row.dataset.name}"?`;
+    document.getElementById("reviewImg").src = row.dataset.image;
+
+    returnModal.style.display = "block";
+  });
+});
+
 
 //change Password
 const changePasswordModal = document.getElementById("changePasswordModal");
@@ -112,5 +160,6 @@ document.querySelectorAll(".closeModal").forEach((closeBtn) => {
   closeBtn.onclick = () => {
     editUserModal.style.display = "none";
     changePasswordModal.style.display = "none";
+    returnModal.style.display = "none";
   };
 });

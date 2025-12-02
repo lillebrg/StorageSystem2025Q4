@@ -1,5 +1,12 @@
-import { deleteBaseItem, get, update, uploadImage } from "../../services/pages/baseitem.service.js";
+import {
+  deleteBaseItem,
+  get,
+  update,
+  uploadImage,
+} from "../../services/pages/baseitem.service.js";
 import { create } from "../../services/pages/specificitem.service.js";
+import { createBorrowRequest } from "../../services/pages/borrowrequest.service.js";
+
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 
@@ -8,14 +15,16 @@ getError.style.display = "none";
 
 let name;
 let description;
-let barcode
+let barcode;
+let shelfBarcode;
 
 await get(id)
   .then((data) => {
-    console.log(data)
-    name = data.name
+    console.log(data);
+    name = data.name;
     description = data.description;
-    barcode = data.barcode
+    barcode = data.barcode;
+    shelfBarcode = data.shelf_barcode;
     document.getElementById("tableTitle").innerHTML = name;
     document.getElementById("baseItemImg").src = data.image_url;
     displayTable(data);
@@ -37,28 +46,57 @@ function displayTable(data) {
   }
 
   // Build all rows
-  data.specific_items.forEach(item => {
+  data.specific_items.forEach((item) => {
     table.innerHTML += `
-      <tr data-id="${item.id}">
+      <tr data-id="${item.id}" data-description="${item.description}">
         <td>${item.id}</td>
         <td>${item.barcode}</td>
         <td>${item.description}</td>
-        <td>${item.barcode}</td>
+        <td>${item.loaned_to == null ? "" : item.loaned_to}</td>
       </tr>`;
-  });
-  
-  document.querySelectorAll("#tBody tr").forEach(row => {
-    row.addEventListener("click", () => {
-      const specificItemId = row.dataset.id;
-      window.location.href = `/specificitems/?id=${specificItemId}&baseitemId=${id}`;
-    });
   });
 }
 
+//request Borrow
+let specificItemId;
+const borrowError = document.getElementById("borrowError");
+borrowError.style.display = "none";
+
+const borrowModal = document.getElementById("borrowModal");
+const borrowForm = document.getElementById("borrowForm");
+borrowForm.addEventListener("submit", submitBorrowRequest);
+
+async function submitBorrowRequest(event) {
+  event.preventDefault();
+  if (!borrowForm.reportValidity()) {
+    return;
+  }
+
+  createBorrowRequest(specificItemId)
+    .then(() => window.location.reload())
+    .catch((error) => {
+      borrowError.style.display = "block";
+      borrowError.innerText = error;
+    });
+}
+
+document.querySelectorAll("#tBody tr").forEach((row) => {
+  row.addEventListener("click", () => {
+    specificItemId = row.dataset.id;
+    document.getElementById(
+      "borrowTitle"
+    ).innerHTML = `Do you want to send a borrow request for item "${name}"?`;
+    document.getElementById("borrowDescription").innerHTML =
+      row.dataset.description;
+    borrowModal.style.display = "block";
+  });
+});
 
 //Create specificItem
 const createModal = document.getElementById("createModal");
-let specificdescriptionInputInput = document.getElementById("specificdescriptionInput");
+let specificdescriptionInputInput = document.getElementById(
+  "specificdescriptionInput"
+);
 const createError = document.getElementById("createError");
 createError.style.display = "none";
 
@@ -76,7 +114,7 @@ async function submitCreate(event) {
     return;
   }
 
-  create(id, rack_noInput.value)
+  create(id, specificdescriptionInputInput.value)
     .then(() => window.location.reload())
     .catch((error) => {
       createError.style.display = "block";
@@ -100,6 +138,7 @@ document.getElementById("updateBtn").onclick = () => {
   nameInput.value = name;
   descriptionInput.value = description;
   barcodeInput.value = barcode;
+  shelfBarcodeInput.value = shelfBarcode;
 };
 
 const updateForm = document.getElementById("updateForm");
@@ -111,29 +150,27 @@ async function handleCreate(event) {
     return;
   }
 
-let savedFileName;
+  let savedFileName;
 
-try {
-  if (imageInput.files.length > 0) {
-    savedFileName = await uploadImage(imageInput.files[0]);
+  try {
+    if (imageInput.files.length > 0) {
+      savedFileName = await uploadImage(imageInput.files[0]);
+    }
+
+    await update(
+      id,
+      nameInput.value,
+      descriptionInput.value,
+      savedFileName.value,
+      savedFileName.path
+    );
+
+    window.location.reload();
+  } catch (error) {
+    console.log(error);
+    updateError.style.display = "block";
+    updateError.innerText = error;
   }
-
-  await update(
-    id,
-    nameInput.value,
-    descriptionInput.value,
-    savedFileName.value,
-    savedFileName.path
-  );
-
-  window.location.reload();
-
-} catch (error) {
-  console.log(error)
-  updateError.style.display = "block";
-  updateError.innerText = error;
-}
-
 }
 
 //delete Storage
@@ -150,7 +187,7 @@ document.getElementById("deleteForm").addEventListener("submit", submitDelete);
 async function submitDelete(event) {
   event.preventDefault();
   deleteBaseItem(id)
-    .then(() =>  goBack())
+    .then(() => goBack())
     .catch((error) => {
       deleteError.style.display = "block";
       deleteError.innerText = error;
@@ -161,14 +198,17 @@ async function submitDelete(event) {
 document.querySelectorAll(".closeModal").forEach((closeBtn) => {
   closeBtn.onclick = () => {
     createModal.style.display = "none";
+    borrowModal.style.display = "none";
     updateModal.style.display = "none";
     deleteModal.style.display = "none";
   };
 });
 
 //go back btn
-document.getElementById("backBtn").onclick = () => {goBack()};
+document.getElementById("backBtn").onclick = () => {
+  goBack();
+};
 
 function goBack() {
-  window.location.href = "/baseitems"
+  window.location.href = "/baseitems";
 }

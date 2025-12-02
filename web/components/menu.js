@@ -62,6 +62,7 @@ nav.stroke ul li a:hover:after {
         <ul>
           <li><a href="/baseitems">Items</a></li>
           <li><a href="/storages">Storage</a></li>
+          <li><a href="/borrowrequests">Borrow Requests</a></li>
           <li><a href="/users">Users</a></li>
           <li><a href="/profile">Profile</a></li>
 

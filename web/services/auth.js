@@ -18,16 +18,17 @@ export function logout() {
   })
 }
 
-export function refreshAuthToken() {
-    let refresh_token = localStorage.getItem("refreshToken");
-    request("POST", "/user/refresh", {refresh_token})
+export async function refreshAuthToken() {
+  let refresh_token = localStorage.getItem("refreshToken");
+
+  return request("POST", "/user/refresh", { refresh_token })
     .then((response) => {
-      console.log(response);
       localStorage.setItem("token", response.access_token);
       localStorage.setItem("refreshToken", response.refresh_token);
       localStorage.setItem("role", response.role);
-  })
-  .catch(() => {
-    window.location.href = "/"
-  });
+    })
+    .catch(() => {
+      window.location.href = "/";
+    });
 }
+

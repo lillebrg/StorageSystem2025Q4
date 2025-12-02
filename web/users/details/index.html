@@ -95,6 +95,19 @@
           </button>
         </form>
       </div>
+
+      <div id="returnModal" class="modal">
+        <form class="form modalContent" id="returnForm">
+          <span class="closeModal">&times;</span>
+          <p class="form-title" id="borrowTitle"></p>
+          <p id="returnDescription"></p>
+          <img id="reviewImg" style="max-height: 200px; max-width: 200px" />
+          <my-alert id="returnError" color="red"></my-alert>
+          <button class="button submit" style="margin-top: 10px" type="submit">
+            Return item
+          </button>
+        </form>
+      </div>
     </div>
   </body>
 </html>

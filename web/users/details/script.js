@@ -63,6 +63,43 @@ function displayTable(data) {
           </tr>`;
   })
 }
+
+//return item
+let specificItemId;
+const returnError = document.getElementById("returnError");
+returnError.style.display = "none";
+
+const returnModal = document.getElementById("returnModal");
+const returnForm = document.getElementById("returnForm");
+returnForm.addEventListener("submit", submitReturn);
+
+async function submitReturn(event) {
+  event.preventDefault();
+  if (!returnForm.reportValidity()) {
+    return;
+  }
+
+  returnItem(specificItemId)
+    .then(() => window.location.reload())
+    .catch((error) => {
+      returnError.style.display = "block";
+      returnError.innerText = error;
+    });
+}
+
+document.querySelectorAll("#tBody tr").forEach((row) => {
+  row.addEventListener("click", () => {
+    specificItemId = row.dataset.id;
+    document.getElementById(
+      "borrowTitle"
+    ).innerHTML = `Do you want to return item "${row.dataset.name}"?`;
+    document.getElementById("reviewImg").src = row.dataset.image;
+
+    returnModal.style.display = "block";
+  });
+});
+
+
 //change Password
 const changePasswordModal = document.getElementById("changePasswordModal");
 document.getElementById("changePasswordBtn").onclick = () =>

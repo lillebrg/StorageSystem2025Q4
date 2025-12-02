@@ -22,7 +22,7 @@ export function create(name, description, barcode, image_path = null, shelf_id) 
 }
 
 export function update(id, name, description, barcode, image_path = undefined, shelf_id) {
-  return request("PUT", `/bate-items/${id}`, {
+  return request("PUT", `/base-items/${id}`, {
     name,
     description,
     barcode,

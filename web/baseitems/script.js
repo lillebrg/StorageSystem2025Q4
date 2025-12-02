@@ -53,7 +53,7 @@ function displayTable(data) {
          <tr data-id="${baseItem.id}">
             <td>${baseItem.name}</td>
             <td>${baseItem.description}</td>
-            <td><img src="${baseItem.image_url}" style="height: 80px;"/></td>
+            <td><img src="${baseItem.image_url}" style="max-height: 80px; max-width: 80px;"/></td>
             <td>${baseItem.specific_items_count}</td>
             <td>${baseItem.specific_items_available_count}</td>
           </tr>`;
