@@ -75,6 +75,10 @@ namespace SwaggerRestApi.BusineesLogic
 
             if (shelf == null) { return new NotFoundObjectResult(new { message = "Could not find shelf" }); }
 
+            bool exist = await _shelfdbaccess.CheckForExistingShelfOnRack(shelfUpdate.shelf_no, shelf.RackId);
+
+            if (exist) { return new BadRequestObjectResult(new { message = "Shelf number already exists" }); }
+
             shelf.ShelfNo = shelfUpdate.shelf_no;
 
             await _shelfdbaccess.UpdateShelf(shelf);

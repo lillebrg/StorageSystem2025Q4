@@ -2,6 +2,7 @@
 using SwaggerRestApi.DBAccess;
 using SwaggerRestApi.Models;
 using SwaggerRestApi.Models.DTO.Borrowed;
+using SwaggerRestApi.Models.DTO.Rack;
 using SwaggerRestApi.Models.DTO.User;
 
 namespace SwaggerRestApi.BusineesLogic
@@ -77,6 +78,15 @@ namespace SwaggerRestApi.BusineesLogic
                 SpecificItem = borrowRequestCreate.specific_item
             };
 
+
+            bool exist = await _borrowedbaccess.CheckIfBorrowRequestExist(userId, borrowRequestCreate.specific_item);
+
+            if (exist) { return new BadRequestObjectResult(new { message = "Borrow request already exist" }); }
+
+            bool alreadyBorrowed = await _borrowedbaccess.CheckIfSpecificItemIsAlreadyBorrowed(borrowRequestCreate.specific_item);
+
+            if (alreadyBorrowed) { return new BadRequestObjectResult(new { message = "Specific item is already borrowed by someone" }); }
+
             await _borrowedbaccess.CreateBorrowRequest(borrowRequest);
 
             var user = await _userdbaccess.GetUser(userId);
@@ -109,6 +119,12 @@ namespace SwaggerRestApi.BusineesLogic
             await _borrowedbaccess.UpdateBorrowRequest(borrowRequest);
             await _userdbaccess.UpdateUser(user);
             await _itemdbaccess.UpdateSpecificItem(specificItem);
+
+            var borrowRequestsToBeDeleted = await _borrowedbaccess.GetAllBorrowRequestWithSpecificItemId(borrowRequest.SpecificItem);
+            foreach (var item in borrowRequestsToBeDeleted)
+            {
+                _borrowedbaccess.DeleteBorrowRequest(item);
+            }
 
             var acceptedBy = await _userdbaccess.GetUser(userId);
             var specificItemAndBaseItem = await _itemdbaccess.GetSpecificItemAndBaseItem(borrowRequest.SpecificItem);

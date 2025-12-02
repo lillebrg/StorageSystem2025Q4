@@ -57,7 +57,7 @@ namespace SwaggerRestApi.Controllers
 
         [HttpPost("{id}/specific-items")]
         [Authorize(Roles = "Admin, Operator")]
-        public async Task<ActionResult<CreateReturnInt>> CreateSpecificItems([FromBody]SpecificItemsCreate specificItems, int id)
+        public async Task<ActionResult<SpecificItemsGet>> CreateSpecificItems([FromBody]SpecificItemsCreate specificItems, int id)
         {
             return await _specificitemlogic.CreateSpecificItem(specificItems, id);
         }

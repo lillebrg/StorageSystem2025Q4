@@ -1,5 +1,6 @@
 package tech.mercantec.storagesystem.ui
 
+import android.app.AlertDialog
 import android.app.ComponentCaller
 import android.content.Intent
 import android.graphics.drawable.Drawable
@@ -11,20 +12,13 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.serialization.Serializable
 import tech.mercantec.storagesystem.R
 import tech.mercantec.storagesystem.services.Api
+import tech.mercantec.storagesystem.ui.adapters.SpecificItemAdapter
+import tech.mercantec.storagesystem.models.*
 import java.io.InputStream
 import java.net.URL
 import kotlin.concurrent.thread
 
 class ViewProductActivity : AppCompatActivity() {
-    @Serializable
-    data class Borrower(val id: Int, val name: String)
-
-    @Serializable
-    data class SpecificItem(val id: Int, val description: String, val loaned_to: Borrower?)
-
-    @Serializable
-    data class BaseItem(val id: Int, var name: String, var description: String, var barcode: String?, var image_url: String?, var specific_items: ArrayList<SpecificItem>)
-
     lateinit var api: Api
     lateinit var baseItem: BaseItem
 
@@ -36,42 +30,81 @@ class ViewProductActivity : AppCompatActivity() {
         setContentView(R.layout.activity_view_product)
 
         api = Api(this)
+
+        findViewById<Button>(R.id.add_specific_item_button).setOnClickListener {
+            showInputDialog("Add", "") { text ->
+                createSpecificItem(text)
+            }
+        }
+
+        findViewById<ListView>(R.id.specific_items_list).setOnItemLongClickListener { parent, view, position, id ->
+            val item = parent.getItemAtPosition(position) as SpecificItem
+
+            val activity = this
+            val popup = PopupMenu(this, view)
+            popup.apply {
+                menuInflater.inflate(R.menu.specific_item_actions, menu)
+
+                setOnMenuItemClickListener {
+                    when (it.itemId) {
+                        R.id.borrow -> {
+                            confirm("Borrow item", "Send a borrow request for this item? You will be notified when it is approved or rejected", "Send") {
+                                @Serializable
+                                data class Req(val specific_item: Int)
+
+                                Api.makeRequest(activity, { api.requestJson<Req, Boolean>("POST", "/borrow-requests", Req(item.id)) }) {
+                                    Toast.makeText(applicationContext, "Borrow request sent", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+
+                            true
+                        }
+                        R.id.edit -> {
+                            showInputDialog("Edit", item.description) { newDesc ->
+                                @Serializable
+                                data class Req(val description: String)
+
+                                Api.makeRequest(activity, { api.requestJson<Req, Boolean>("PUT", "/specific-items/${item.id}", Req(newDesc)) }) {
+                                    for (specificItem in baseItem.specific_items) {
+                                        if (specificItem.id != item.id) continue
+
+                                        specificItem.description = newDesc
+                                    }
+
+                                    showProductInfo()
+                                }
+                            }
+
+                            true
+                        }
+                        R.id.delete -> {
+                            confirm("Delete item", "Delete this item? This action cannot be undone", "Delete") {
+                                Api.makeRequest(activity, { api.requestJson<Unit, Boolean>("DELETE", "/specific-items/${item.id}", null) }) {
+                                    baseItem.specific_items.removeIf { it.id == item.id }
+
+                                    showProductInfo()
+
+                                    Toast.makeText(applicationContext, "Item deleted", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+
+                            true
+                        }
+                        else -> false
+                    }
+                }
+
+                show()
+            }
+
+            true
+        }
     }
 
     override fun onResume() {
         super.onResume()
 
         fetchProduct()
-    }
-
-    private fun fetchProduct() {
-        val id = intent.extras!!.getInt("baseItemId")
-
-        Api.makeRequest(this, { api.requestJson<Unit, BaseItem>("GET", "/base-items/${id}", null) }, showLoading = false) {
-            baseItem = it
-
-            showProductInfo()
-        }
-    }
-
-    private fun showProductInfo() {
-        findViewById<TextView>(R.id.title).setText(baseItem.name, TextView.BufferType.SPANNABLE)
-        findViewById<TextView>(R.id.description).setText(baseItem.description, TextView.BufferType.SPANNABLE)
-        findViewById<TextView>(R.id.barcode).setText(getString(R.string.barcode_label, baseItem.barcode), TextView.BufferType.SPANNABLE)
-
-        if (baseItem.image_url != null) {
-            thread {
-                val stream = URL(baseItem.image_url!!).content as InputStream
-                val drawable = Drawable.createFromStream(stream, "src")
-
-                runOnUiThread {
-                    findViewById<ImageView>(R.id.image).apply {
-                        visibility = View.VISIBLE
-                        setImageDrawable(drawable)
-                    }
-                }
-            }
-        }
     }
 
     override fun onActivityResult(
@@ -106,5 +139,98 @@ class ViewProductActivity : AppCompatActivity() {
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    private fun fetchProduct() {
+        val id = intent.extras!!.getInt("baseItemId")
+
+        Api.makeRequest(this, { api.requestJson<Unit, BaseItem>("GET", "/base-items/${id}", null) }, showLoading = false) {
+            baseItem = it
+
+            showProductInfo()
+        }
+    }
+
+    private fun createSpecificItem(description: String) {
+        @Serializable
+        data class CreateSpecificItemRequest(val description: String)
+
+        val req = CreateSpecificItemRequest(description)
+        Api.makeRequest(this, {
+            api.requestJson<CreateSpecificItemRequest, SpecificItem>("POST", "/base-items/${baseItem.id}/specific-items", req)
+        }) { response ->
+            baseItem.specific_items.add(response)
+
+            showProductInfo()
+        }
+    }
+
+    private fun showProductInfo() {
+        findViewById<TextView>(R.id.title).setText(baseItem.name, TextView.BufferType.SPANNABLE)
+        findViewById<TextView>(R.id.description).setText(baseItem.description, TextView.BufferType.SPANNABLE)
+        findViewById<TextView>(R.id.barcode).setText(getString(R.string.barcode_label, baseItem.barcode), TextView.BufferType.SPANNABLE)
+
+        findViewById<ListView>(R.id.specific_items_list).apply {
+            adapter = SpecificItemAdapter(applicationContext, baseItem.specific_items)
+
+            val height = dpToPx(70) * adapter.count + dividerHeight * (adapter.count - 1)
+            val params = layoutParams
+            params.height = height
+            layoutParams = params
+            requestLayout()
+        }
+
+        if (baseItem.image_url != null) {
+            thread {
+                val stream = URL(baseItem.image_url!!).content as InputStream
+                val drawable = Drawable.createFromStream(stream, "src")
+
+                runOnUiThread {
+                    findViewById<ImageView>(R.id.image).apply {
+                        visibility = View.VISIBLE
+                        setImageDrawable(drawable)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun dpToPx(dp: Int): Int {
+        return (dp * resources.displayMetrics.density).toInt()
+    }
+
+    private fun showInputDialog(action: String, text: String, callback: (String) -> Unit) {
+        val layout = LinearLayout(this)
+        layout.orientation = LinearLayout.VERTICAL
+        layout.setPadding(60, 40, 60, 0)
+
+        val editText = EditText(this)
+        editText.hint = "Description (optional)"
+        editText.setText(text, TextView.BufferType.SPANNABLE)
+        layout.addView(editText)
+
+        val dialog = AlertDialog.Builder(this)
+            .setTitle("$action item")
+            .setView(layout)
+            .setPositiveButton(action) { dialog, which ->
+                callback(editText.text.toString())
+            }
+            .setNegativeButton("Cancel") { dialog, which -> }
+            .create()
+
+        dialog.show()
+    }
+
+    private fun confirm(title: String, message: String, action: String, callback: () -> Unit) {
+        val dialog = AlertDialog.Builder(this)
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton(action) { dialog, which ->
+                callback()
+            }
+            .setNegativeButton("Cancel") { dialog, which -> }
+            .create()
+
+        dialog.show()
     }
 }
