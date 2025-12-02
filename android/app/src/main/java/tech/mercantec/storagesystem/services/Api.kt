@@ -69,7 +69,7 @@ class Api(private val ctx: Context) {
     @Serializable
     class HttpErrorResponse(val message: String)
 
-    val json = Json { explicitNulls = false } // Treat missing values as null when decoding
+    val json = Json { explicitNulls = false; ignoreUnknownKeys = true } // Treat missing values as null when decoding
 
     inline fun <reified Req, reified Res> requestJson(
         method: String,
