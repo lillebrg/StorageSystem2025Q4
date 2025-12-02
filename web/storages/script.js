@@ -34,9 +34,9 @@ function displayTable(data) {
 }
 
 //create Storage
-let createModal = document.getElementById("createModal");
+const createModal = document.getElementById("createModal");
 let nameInput = document.getElementById("name");
-let createError = document.getElementById("createError");
+const createError = document.getElementById("createError");
 createError.style.display = "none";
 
 document.getElementById("createBtn").onclick = () => {

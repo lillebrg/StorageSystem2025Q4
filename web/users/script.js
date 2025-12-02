@@ -34,7 +34,7 @@ let nameInput = document.getElementById("name");
 let emailInput = document.getElementById("email");
 let passwordInput = document.getElementById("password");
 let roleInput = document.getElementById("role");
-let createError = document.getElementById("createError");
+const createError = document.getElementById("createError");
 createError.style.display = "none";
 
 document.getElementById("createBtn").onclick = () => {

@@ -450,7 +450,7 @@ namespace SwaggerRestApi.BusineesLogic
             {
                 Token = refreshtoken,
                 UserId = userId,
-                ExpiresAt = DateTime.Now.AddDays(7)
+                ExpiresAt = DateTime.Now
             };
 
             return await _userdbaccess.AddRefreshToken(token);

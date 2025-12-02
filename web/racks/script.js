@@ -46,10 +46,10 @@ function displayTable(data) {
   });
 }
 //Create shelf
-let createModal = document.getElementById("createModal");
+const createModal = document.getElementById("createModal");
 let shelf_noInput = document.getElementById("shelf_no");
 
-let createError = document.getElementById("createError");
+const createError = document.getElementById("createError");
 createError.style.display = "none";
 
 document.getElementById("createBtn").onclick = () => {
@@ -103,11 +103,11 @@ async function submitUpdate(event) {
 }
 
 //delete rack
-let deleteModal = document.getElementById("deleteModal");
+const deleteModal = document.getElementById("deleteModal");
 document.getElementById("deleteBtn").onclick = () =>
   (deleteModal.style.display = "block");
 
-let deleteError = document.getElementById("deleteError");
+const deleteError = document.getElementById("deleteError");
 deleteError.style.display = "none";
 
 const deleteForm = document.getElementById("deleteForm");
@@ -130,6 +130,7 @@ async function submitDelete(event) {
 document.querySelectorAll(".closeModal").forEach((closeBtn) => {
   closeBtn.onclick = () => {
     createModal.style.display = "none";
+    updateModal.style.display = "none";
     deleteModal.style.display = "none";
   };
 });

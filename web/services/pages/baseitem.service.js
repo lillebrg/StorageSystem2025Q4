@@ -1,7 +1,7 @@
 import { request } from "../api.js";
 
 export function get(id) {
-  return request("GET", `/items/${id}`);
+  return request("GET", `/base-items/${id}`);
 }
 
 export function getAll(limit, offset, search) {
@@ -25,7 +25,7 @@ export function uploadImage(image) {
   return request("POST", `/images`, null, image);
 }
 
-export function update(id, name, description, barcode, image_path, shelf_id) {
+export function update(id, name, description, barcode, image_path = undefined, shelf_id) {
   return request("PUT", `/bate-items/${id}`, {
     name,
     description,
@@ -33,4 +33,9 @@ export function update(id, name, description, barcode, image_path, shelf_id) {
     image_path,
     shelf_id,
   });
+}
+
+
+export function deleteBaseItem(id) {
+  return request("DELETE", `/base-items/${id}`);
 }

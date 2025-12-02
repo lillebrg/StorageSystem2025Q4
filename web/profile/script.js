@@ -26,7 +26,7 @@ function displayProfile(data) {
           <p class="job">${data.role}</p>
 
           <button class="button" id="editBtn">Edit</button>
-          <button class="button" id="changePasswordBtn">change Password</button>
+          <button class="button" id="changePasswordBtn">Change Password</button>
           <button class="button" style="margin-top: 10px; background-color: darkred;" id="logoutBtn">logout</button>`;
 }
 
@@ -49,6 +49,9 @@ function displayTable(data) {
 const changePasswordModal = document.getElementById("changePasswordModal");
 document.getElementById("changePasswordBtn").onclick = () => (changePasswordModal.style.display = "block");
 
+const changePasswordError = document.getElementById("changePasswordError");
+changePasswordError.style.display = "none";
+
 const changePasswordForm = document.getElementById("changePasswordForm");
 changePasswordForm.addEventListener("submit", handleChangePassword);
 
@@ -70,7 +73,8 @@ async function handleChangePassword(event) {
   updatePassword(null, oldPasswordInput, newPasswordInput)
     .then(() => window.location.reload())
     .catch((error) => {
-      console.log(error);
+      changePasswordError.style.display = "block";
+      changePasswordError.innerText = error;
     });
 };
 

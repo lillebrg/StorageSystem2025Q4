@@ -44,13 +44,13 @@ function displayTable(data) {
   });
 }
 //create baseItem
-let createModal = document.getElementById("createModal");
+const createModal = document.getElementById("createModal");
 let nameInput = document.getElementById("name");
 let descriptionInput = document.getElementById("description");
 let imageInput = document.getElementById("image");
 let barcodeInput = document.getElementById("barcode");
 
-let createError = document.getElementById("createError");
+const createError = document.getElementById("createError");
 createError.style.display = "none";
 
 document.getElementById("createBtn").onclick = () => {
@@ -122,13 +122,13 @@ async function submitUpdate(event) {
 }
 
 //delete shelf
-let deleteForm = document.getElementById("deleteForm");
+const deleteForm = document.getElementById("deleteForm");
 deleteForm.addEventListener("submit", handleUserDelete);
 
-let deleteError = document.getElementById("deleteError");
+const deleteError = document.getElementById("deleteError");
 deleteError.style.display = "none";
 
-let deleteModal = document.getElementById("deleteModal");
+const deleteModal = document.getElementById("deleteModal");
 document.getElementById("deleteBtn").onclick = () =>
   (deleteModal.style.display = "block");
 async function handleUserDelete(event) {

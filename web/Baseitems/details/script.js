@@ -1,5 +1,5 @@
-import { deleteStorage, get, update } from "../../services/pages/storage.service.js";
-import { create } from "../../services/pages/racks.service.js";
+import { deleteBaseItem, get, update, uploadImage } from "../../services/pages/baseitem.service.js";
+import { create } from "../../services/pages/specificitem.service.js";
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 
@@ -7,11 +7,16 @@ let getError = document.getElementById("getError");
 getError.style.display = "none";
 
 let name;
+let description;
+let barcode
 
 await get(id)
   .then((data) => {
-    name = data.name;
-    document.getElementById("tableTitle").innerHTML = "Storage: " + data.name;
+    name = data.name
+    description = data.description;
+    barcode = data.barcode
+    document.getElementById("tableTitle").innerHTML = name;
+    document.getElementById("baseItemImg").src = data.image_url;
     displayTable(data);
   })
   .catch((error) => {
@@ -24,24 +29,27 @@ function displayTable(data) {
   const table = document.getElementById("tBody");
   table.innerHTML = ""; // clear old table
 
-  if (data.racks.length <= 0) {
+  if (data.specific_items.length <= 0) {
     getError.style.display = "block";
-    getError.innerHTML = "Storage is empty";
+    getError.innerHTML = "No Specific items";
     return;
   }
 
   // Build all rows
-  data.racks.forEach(item => {
+  data.specific_items.forEach(item => {
     table.innerHTML += `
       <tr data-id="${item.id}">
-        <td>${item.rack_no}</td>
+        <td>${item.id}</td>
+        <td>${item.barcode}</td>
+        <td>${item.description}</td>
+        <td>${item.barcode}</td>
       </tr>`;
   });
   
   document.querySelectorAll("#tBody tr").forEach(row => {
     row.addEventListener("click", () => {
-      const id = row.dataset.id;
-      window.location.href = `/racks/?id=${id}&storageId=${data.id}`;
+      const specificItemId = row.dataset.id;
+      window.location.href = `/specificitems/?id=${specificItemId}&baseitemId=${id}`;
     });
   });
 }
@@ -54,7 +62,7 @@ const createError = document.getElementById("createError");
 createError.style.display = "none";
 
 document.getElementById("createBtn").onclick = () => {
-  rack_noInput.value = "";
+  specificdescriptionInput.value = "";
   createModal.style.display = "block";
 };
 
@@ -75,33 +83,55 @@ async function submitCreate(event) {
     });
 }
 
-//update storage
-let updateModal = document.getElementById("updateModal");
+//update baseItem
+const updateModal = document.getElementById("updateModal");
 let nameInput = document.getElementById("name");
+let descriptionInput = document.getElementById("description");
+let imageInput = document.getElementById("image");
+let barcodeInput = document.getElementById("barcode");
 
-let updateError = document.getElementById("updateError");
+const updateError = document.getElementById("updateError");
 updateError.style.display = "none";
 
 document.getElementById("updateBtn").onclick = () => {
-  nameInput.value = name;
   updateModal.style.display = "block";
+  nameInput.value = name;
+  descriptionInput.value = description;
+  barcodeInput.value = barcode;
 };
 
 const updateForm = document.getElementById("updateForm");
-updateForm.addEventListener("submit", submitUpdate);
+updateForm.addEventListener("submit", handleCreate);
 
-async function submitUpdate(event) {
+async function handleCreate(event) {
   event.preventDefault();
   if (!updateForm.reportValidity()) {
     return;
   }
 
-  update(id, nameInput.value)
-    .then(() => window.location.reload())
-    .catch((error) => {
-      updateError.style.display = "block";
-      updateError.innerText = error;
-    });
+let savedFileName;
+
+try {
+  if (imageInput.files.length > 0) {
+    savedFileName = await uploadImage(imageInput.files[0]);
+  }
+
+  await update(
+    id,
+    nameInput.value,
+    descriptionInput.value,
+    savedFileName.value,
+    savedFileName.path
+  );
+
+  window.location.reload();
+
+} catch (error) {
+  console.log(error)
+  updateError.style.display = "block";
+  updateError.innerText = error;
+}
+
 }
 
 //delete Storage
@@ -117,7 +147,7 @@ document.getElementById("deleteForm").addEventListener("submit", submitDelete);
 
 async function submitDelete(event) {
   event.preventDefault();
-  deleteStorage(id)
+  deleteBaseItem(id)
     .then(() =>  goBack())
     .catch((error) => {
       deleteError.style.display = "block";
@@ -138,5 +168,5 @@ document.querySelectorAll(".closeModal").forEach((closeBtn) => {
 document.getElementById("backBtn").onclick = () => {goBack()};
 
 function goBack() {
-  window.location.href = "/storages"
+  window.location.href = "/baseitems"
 }

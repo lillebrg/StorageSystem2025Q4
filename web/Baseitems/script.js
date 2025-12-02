@@ -5,7 +5,6 @@ document.getElementById("pageBack").onclick = () =>{
    if(currentPage >= 1){
     currentPage -= 1;
    }
-    console.log(currentPage)
     getItems();
 };
 
@@ -33,7 +32,6 @@ document.getElementById("pageCount").innerHTML = `Page ${currentPage+1}`
 
 await getAll(10, 10 * currentPage, search)
   .then((data) => {
-    console.log(data)
     displayTable(data);
   })
   .catch((error) => {
@@ -54,7 +52,7 @@ function displayTable(data) {
          <tr data-id="${baseItem.id}">
             <td>${baseItem.name}</td>
             <td>${baseItem.description}</td>
-            <td><img src="${baseItem.image_url}" style="width: 100px;"/></td>
+            <td><img src="${baseItem.image_url}" style="height: 80px;"/></td>
             <td>${baseItem.specific_items_count}</td>
             <td>${baseItem.specific_items_available_count}</td>
           </tr>`;
@@ -64,22 +62,20 @@ function displayTable(data) {
   document.querySelectorAll("#tBody tr").forEach((row) => {
     row.addEventListener("click", () => {
       const id = row.dataset.id;
-      window.location.href = "/users/details/?id=" + id;
+      window.location.href = "/baseitems/details/?id=" + id;
     });
   });
 }
 }
 
-
-
 //create baseItem
-let createModal = document.getElementById("createModal");
+const createModal = document.getElementById("createModal");
 let nameInput = document.getElementById("name");
 let descriptionInput = document.getElementById("description");
 let imageInput = document.getElementById("image");
 let barcodeInput = document.getElementById("barcode");
 
-let createError = document.getElementById("createError");
+const createError = document.getElementById("createError");
 createError.style.display = "none";
 
 document.getElementById("createBtn").onclick = () => {
@@ -99,7 +95,7 @@ async function handleCreate(event) {
     return;
   }
 
-let savedFileName = null;
+let savedFileName;
 
 try {
   if (imageInput.files.length > 0) {
@@ -111,7 +107,6 @@ try {
     descriptionInput.value,
     barcodeInput.value,
     savedFileName.path
-
   );
 
   window.location.reload();

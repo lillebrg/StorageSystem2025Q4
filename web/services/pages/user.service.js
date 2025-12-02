@@ -43,7 +43,7 @@ export function updatePassword(id = null, current_password = null, new_password)
       new_password,
     });
   } else {
-    return request("POST", "/user", {
+    return request("POST", "/user/change-password", {
       current_password,
       new_password,
     });

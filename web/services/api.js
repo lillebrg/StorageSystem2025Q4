@@ -14,18 +14,14 @@ export async function request(method, path, body = null, image = undefined, canR
       body: body ? JSON.stringify(body) : image,
     })
       .then(async (response) => {
-        console.log(response.status)
         try {
         if(response.status == 401) {
           if (canRetry){
-            console.log(canRetry)
             await refreshAuthToken();
             return request(method, path, body, image, false)
           };
-          window.location.href = "/"
+          //window.location.href = "/"
         }
-          
-          
           const json = await response.json();
 
           if (response.ok) return resolve(json);
