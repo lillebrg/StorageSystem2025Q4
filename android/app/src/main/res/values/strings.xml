@@ -28,6 +28,7 @@
     <string name="image">Image</string>
     <string name="upload_image">Upload image</string>
     <string name="remove_image">Remove image</string>
+    <string name="shelf_no">Shelf %d</string>
     <string name="items">Items</string>
     <string name="add_item">Add item</string>
     <string name="loaned_to">Loaned to: %s</string>

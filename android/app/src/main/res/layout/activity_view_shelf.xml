@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="30dp"
+    tools:context=".ui.ViewShelfActivity">
+
+    <TextView
+        android:id="@+id/shelf_no"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingHorizontal="20dp"
+        android:textSize="26sp"
+        android:textStyle="bold"
+    />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray"
+        android:layout_marginTop="20dp"
+    />
+
+    <ListView
+        android:id="@+id/shelf_items_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+    />
+
+</LinearLayout>
