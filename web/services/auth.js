@@ -22,13 +22,12 @@ export function refreshAuthToken() {
     let refresh_token = localStorage.getItem("refreshToken");
     request("POST", "/user/refresh", {refresh_token})
     .then((response) => {
-        console.log(response)
+      console.log(response);
       localStorage.setItem("token", response.access_token);
       localStorage.setItem("refreshToken", response.refresh_token);
       localStorage.setItem("role", response.role);
   })
-  .catch((err) => {
-    console.log(err)
-    //window.location.href = "/"
+  .catch(() => {
+    window.location.href = "/"
   });
 }

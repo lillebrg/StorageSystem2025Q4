@@ -14,6 +14,8 @@ await get(id)
   .then((data) => {
     shelf_no = data.shelf_no;
     document.getElementById("tableTitle").innerHTML = "Shelf: " + data.shelf_no;
+    document.getElementById("shelfBarcode").innerHTML = data.barcode;
+
     displayTable(data.base_items);
   })
   .catch((error) => {
@@ -41,6 +43,13 @@ function displayTable(data) {
             <td>${baseItem.specific_items_count}</td>
             <td>${baseItem.specific_items_available_count}</td>
           </tr>`;
+  });
+
+    document.querySelectorAll("#tBody tr").forEach((row) => {
+    row.addEventListener("click", () => {
+      const id = row.dataset.id;
+      window.location.href = "/baseitems/details/?id=" + id;
+    });
   });
 }
 //create baseItem

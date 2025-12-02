@@ -12,6 +12,7 @@ let barcode
 
 await get(id)
   .then((data) => {
+    console.log(data)
     name = data.name
     description = data.description;
     barcode = data.barcode
@@ -55,9 +56,9 @@ function displayTable(data) {
 }
 
 
-//Create Rack
+//Create specificItem
 const createModal = document.getElementById("createModal");
-let rack_noInput = document.getElementById("rack_no");
+let specificdescriptionInputInput = document.getElementById("specificdescriptionInput");
 const createError = document.getElementById("createError");
 createError.style.display = "none";
 
@@ -89,6 +90,7 @@ let nameInput = document.getElementById("name");
 let descriptionInput = document.getElementById("description");
 let imageInput = document.getElementById("image");
 let barcodeInput = document.getElementById("barcode");
+let shelfBarcodeInput = document.getElementById("shelfBarcode");
 
 const updateError = document.getElementById("updateError");
 updateError.style.display = "none";

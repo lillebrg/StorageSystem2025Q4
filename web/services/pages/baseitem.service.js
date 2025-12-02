@@ -21,10 +21,6 @@ export function create(name, description, barcode, image_path = null, shelf_id) 
   });
 }
 
-export function uploadImage(image) {
-  return request("POST", `/images`, null, image);
-}
-
 export function update(id, name, description, barcode, image_path = undefined, shelf_id) {
   return request("PUT", `/bate-items/${id}`, {
     name,
@@ -38,4 +34,12 @@ export function update(id, name, description, barcode, image_path = undefined, s
 
 export function deleteBaseItem(id) {
   return request("DELETE", `/base-items/${id}`);
+}
+
+export function uploadImage(image) {
+  return request("POST", `/images`, null, image);
+}
+
+export function scanBarcode(barcode) {
+  return request("POST", `/barcodes/scan?barcode=${barcode}`);
 }

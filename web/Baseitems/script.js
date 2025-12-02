@@ -1,4 +1,4 @@
-import { create, getAll, uploadImage } from "../services/pages/baseitem.service.js"
+import { create, getAll, uploadImage, scanBarcode } from "../services/pages/baseitem.service.js"
 //paginator
 let currentPage = 0;
 document.getElementById("pageBack").onclick = () =>{
@@ -39,6 +39,7 @@ await getAll(10, 10 * currentPage, search)
     getError.color = "red";
     getError.innerHTML = error;
   });
+}
 
 function displayTable(data) {
   let table = document.getElementById("tBody");
@@ -66,7 +67,6 @@ function displayTable(data) {
     });
   });
 }
-}
 
 //create baseItem
 const createModal = document.getElementById("createModal");
@@ -74,6 +74,8 @@ let nameInput = document.getElementById("name");
 let descriptionInput = document.getElementById("description");
 let imageInput = document.getElementById("image");
 let barcodeInput = document.getElementById("barcode");
+let shelfBarcodeInput = document.getElementById("shelfBarcode");
+
 
 const createError = document.getElementById("createError");
 createError.style.display = "none";
@@ -84,6 +86,7 @@ document.getElementById("createBtn").onclick = () => {
   descriptionInput.value = "";
   imageInput.value = "";
   barcodeInput.value = "";
+  shelfBarcodeInput.value = "";
 };
 
 const createForm = document.getElementById("createForm");
@@ -95,9 +98,16 @@ async function handleCreate(event) {
     return;
   }
 
-let savedFileName;
+
+  let shelf;
+  let savedFileName;
 
 try {
+  if(shelfBarcodeInput.value != ""){
+    let response = await scanBarcode(shelfBarcodeInput.value);
+    shelf = response.shelf.id
+  }
+
   if (imageInput.files.length > 0) {
     savedFileName = await uploadImage(imageInput.files[0]);
   }
@@ -106,7 +116,8 @@ try {
     nameInput.value,
     descriptionInput.value,
     barcodeInput.value,
-    savedFileName.path
+    savedFileName.path,
+    shelf
   );
 
   window.location.reload();
