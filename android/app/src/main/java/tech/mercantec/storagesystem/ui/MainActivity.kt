@@ -58,6 +58,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.change_password -> {
+            val intent = Intent(this, ChangePasswordActivity::class.java)
+            intent.putExtra("changing", true)
+            startActivity(intent)
+
+            true
+        }
         R.id.logout -> {
             thread { auth.logout() }
 
