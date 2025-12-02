@@ -21,6 +21,12 @@ class ChangePasswordActivity : AppCompatActivity() {
             findViewById<EditText>(R.id.current_password_input).visibility = View.GONE
         }
 
+        if (intent.extras?.getBoolean("changing") == true) {
+            findViewById<TextView>(R.id.title).setText(R.string.change_password, TextView.BufferType.SPANNABLE)
+            findViewById<TextView>(R.id.description).visibility = View.GONE
+            findViewById<Button>(R.id.logout_button).visibility = View.GONE
+        }
+
         val auth = Auth(this)
 
         findViewById<Button>(R.id.reset_password_button).setOnClickListener {

@@ -42,7 +42,7 @@ class CreateProductActivity : AppCompatActivity() {
         val imageUrl = intent.extras?.getString("imageUrl")
 
         // Show existing image if applicable
-        if (imageUrl != null) {
+        if (imageUrl != null && imageUrl.isNotEmpty()) {
             thread {
                 val stream = URL(imageUrl).content as InputStream
                 val drawable = Drawable.createFromStream(stream, "src")

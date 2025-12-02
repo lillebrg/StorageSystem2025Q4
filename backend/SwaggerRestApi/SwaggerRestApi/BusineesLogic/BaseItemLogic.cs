@@ -111,11 +111,13 @@ namespace SwaggerRestApi.BusineesLogic
                 name = baseItem.Name,
                 description = baseItem.Description,
                 barcode = baseItem.ModelBarcode,
+                shelf_barcode = "",
                 image_url = imageBaseURL + baseItem.Picture,
                 specific_items = new List<SpecificItemsGet>()
             };
 
             if (result.image_url == imageBaseURL) { result.image_url = null; }
+            if (baseItem.Shelf != null) { result.shelf_barcode = baseItem.Shelf.Barcode; }
 
             foreach (var item in baseItem.SpecificItems)
             {
@@ -167,7 +169,7 @@ namespace SwaggerRestApi.BusineesLogic
             if (baseItemCreate.barcode != null && baseItemCreate.barcode != "") { baseItem.ModelBarcode = baseItemCreate.barcode; }
             if (baseItemCreate.image_path != null || baseItemCreate.image_path == "") 
             {
-                await DeleteImage(baseItem.Picture);
+                if (baseItem.Picture != null) await DeleteImage(baseItem.Picture);
                 baseItem.Picture = baseItemCreate.image_path; 
             }
             if (baseItem.Picture == "") { baseItem.Picture = null; }

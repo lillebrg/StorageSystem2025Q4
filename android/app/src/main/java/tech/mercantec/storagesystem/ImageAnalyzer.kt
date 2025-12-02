@@ -18,6 +18,7 @@ import tech.mercantec.storagesystem.services.Api
 import tech.mercantec.storagesystem.services.ApiRequestException
 import tech.mercantec.storagesystem.ui.CreateProductActivity
 import tech.mercantec.storagesystem.ui.ViewProductActivity
+import tech.mercantec.storagesystem.ui.ViewShelfActivity
 import java.util.concurrent.Executors
 import kotlin.concurrent.thread
 
@@ -51,16 +52,16 @@ class ImageAnalyzer(val analysis: ImageAnalysis, val ctx: Activity) : ImageAnaly
         data class BarcodeScanResponseBaseItemSpecificItem(val id: Int, val description: String)
 
         @Serializable
-        data class BarcodeScanResponseBaseItem(val id: Int, val name: String, val description: String, val image_url: String?, val specific_items: Array<BarcodeScanResponseBaseItemSpecificItem>)
+        data class BarcodeScanResponseBaseItem(val id: Int, val name: String, val description: String, val image_url: String?, val specific_items: ArrayList<BarcodeScanResponseBaseItemSpecificItem>)
 
         @Serializable
-        data class BarcodeScanResponseSpecificItem(val id: Int, val name: String, val description: String, val image_url: String?)
+        data class BarcodeScanResponseSpecificItem(val id: Int, val name: String, val description: String, val image_url: String?, val base_item: BarcodeScanResponseBaseItem)
 
         @Serializable
         data class BarcodeScanResponseShelfBaseItem(val id: Int, val name: String, val description: String, val image_url: String?)
 
         @Serializable
-        data class BarcodeScanResponseShelf(val id: Int, val shelf_no: Int, val rack_id: Int, val base_items: Array<BarcodeScanResponseShelfBaseItem>)
+        data class BarcodeScanResponseShelf(val id: Int, val shelf_no: Int, val rack_id: Int, val base_items: ArrayList<BarcodeScanResponseShelfBaseItem>)
 
         @Serializable
         data class BarcodeScanResponse(val type: String, val base_item: BarcodeScanResponseBaseItem?, val specific_item: BarcodeScanResponseSpecificItem?, val shelf: BarcodeScanResponseShelf?)
@@ -82,15 +83,17 @@ class ImageAnalyzer(val analysis: ImageAnalysis, val ctx: Activity) : ImageAnaly
                             ctx.startActivity(intent)
                         }
                         "specific_item" -> {
-                            Toast.makeText(ctx, "Found specific item: ${response.specific_item!!.name}", Toast.LENGTH_LONG).show()
+                            val intent = Intent(ctx, ViewProductActivity::class.java)
+                            intent.putExtra("baseItemId", response.specific_item!!.base_item.id)
+                            ctx.startActivity(intent)
                         }
                         "shelf" -> {
-                            Toast.makeText(ctx, "Found shelf: ${response.shelf!!.shelf_no}", Toast.LENGTH_LONG).show()
+                            val intent = Intent(ctx, ViewShelfActivity::class.java)
+                            intent.putExtra("shelfId", response.shelf!!.id)
+                            ctx.startActivity(intent)
                         }
                         else -> Toast.makeText(ctx, "Invalid response type: ${response.type}", Toast.LENGTH_LONG).show()
                     }
-
-                    analysis.setAnalyzer(Executors.newSingleThreadExecutor(), this)
                 }
             } catch (e: ApiRequestException) {
                 if (e.code == 404) {

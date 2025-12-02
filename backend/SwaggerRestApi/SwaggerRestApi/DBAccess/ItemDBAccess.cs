@@ -96,7 +96,7 @@ namespace SwaggerRestApi.DBAccess
 
         public async Task<BaseItem> GetBaseItem(int id)
         {
-            var item = await _context.BaseItems.Include(b => b.SpecificItems).FirstOrDefaultAsync(b => b.Id == id);
+            var item = await _context.BaseItems.Include(b => b.SpecificItems).Include(b => b.Shelf).FirstOrDefaultAsync(b => b.Id == id);
 
             return item;
         }

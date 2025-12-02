@@ -122,8 +122,12 @@ internal class Program
         await using var context = app.Services.CreateAsyncScope().ServiceProvider.GetService<DBContext>();
         SeedData seedData = new SeedData(context);
         await seedData.StartUserData();
-        await seedData.StartStorageData();
-        await seedData.StartItemsData();
+
+        if (app.Environment.IsDevelopment())
+        {
+            await seedData.StartStorageData();
+            await seedData.StartItemsData();
+        }
 
         app.UseCors("AllowAll");
 
