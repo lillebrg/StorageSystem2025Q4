@@ -3,7 +3,7 @@ package tech.mercantec.storagesystem.models
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ShelfItem(val id: Int, val name: String, val description: String, val barcode: String, val image_url: String?, val specific_items_count: Int, val specific_items_available_count: Int)
+data class ShelfItem(val id: Int, val name: String, val description: String?, val barcode: String, val image_url: String?, val specific_items_count: Int, val specific_items_available_count: Int)
 
 @Serializable
 data class Shelf(val id: Int, val barcode: String, val shelf_no: Int, val base_items: ArrayList<ShelfItem>)
@@ -21,7 +21,7 @@ data class Borrower(val id: Int, val name: String)
 data class BorrowRequest(val id: Int, val loaned_to: Borrower?, val base_item: BorrowedBaseItem, val specific_item: BorrowedSpecificItem, val accepted: Boolean)
 
 @Serializable
-data class SpecificItem(val id: Int, var description: String, var barcode: String, val loaned_to: Borrower?)
+data class SpecificItem(val id: Int, var description: String?, var barcode: String, val loaned_to: Borrower?)
 
 @Serializable
 data class BaseItem(val id: Int, var name: String, var description: String, var barcode: String?, var image_url: String?, var specific_items: ArrayList<SpecificItem>)

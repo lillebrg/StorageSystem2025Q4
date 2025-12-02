@@ -60,7 +60,7 @@ class ViewProductActivity : AppCompatActivity() {
                             true
                         }
                         R.id.edit -> {
-                            showInputDialog("Edit", item.description) { newDesc ->
+                            showInputDialog("Edit", item.description ?: "") { newDesc ->
                                 @Serializable
                                 data class Req(val description: String)
 

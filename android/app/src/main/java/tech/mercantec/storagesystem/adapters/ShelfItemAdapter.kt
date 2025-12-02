@@ -29,7 +29,7 @@ class ShelfItemAdapter(val ctx: Context, val items: ArrayList<ShelfItem>) : Base
 
         view.findViewById<TextView>(R.id.name).setText(item.name, TextView.BufferType.SPANNABLE)
 
-        if (item.description.isNotEmpty()) {
+        if (item.description != null && item.description.isNotEmpty()) {
             view.findViewById<TextView>(R.id.description).apply {
                 visibility = View.VISIBLE
                 setText(item.description.split("\n")[0], TextView.BufferType.SPANNABLE)

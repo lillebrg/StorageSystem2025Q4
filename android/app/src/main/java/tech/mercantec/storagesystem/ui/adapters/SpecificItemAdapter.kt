@@ -28,7 +28,7 @@ class SpecificItemAdapter(val ctx: Context, val items: ArrayList<SpecificItem>) 
 
         view.findViewById<TextView>(R.id.barcode).setText(item.barcode, TextView.BufferType.SPANNABLE)
 
-        if (item.description.isNotEmpty()) {
+        if (item.description != null && item.description!!.isNotEmpty()) {
             view.findViewById<TextView>(R.id.description).apply {
                 visibility = View.VISIBLE
                 setText(item.description, TextView.BufferType.SPANNABLE)
