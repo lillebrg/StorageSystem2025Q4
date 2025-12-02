@@ -111,11 +111,13 @@ namespace SwaggerRestApi.BusineesLogic
                 name = baseItem.Name,
                 description = baseItem.Description,
                 barcode = baseItem.ModelBarcode,
+                shelf_barcode = "",
                 image_url = imageBaseURL + baseItem.Picture,
                 specific_items = new List<SpecificItemsGet>()
             };
 
             if (result.image_url == imageBaseURL) { result.image_url = null; }
+            if (baseItem.Shelf != null) { result.shelf_barcode = baseItem.Shelf.Barcode; }
 
             foreach (var item in baseItem.SpecificItems)
             {

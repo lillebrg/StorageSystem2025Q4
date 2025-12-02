@@ -12,6 +12,8 @@ namespace SwaggerRestApi.Models.DTO.BaseItems
 
         public string? barcode { get; set; }
 
+        public string? shelf_barcode { get; set; }
+
         public string? image_url { get; set; }
 
         public List<SpecificItemsGet> specific_items { get; set; }
