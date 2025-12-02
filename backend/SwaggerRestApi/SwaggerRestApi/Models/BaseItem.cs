@@ -16,6 +16,7 @@ namespace SwaggerRestApi.Models
 
         public List<SpecificItem> SpecificItems { get; set; }
 
+
         public int? ShelfId { get; set; }
 
         public Shelf? Shelf { get; set; }

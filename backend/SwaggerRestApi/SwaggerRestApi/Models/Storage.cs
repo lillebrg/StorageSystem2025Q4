@@ -7,7 +7,6 @@ namespace SwaggerRestApi.Models
 
         public string Name { get; set; }
 
-
         public List<Rack> Racks { get; set; }
     }
 }
