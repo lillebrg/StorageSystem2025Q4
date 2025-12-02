@@ -19,6 +19,7 @@ import java.util.concurrent.Executors
 
 class ScanFragment : Fragment() {
     private val CAMERA_PERMISSION_REQUEST_CODE = 200
+    private var imageAnalysis: ImageAnalysis? = null
     private lateinit var previewView: PreviewView
     private lateinit var permissionNoticeView: TextView
 
@@ -32,6 +33,12 @@ class ScanFragment : Fragment() {
         } else {
             requestPermissions(arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        imageAnalysis?.setAnalyzer(Executors.newSingleThreadExecutor(), ImageAnalyzer(imageAnalysis!!, requireActivity()))
     }
 
     override fun onRequestPermissionsResult(
@@ -56,14 +63,15 @@ class ScanFragment : Fragment() {
     @OptIn(ExperimentalGetImage::class)
     private fun showCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+        val activity = requireActivity()
 
         cameraProviderFuture.addListener({
             val cameraProvider = cameraProviderFuture.get()
 
             val preview = Preview.Builder().build().apply { surfaceProvider = previewView.surfaceProvider }
 
-            val imageAnalysis = ImageAnalysis.Builder().build().apply {
-                setAnalyzer(Executors.newSingleThreadExecutor(), ImageAnalyzer(this, requireActivity()))
+            imageAnalysis = ImageAnalysis.Builder().build().apply {
+                setAnalyzer(Executors.newSingleThreadExecutor(), ImageAnalyzer(this, activity))
             }
 
             cameraProvider.unbindAll()

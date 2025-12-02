@@ -169,7 +169,7 @@ namespace SwaggerRestApi.BusineesLogic
             if (baseItemCreate.barcode != null && baseItemCreate.barcode != "") { baseItem.ModelBarcode = baseItemCreate.barcode; }
             if (baseItemCreate.image_path != null || baseItemCreate.image_path == "") 
             {
-                await DeleteImage(baseItem.Picture);
+                if (baseItem.Picture != null) await DeleteImage(baseItem.Picture);
                 baseItem.Picture = baseItemCreate.image_path; 
             }
             if (baseItem.Picture == "") { baseItem.Picture = null; }
