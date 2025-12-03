@@ -3,9 +3,20 @@ import {
   get,
   update,
   uploadImage,
+  scanBarcode,
 } from "../../services/pages/baseitem.service.js";
 import { create } from "../../services/pages/specificitem.service.js";
 import { createBorrowRequest } from "../../services/pages/borrowrequest.service.js";
+
+//role
+const createBtn = document.getElementById("createBtn");
+const updateBtn = document.getElementById("updateBtn");
+const deleteBtn = document.getElementById("deleteBtn");
+if (localStorage.getItem("role") == "User") {
+  createBtn.style.display = "none";
+  updateBtn.style.display = "none";
+  deleteBtn.style.display = "none";
+}
 
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
@@ -20,7 +31,6 @@ let shelfBarcode;
 
 await get(id)
   .then((data) => {
-    console.log(data);
     name = data.name;
     description = data.description;
     barcode = data.barcode;
@@ -52,7 +62,7 @@ function displayTable(data) {
         <td>${item.id}</td>
         <td>${item.barcode}</td>
         <td>${item.description}</td>
-        <td>${item.loaned_to == null ? "" : item.loaned_to}</td>
+        <td>${item.loaned_to == null ? "" : item.loaned_to.name}</td>
       </tr>`;
   });
 }
@@ -100,7 +110,7 @@ let specificdescriptionInputInput = document.getElementById(
 const createError = document.getElementById("createError");
 createError.style.display = "none";
 
-document.getElementById("createBtn").onclick = () => {
+createBtn.onclick = () => {
   specificdescriptionInput.value = "";
   createModal.style.display = "block";
 };
@@ -133,7 +143,7 @@ let shelfBarcodeInput = document.getElementById("shelfBarcode");
 const updateError = document.getElementById("updateError");
 updateError.style.display = "none";
 
-document.getElementById("updateBtn").onclick = () => {
+updateBtn.onclick = () => {
   updateModal.style.display = "block";
   nameInput.value = name;
   descriptionInput.value = description;
@@ -151,23 +161,30 @@ async function handleCreate(event) {
   }
 
   let savedFileName;
+  let shelf;
 
   try {
     if (imageInput.files.length > 0) {
-      savedFileName = await uploadImage(imageInput.files[0]);
+      let response = await uploadImage(imageInput.files[0]);
+      savedFileName = response.path;
+    }
+
+    if (shelfBarcodeInput.value != "") {
+      let response = await scanBarcode(shelfBarcodeInput.value);
+      shelf = response.shelf.id;
     }
 
     await update(
       id,
       nameInput.value,
       descriptionInput.value,
-      savedFileName.value,
-      savedFileName.path
+      barcodeInput.value,
+      savedFileName,
+      shelf
     );
 
     window.location.reload();
   } catch (error) {
-    console.log(error);
     updateError.style.display = "block";
     updateError.innerText = error;
   }
@@ -178,7 +195,7 @@ const deleteModal = document.getElementById("deleteModal");
 const deleteError = document.getElementById("deleteError");
 deleteError.style.display = "none";
 
-document.getElementById("deleteBtn").onclick = () => {
+deleteBtn.onclick = () => {
   deleteModal.style.display = "block";
 };
 

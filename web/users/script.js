@@ -1,16 +1,27 @@
 import { create, getAll } from "../services/pages/user.service.js";
 
+let getError = document.getElementById("getError");
+getError.style.display = "none";
+
 await getAll()
   .then((data) => displayTable(data))
   .catch((error) => {
-    console.log(error);
+    getError.style.display = "block";
+    getError.color = "red";
+    getError.innerHTML = error;
   });
 
 function displayTable(data) {
   let table = document.getElementById("tBody");
   table.innerHTML = ""; // clear old table
-
-  data.forEach(user => {
+  if (data.length <= 0) {
+    getError.style.display = "block";
+    getError.innerHTML = "No users in the system";
+    return;
+  } else {
+    getError.style.display = "none";
+  }
+  data.forEach((user) => {
     table.innerHTML += `
          <tr data-id="${user.id}">
             <td>${user.name}</td>
@@ -18,7 +29,7 @@ function displayTable(data) {
             <td>${user.role}</td>
             <td>${user.borrowed_items}</td>
           </tr>`;
-  })
+  });
 
   document.querySelectorAll("#tBody tr").forEach((row) => {
     row.addEventListener("click", () => {
@@ -45,7 +56,6 @@ document.getElementById("createBtn").onclick = () => {
   roleInput.value = "";
 };
 
-
 const createForm = document.getElementById("createForm");
 createForm.addEventListener("submit", handleCreate);
 
@@ -60,7 +70,7 @@ async function handleCreate(event) {
   const password = passwordInput.value;
   const role = roleInput.value;
 
- await create(name, email, password, role)
+  await create(name, email, password, role)
     .then(() => location.reload())
     .catch((error) => {
       createError.style.display = "block";

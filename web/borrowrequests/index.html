@@ -4,7 +4,7 @@
     <title>Storage System</title>
     <link rel="stylesheet" href="/style.css" />
     <link rel="stylesheet" href="../baseitems/style.css" />
-    <link rel="icon" href="../assets/images/telia.png" type="image/x-icon" />
+    <link rel="icon" href="../../assets/images/box.png" type="image/x-icon" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -24,10 +24,22 @@
   <body>
     <menu-nav></menu-nav>
     <div class="container">
-      <table class="responsive-table">
-        <div class="toolBar" style="justify-content: center">
-          <h2 class="tableTitle">All Borrow Requests</h2>
+        <div class="toolBar">
+          <div style="width: 33.33%; display: flex; justify-content: start">
+            <div class="input-container">
+              <select  class="select" name="showAccepted" id="showAccepted">
+                <option value="" selected disabled>Show...</option>
+                <option value="notHandled">Not handled yet</option>
+                <option value="accepted">Accepted</option>
+              </select>
+            </div>
+          </div>
+          <div style="width: 33.33%; justify-content: center">
+            <h2 class="tableTitle">All Borrow Requests</h2>
+          </div>
+          <div style="width: 33.33%; display: flex; justify-content: end"></div>
         </div>
+      <table class="responsive-table">
         <thead>
           <tr>
             <th scope="col">From</th>
@@ -47,7 +59,7 @@
           <p class="form-title" id="borrowTitle"></p>
           <img id="reviewImg" style="max-height: 200px; max-width: 200px" />
           <my-alert id="reviewError" color="red"></my-alert>
-          <div style="display: flex; justify-content: center;">
+          <div style="display: flex; justify-content: center">
             <button
               class="button submit"
               style="margin-top: 10px; background-color: darkred"
@@ -55,7 +67,11 @@
             >
               Reject
             </button>
-            <button class="button submit" id="acceptRequestBtn" style="margin-top: 10px">
+            <button
+              class="button submit"
+              id="acceptRequestBtn"
+              style="margin-top: 10px"
+            >
               Accept
             </button>
           </div>

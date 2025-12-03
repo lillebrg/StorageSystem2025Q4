@@ -17,6 +17,9 @@ function displayTable(data) {
     if (data.length <= 0) {
     getError.style.display = "block";
     getError.innerHTML = "No storages";
+    return;
+  } else {
+    getError.style.display = "none";
   }
 
     data.forEach(item => {

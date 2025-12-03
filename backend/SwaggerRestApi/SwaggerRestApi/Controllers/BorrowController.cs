@@ -46,7 +46,7 @@ namespace SwaggerRestApi.Controllers
 
         // send notification to user
         [HttpPost("{id}/reject")]
-        [Authorize(Roles = "Admin, Operator")]
+        [Authorize(Roles = "Admin, Operator, User")]
         public async Task<ActionResult> RejectBorrowRequest(int id)
         {
             var claims = HttpContext.User.Claims;

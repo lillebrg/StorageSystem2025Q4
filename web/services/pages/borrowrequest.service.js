@@ -8,14 +8,14 @@ export function createBorrowRequest(specific_item) {
   return request("POST", `/borrow-requests`, {specific_item});
 }
 
-export function acceptRequest(specific_itemId) {
-  return request("POST", `/borrow-requests/${specific_itemId}/accept`, );
+export function acceptRequest(id) {
+  return request("POST", `/borrow-requests/${id}/accept`, );
 }
 
-export function rejectRequest(specific_itemId) {
-  return request("POST", `/borrow-requests/${specific_itemId}/reject`, );
+export function rejectRequest(id) {
+  return request("POST", `/borrow-requests/${id}/reject`, );
 }
 
-export function returnItem(specific_itemId) {
-  return request("POST", `/borrow-requests/${specific_itemId}/return`, );
+export function returnItem(id) {
+  return request("POST", `/borrow-requests/${id}/return`, );
 }

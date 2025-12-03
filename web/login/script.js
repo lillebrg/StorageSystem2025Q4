@@ -6,8 +6,8 @@ const passwordInput = document.getElementById("password");
 
 const loginForm = document.getElementById("loginForm");
 loginForm.addEventListener("submit", handleLogin);
-let loginAlert = document.getElementById("loginError");
-loginAlert.style.display = "none";
+let loginError = document.getElementById("loginError");
+loginError.style.display = "none";
 
 const newPasswordForm = document.getElementById("newPasswordForm");
 newPasswordForm.addEventListener("submit", handleNewPassword);
@@ -39,8 +39,8 @@ async function handleLogin(event) {
       }
     })
     .catch((error) => {
-      loginAlert.style.display = "block";
-      loginAlert.innerText = error;
+      loginError.style.display = "block";
+      loginError.innerText = error;
     });
 }
 

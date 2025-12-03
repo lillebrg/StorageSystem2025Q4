@@ -28,6 +28,7 @@ await get(id)
     getError.innerText = error;
   });
 
+
 function displayProfile() {
   let table = document.getElementById(`profileCard`);
   table.innerHTML += `
@@ -45,23 +46,40 @@ function displayProfile() {
 }
 
 function displayTable(data) {
-  //todo, specific items shown
   let table = document.getElementById("tBody");
-  table.innerHTML = ""; // clear old table
-  if(data.length <= 0) {
-    getError.style.display = "block"
-    getError.innerHTML = "No items borrowed"
+  table.innerHTML = "";
+
+  if (data.length <= 0) {
+    getError.style.display = "block";
+    getError.innerHTML = "No items borrowed";
+    return;
+  } else {
+    getError.style.display = "none";
   }
 
-    data.forEach(user => {
+  data.forEach(item => {
     table.innerHTML += `
-         <tr data-id="${user.id}">
-            <td>${user.name}</td>
-            <td>${user.email}</td>
-            <td>${user.role}</td>
-            <td>${user.borrowed_items}</td>
-          </tr>`;
-  })
+      <tr data-id="${item.specific_item_id}"
+          data-name="${item.base_item_name}"
+          data-description="${item.specific_item_description}"
+          data-image="${item.base_item_picture}">
+        <td>${item.specific_item_id}</td>
+        <td>${item.base_item_name}</td>
+        <td><img src="${item.base_item_picture}" style="max-height: 80px; max-width: 80px;"/></td>
+        <td>${item.specific_item_description}</td>
+      </tr>`;
+  });
+
+  table.querySelectorAll("tr").forEach((row) => {
+    row.addEventListener("click", () => {
+      specificItemId = row.dataset.id;
+      document.getElementById("borrowTitle").innerHTML =
+        `Do you want to return item "${row.dataset.name}"?`;
+      document.getElementById("reviewImg").src = row.dataset.image;
+
+      returnModal.style.display = "block";
+    });
+  });
 }
 
 //return item
@@ -87,19 +105,6 @@ async function submitReturn(event) {
     });
 }
 
-document.querySelectorAll("#tBody tr").forEach((row) => {
-  row.addEventListener("click", () => {
-    specificItemId = row.dataset.id;
-    document.getElementById(
-      "borrowTitle"
-    ).innerHTML = `Do you want to return item "${row.dataset.name}"?`;
-    document.getElementById("reviewImg").src = row.dataset.image;
-
-    returnModal.style.display = "block";
-  });
-});
-
-
 //change Password
 const changePasswordModal = document.getElementById("changePasswordModal");
 document.getElementById("changePasswordBtn").onclick = () =>
@@ -119,7 +124,8 @@ async function handleChangePassword(event) {
   updatePassword(id, null, newPasswordInput)
     .then(() => window.location.reload())
     .catch((error) => {
-      console.log(error);
+      changePasswordError.style.display = "block";
+      changePasswordError.innerText = error;
     });
 }
 
@@ -135,6 +141,9 @@ document.getElementById("editBtn").onclick = () => {
   roleInput.value = role;
   editUserModal.style.display = "block";
 };
+
+let editError = document.getElementById("editError");
+editError.style.display = "none";
 
 const userEditForm = document.getElementById("userEditForm");
 userEditForm.addEventListener("submit", handleUserEdit);
@@ -154,14 +163,15 @@ async function handleUserEdit(event) {
   )
     .then(() => window.location.reload())
     .catch((error) => {
-      console.log(error);
-    });
+      editError.style.display = "block";
+      editError.innerText = error;    });
 }
 
 //delete User
 const userDeleteForm = document.getElementById("userDeleteForm");
 userDeleteForm.addEventListener("submit", handleUserDelete);
-
+let deleteError = document.getElementById("deleteError");
+deleteError.style.display = "none";
 const deleteUserModal = document.getElementById("deleteUserModal");
 document.getElementById("deleteUserBtn").onclick = () =>
   (deleteUserModal.style.display = "block");
@@ -173,8 +183,8 @@ async function handleUserDelete(event) {
   deleteUser(id)
     .then(() => (window.location.href = "/users"))
     .catch((error) => {
-      console.log(error);
-    });
+      deleteError.style.display = "block";
+      deleteError.innerText = error;    });
 }
 
 // Close modals when clicking on any close button

@@ -3,6 +3,7 @@
   <head>
     <title>Storage System</title>
     <link rel="stylesheet" href="/style.css" />
+    <link rel="icon" href="../../assets/images/box.png" type="image/x-icon" />
     <link rel="stylesheet" href="/users/details/style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -23,17 +24,34 @@
         <div class="card" id="profileCard"></div>
         <div class="table">
           <table class="responsive-table">
+            <h4 style="margin: 0">Borrowed Items</h4>
             <thead>
               <tr>
                 <th scope="col">Id</th>
                 <th scope="col">Name</th>
                 <th scope="col">Image</th>
-                <th scope="col">ItemDescription</th>
+                <th scope="col">Description</th>
               </tr>
             </thead>
             <tbody id="tBody"></tbody>
           </table>
           <my-alert id="getError" color="#7d2ae8"></my-alert>
+        </div>
+
+        <div class="table">
+          <table class="responsive-table">
+            <h4 style="margin: 0">Borrow Requests</h4>
+            <thead>
+              <tr>
+                <th scope="col">Item</th>
+                <th scope="col">Image</th>
+                <th scope="col">Description</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody id="tBodyBorrowRequests"></tbody>
+          </table>
+          <my-alert id="getBorrowRequestsError" color="#7d2ae8"></my-alert>
         </div>
       </div>
 
@@ -47,6 +65,7 @@
           <div class="input-container">
             <input placeholder="Enter email" type="email" id="email" required />
           </div>
+          <my-alert id="editError" color="red"></my-alert>
           <button class="button submit" type="submit">Save changes</button>
         </form>
       </div>
@@ -93,6 +112,21 @@
           <my-alert id="returnError" color="red"></my-alert>
           <button class="button submit" style="margin-top: 10px" type="submit">
             Return item
+          </button>
+        </form>
+      </div>
+
+      <div id="cancelRequestModal" class="modal">
+        <form class="form modalContent" id="cancelRequestForm">
+          <span class="closeModal">&times;</span>
+          <p class="form-title" id="cancelRequestTitle"></p>
+          <img
+            id="cancelRequestreviewImg"
+            style="max-height: 200px; max-width: 200px"
+          />
+          <my-alert id="cancelRequestError" color="red"></my-alert>
+          <button class="button submit" style="margin-top: 10px" type="submit">
+            Cancel Request
           </button>
         </form>
       </div>

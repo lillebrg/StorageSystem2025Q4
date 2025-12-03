@@ -12,6 +12,10 @@ export function getAll() {
   return request("GET", `/users`);
 }
 
+export function getBorrowRequests() {
+  return request("GET", `/user/borrow-requests`);
+}
+
 export function create(name, email, password, role) {
   return request("POST", "/users/create", {
     name,

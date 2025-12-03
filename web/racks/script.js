@@ -11,7 +11,6 @@ let rack_no;
 
 await get(id)
   .then((data) => {
-    console.log(data);
     rack_no = data.rack_no;
     document.getElementById("tableTitle").innerHTML = "Rack: " + data.rack_no;
     displayTable(data);

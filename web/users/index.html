@@ -3,30 +3,31 @@
   <head>
     <title>Storage System</title>
     <link rel="stylesheet" href="/style.css" />
+    <link rel="icon" href="../../assets/images/box.png" type="image/x-icon" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
       rel="stylesheet"
     />
- <link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-/>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
 
     <script src="/services/checklogin.js"></script>
     <script src="/components/menu.js"></script>
     <script src="/components/alert.js"></script>
     <script type="module" src="/users/script.js"></script>
-
   </head>
   <body>
-      <menu-nav></menu-nav>
+    <menu-nav></menu-nav>
     <div class="container">
       <table class="responsive-table">
-             <div class="toolBar">
-          <div style="width: 33.33%; display: flex; justify-content: start">
-          </div>
+        <div class="toolBar">
+          <div
+            style="width: 33.33%; display: flex; justify-content: start"
+          ></div>
           <div style="width: 33.33%; justify-content: center">
             <h2 class="tableTitle">All Users</h2>
           </div>
@@ -44,10 +45,9 @@
             <th scope="col">Borrowed Items</th>
           </tr>
         </thead>
-        <tbody id="tBody">
-        </tbody>
+        <tbody id="tBody"></tbody>
       </table>
-
+      <my-alert id="getError" color="#9a03e4"></my-alert>
       <div id="createModal" class="modal">
         <form class="form modalContent" id="createForm">
           <span class="closeModal">&times;</span>
@@ -68,8 +68,8 @@
           </div>
           <div class="input-container">
             <select name="role" id="role" required>
-              <option value=""selected disabled>Select Role...</option>
-              <option value="Admin" >Admin</option>
+              <option value="" selected disabled>Select Role...</option>
+              <option value="Admin">Admin</option>
               <option value="Operator">Operator</option>
               <option value="User">User</option>
             </select>
