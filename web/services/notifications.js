@@ -1,4 +1,5 @@
 import { request } from "./api.js";
+import { vapidPublicKey } from "./config.js";
 
 window.addEventListener("load", () => {
     if ("serviceWorker" in navigator && "PushManager" in window && localStorage.getItem("token")) {
@@ -85,7 +86,9 @@ async function subscribeToNotifications() {
         return;
     }
 
-    const subscription = await registration.pushManager.subscribe();
+    const subscription = await registration.pushManager.subscribe({
+        applicationServerKey: vapidPublicKey,
+    });
 
     await request("POST", "/notifications/subscribe", {
         endpoint: subscription.endpoint,
