@@ -90,6 +90,7 @@ async function subscribeToNotifications() {
 
     const subscription = await registration.pushManager.subscribe({
         applicationServerKey: vapidPublicKey,
+        userVisibleOnly: true,
     });
 
     await request("POST", "/notifications/subscribe", {
