@@ -46,20 +46,18 @@ namespace SwaggerRestApi.BusineesLogic
                     loaned_to = new UserLoanedTo(),
                     specific_item = new SpecificItemFromBorrowed()
                 };
-                var specificItem = await _itemdbaccess.GetSpecificItem(item.SpecificItem);
-                var baseItem = await _itemdbaccess.GetBaseItem(specificItem.BaseItemId);
-                var user = await _userdbaccess.GetUser(item.LoanTo);
+                var baseItem = await _itemdbaccess.GetBaseItem(item.SpecificItem.BaseItemId);
 
                 borrowGet.base_item.id = baseItem.Id;
                 borrowGet.base_item.name = baseItem.Name;
                 borrowGet.base_item.description = baseItem.Description;
                 borrowGet.base_item.image_url = imageBaseURL + baseItem.Picture;
 
-                borrowGet.specific_item.id = specificItem.Id;
-                borrowGet.specific_item.description = specificItem.Description;
+                borrowGet.specific_item.id = item.SpecificItem.Id;
+                borrowGet.specific_item.description = item.SpecificItem.Description;
 
-                borrowGet.loaned_to.id = user.Id;
-                borrowGet.loaned_to.name = user.Name;
+                borrowGet.loaned_to.id = item.LoanTo;
+                borrowGet.loaned_to.name = item.User.Name;
 
                 if (borrowGet.base_item.image_url == imageBaseURL) { borrowGet.base_item.image_url = null; }
 
@@ -75,7 +73,7 @@ namespace SwaggerRestApi.BusineesLogic
             {
                 Accepted = false,
                 LoanTo = userId,
-                SpecificItem = borrowRequestCreate.specific_item
+                SpecificItemId = borrowRequestCreate.specific_item
             };
 
 
@@ -112,9 +110,9 @@ namespace SwaggerRestApi.BusineesLogic
             if (borrowRequest.Accepted == true) { return new BadRequestObjectResult(new { message = "Borrow rquest is already accepted" }); }
 
             var user = await _userdbaccess.GetUser(borrowRequest.LoanTo);
-            var specificItem = await _itemdbaccess.GetSpecificItem(borrowRequest.SpecificItem);
+            var specificItem = await _itemdbaccess.GetSpecificItem(borrowRequest.SpecificItemId);
 
-            user.BorrowedItems.Add(borrowRequest.SpecificItem);
+            user.BorrowedItems.Add(borrowRequest.SpecificItemId);
             specificItem.BorrowedTo = borrowRequest.LoanTo;
             borrowRequest.Accepted = true;
 
@@ -122,14 +120,14 @@ namespace SwaggerRestApi.BusineesLogic
             await _userdbaccess.UpdateUser(user);
             await _itemdbaccess.UpdateSpecificItem(specificItem);
 
-            var borrowRequestsToBeDeleted = await _borrowedbaccess.GetAllBorrowRequestWithSpecificItemId(borrowRequest.SpecificItem);
+            var borrowRequestsToBeDeleted = await _borrowedbaccess.GetAllBorrowRequestWithSpecificItemId(borrowRequest.SpecificItemId);
             foreach (var item in borrowRequestsToBeDeleted)
             {
                 _borrowedbaccess.DeleteBorrowRequest(item);
             }
 
             var acceptedBy = await _userdbaccess.GetUser(userId);
-            var specificItemAndBaseItem = await _itemdbaccess.GetSpecificItemAndBaseItem(borrowRequest.SpecificItem);
+            var specificItemAndBaseItem = await _itemdbaccess.GetSpecificItemAndBaseItem(borrowRequest.SpecificItemId);
             Notifications notification = new Notifications
             {
                 SentBy = userId,
@@ -152,7 +150,7 @@ namespace SwaggerRestApi.BusineesLogic
             await _borrowedbaccess.DeleteBorrowRequest(borrowRequest);
 
             var acceptedBy = await _userdbaccess.GetUser(userId);
-            var specificItemAndBaseItem = await _itemdbaccess.GetSpecificItemAndBaseItem(borrowRequest.SpecificItem);
+            var specificItemAndBaseItem = await _itemdbaccess.GetSpecificItemAndBaseItem(borrowRequest.SpecificItemId);
             Notifications notification = new Notifications
             {
                 SentBy = userId,
@@ -173,9 +171,9 @@ namespace SwaggerRestApi.BusineesLogic
             if (borrowRequest == null) { return new NotFoundObjectResult(new { message = "Could not find borrow request" }); }
 
             var user = await _userdbaccess.GetUser(borrowRequest.LoanTo);
-            var specificItem = await _itemdbaccess.GetSpecificItem(borrowRequest.SpecificItem);
+            var specificItem = await _itemdbaccess.GetSpecificItem(borrowRequest.SpecificItemId);
 
-            user.BorrowedItems.Remove(borrowRequest.SpecificItem);
+            user.BorrowedItems.Remove(borrowRequest.SpecificItemId);
             specificItem.BorrowedTo = null;
 
             await _userdbaccess.UpdateUser(user);
