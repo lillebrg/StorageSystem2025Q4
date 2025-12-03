@@ -1,4 +1,4 @@
-import { url } from "/services/apiurl.js";
+import { url } from "/services/config.js";
 
 export async function request(method, path, body = null, image = undefined) {
   let token = localStorage.getItem("token");
