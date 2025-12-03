@@ -252,6 +252,11 @@ namespace SwaggerRestApi.BusineesLogic
             sub.P256DH = subscription.P256dh;
             sub.Endpoint = subscription.Endpoint;
 
+            var subject = _configuration["Notification:Subject"];
+            var publicKey = _configuration["Notification:PublicKey"];
+            var privateKey = _configuration["Notification:PrivateKey"];
+            var vapidDetails = new VapidDetails(subject, publicKey, privateKey);
+
             var webPushClient = new WebPushClient();
             try
             {
