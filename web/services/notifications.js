@@ -79,8 +79,10 @@ async function subscribeToNotifications() {
 
     if (permission === "denied") return;
 
-    const registration = await navigator.serviceWorker.getRegistration()
-        || await navigator.serviceWorker.register("/services/worker.js");
+    if (!await navigator.serviceWorker.getRegistration())
+        await navigator.serviceWorker.register("/services/worker.js");
+
+    const registration = await navigator.serviceWorker.ready;
 
     if (await registration.pushManager.getSubscription()) {
         return;
