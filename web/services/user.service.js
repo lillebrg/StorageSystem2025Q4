@@ -61,8 +61,23 @@ export function login(email, password) {
   });
 }
 
-export function logout() {
+export async function logout() {
   localStorage.removeItem("token");
   localStorage.removeItem("role");
+
+  // Unsubscribe from notifications
+  if ("serviceWorker" in navigator && "PushManager" in window) {
+      const registration = await navigator.serviceWorker.getRegistration();
+
+      if (registration) {
+          const subscription = await registration.pushManager.getSubscription()
+
+          if (subscription)
+              await subscription.unsubscribe();
+
+          await registration.unregister();
+      }
+  }
+
   window.location.href = "/";
 }

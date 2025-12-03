@@ -262,7 +262,10 @@ namespace SwaggerRestApi.BusineesLogic
                 if (exception.StatusCode == (HttpStatusCode)410)
                 {
                     _notificationdbaccess.DeleteNotificationSubscription(subscription);
+                    return;
                 }
+
+                throw;
             }
         }
     }
