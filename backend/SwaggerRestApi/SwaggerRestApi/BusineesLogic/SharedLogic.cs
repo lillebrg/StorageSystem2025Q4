@@ -260,7 +260,7 @@ namespace SwaggerRestApi.BusineesLogic
             var webPushClient = new WebPushClient();
             try
             {
-                await webPushClient.SendNotificationAsync(sub, message);
+                await webPushClient.SendNotificationAsync(sub, message, vapidDetails);
             }
             catch (WebPushException exception)
             {
