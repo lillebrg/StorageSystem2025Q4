@@ -109,6 +109,8 @@ namespace SwaggerRestApi.BusineesLogic
 
             if (borrowRequest == null) { return new NotFoundObjectResult(new { message = "Could not find borrow request" }); }
 
+            if (borrowRequest.Accepted == true) { return new BadRequestObjectResult(new { message = "Borrow rquest is already accepted" }); }
+
             var user = await _userdbaccess.GetUser(borrowRequest.LoanTo);
             var specificItem = await _itemdbaccess.GetSpecificItem(borrowRequest.SpecificItem);
 

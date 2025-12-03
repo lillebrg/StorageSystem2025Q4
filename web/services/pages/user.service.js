@@ -53,3 +53,31 @@ export function updatePassword(id = null, current_password = null, new_password)
 export function deleteUser(id) {
   return request("DELETE", `/users/${id}`);
 }
+
+export function login(email, password) {
+  return request("POST", "/user/login", {
+    email,
+    password,
+  });
+}
+
+export async function logout() {
+  localStorage.removeItem("token");
+  localStorage.removeItem("role");
+
+  // Unsubscribe from notifications
+  if ("serviceWorker" in navigator && "PushManager" in window) {
+      const registration = await navigator.serviceWorker.getRegistration();
+
+      if (registration) {
+          const subscription = await registration.pushManager.getSubscription()
+
+          if (subscription)
+              await subscription.unsubscribe();
+
+          await registration.unregister();
+      }
+  }
+
+  window.location.href = "/";
+}
