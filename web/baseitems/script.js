@@ -54,7 +54,7 @@ function displayTable(data) {
          <tr data-id="${baseItem.id}">
             <td>${baseItem.name}</td>
             <td>${baseItem.description}</td>
-            <td><img src="${baseItem.image_url}" style="width: 100px;"/></td>
+            <td><img src="${baseItem.image_url || "/assets/images/placeholder.png"}" class="baseitem-image"/></td>
             <td>${baseItem.specific_items_count}</td>
             <td>${baseItem.specific_items_available_count}</td>
           </tr>`;
