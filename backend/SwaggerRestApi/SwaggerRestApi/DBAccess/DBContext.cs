@@ -63,6 +63,18 @@ namespace SwaggerRestApi.DBAccess
                 .HasForeignKey(r => r.BaseItemId)
                 .IsRequired();
 
+            modelBuilder.Entity<BorrowRequest>()
+                .HasOne(br => br.SpecificItem)
+                .WithMany()
+                .HasForeignKey(br => br.SpecificItemId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<BorrowRequest>()
+                .HasOne(br => br.User)
+                .WithMany()
+                .HasForeignKey(br => br.LoanTo)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<RefreshToken>()
                 .HasOne(rt => rt.User)
                 .WithMany()

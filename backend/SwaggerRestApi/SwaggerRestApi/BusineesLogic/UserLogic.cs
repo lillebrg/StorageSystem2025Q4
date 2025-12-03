@@ -342,7 +342,7 @@ namespace SwaggerRestApi.BusineesLogic
                     base_item = new BaseItemFromBorrowed(),
                     specific_item = new SpecificItemFromBorrowed()
                 };
-                var specificItem = await _itemdbaccess.GetSpecificItem(item.SpecificItem);
+                var specificItem = await _itemdbaccess.GetSpecificItem(item.SpecificItemId);
                 var baseItem = await _itemdbaccess.GetBaseItem(specificItem.BaseItemId);
 
                 borrowGet.base_item.id = baseItem.Id;

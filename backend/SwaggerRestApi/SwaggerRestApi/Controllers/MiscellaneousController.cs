@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using BarcodeStandard;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SkiaSharp;
 using SwaggerRestApi.BusineesLogic;
 using SwaggerRestApi.Models.DTO;
 using SwaggerRestApi.Models.DTO.Barcode;
@@ -70,6 +72,22 @@ namespace SwaggerRestApi.Controllers
         public async Task<ActionResult<ScannedBarcode>> GetBarcodeItem(string barcode)
         {
             return await _sharedlogic.GetScannedItem(barcode);
+        }
+
+        [HttpGet("/barcodes/generate")]
+        public async Task<ActionResult> GenerateBarcode(string barcode)
+        {
+            if (!barcode.All(char.IsDigit) || barcode.Length != 13) { return BadRequest("EAN-13 requires 13 numeric digits."); }
+
+            var b = new Barcode();
+            b.IncludeLabel = true;
+            SKImage img = b.Encode(BarcodeStandard.Type.Ean13, barcode, 300, 100);
+
+            var encoded = img.Encode();
+
+            Stream stream = encoded.AsStream();
+
+            return File(stream, "image/png");
         }
     }
 }

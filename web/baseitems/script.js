@@ -1,4 +1,10 @@
 import { create, getAll, uploadImage, scanBarcode } from "../services/pages/baseitem.service.js"
+//role
+const createBtn = document.getElementById("createBtn")
+if(localStorage.getItem("role") == "User"){
+  createBtn.style.display = "none"
+}
+
 //paginator
 let currentPage = 0;
 document.getElementById("pageBack").onclick = () =>{
@@ -47,13 +53,16 @@ function displayTable(data) {
     if (data.length <= 0) {
       getError.style.display = "block";
       getError.innerHTML = "No items in the system";
-      }
+      return;
+  } else {
+    getError.style.display = "none";
+  }
   data.forEach(baseItem => {
     table.innerHTML += `
          <tr data-id="${baseItem.id}">
             <td>${baseItem.name}</td>
             <td>${baseItem.description}</td>
-            <td><img src="${baseItem.image_url}" style="max-height: 80px; max-width: 80px;"/></td>
+            <td><img src="${baseItem.image_url || "/assets/images/placeholder.png"}" class="baseitem-image"/></td>
             <td>${baseItem.specific_items_count}</td>
             <td>${baseItem.specific_items_available_count}</td>
           </tr>`;
@@ -80,7 +89,7 @@ let shelfBarcodeInput = document.getElementById("shelfBarcode");
 const createError = document.getElementById("createError");
 createError.style.display = "none";
 
-document.getElementById("createBtn").onclick = () => {
+createBtn.onclick = () => {
   createModal.style.display = "block";
   nameInput.value = "";
   descriptionInput.value = "";

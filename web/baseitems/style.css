@@ -20,3 +20,8 @@
   background-color: #a885eb;
     cursor: pointer;
 }
+
+.baseitem-image {
+  width: 100px;
+  border-radius: 0.25rem;
+}

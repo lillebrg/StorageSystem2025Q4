@@ -1,5 +1,4 @@
-import { url } from "/services/apiurl.js";
-import { refreshAuthToken } from "./auth.js";
+import { url } from "/services/config.js";
 
 export async function request(
   method,

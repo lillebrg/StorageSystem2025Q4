@@ -1,4 +1,5 @@
 import { request } from "./api.js";
+import { vapidPublicKey } from "./config.js";
 
 window.addEventListener("load", () => {
     if ("serviceWorker" in navigator && "PushManager" in window && localStorage.getItem("token")) {
@@ -78,14 +79,19 @@ async function subscribeToNotifications() {
 
     if (permission === "denied") return;
 
-    const registration = await navigator.serviceWorker.getRegistration()
-        || await navigator.serviceWorker.register("/services/worker.js");
+    if (!await navigator.serviceWorker.getRegistration())
+        await navigator.serviceWorker.register("/service-worker.js");
+
+    const registration = await navigator.serviceWorker.ready;
 
     if (await registration.pushManager.getSubscription()) {
         return;
     }
 
-    const subscription = await registration.pushManager.subscribe();
+    const subscription = await registration.pushManager.subscribe({
+        applicationServerKey: vapidPublicKey,
+        userVisibleOnly: true,
+    });
 
     await request("POST", "/notifications/subscribe", {
         endpoint: subscription.endpoint,
