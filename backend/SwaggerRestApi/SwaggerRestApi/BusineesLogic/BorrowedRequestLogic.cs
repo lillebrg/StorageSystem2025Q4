@@ -149,14 +149,19 @@ namespace SwaggerRestApi.BusineesLogic
 
             if (borrowRequest == null || borrowRequest.Accepted == true) { return new NotFoundObjectResult(new { message = "Could not find borrow request" }); }
 
+            var rejectedBy = await _userdbaccess.GetUser(userId);
+            if (rejectedBy.Role == "User" && rejectedBy.Id != borrowRequest.LoanTo)
+            {
+                return new NotFoundObjectResult(new { message = "Could not find borrow request" });
+            }
+
             await _borrowedbaccess.DeleteBorrowRequest(borrowRequest);
 
-            var acceptedBy = await _userdbaccess.GetUser(userId);
             var specificItemAndBaseItem = await _itemdbaccess.GetSpecificItemAndBaseItem(borrowRequest.SpecificItem);
             Notifications notification = new Notifications
             {
                 SentBy = userId,
-                Message = $"Your borrow request for {specificItemAndBaseItem.BaseItem.Name} was rejected by {acceptedBy.Name}",
+                Message = $"Your borrow request for {specificItemAndBaseItem.BaseItem.Name} was rejected by {rejectedBy.Name}",
                 SentTo = borrowRequest.LoanTo
             };
 
