@@ -1,4 +1,4 @@
-import { get, update, deleteShelf, downloadBarcode } from "../services/pages/shelves.service.js";
+import { get, update, deleteShelf } from "../services/pages/shelves.service.js";
 import { create, uploadImage} from "../services/pages/baseitem.service.js";
 import { url } from "../../services/config.js";
 
@@ -157,16 +157,7 @@ async function handleUserDelete(event) {
 }
 
 //download barcode
-document.getElementById("downloadBtn").onclick = () => {
-    downloadBarcode(shelfBarcode)
-    .then((response) => console.log(response))
-    .catch((error) => {
-      getError.style.display = "block";
-      getError.innerText = error;
-    });
-}
-
-
+document.getElementById("downloadRedirect").href = `${url}/barcodes/generate?barcode=${shelfBarcode}` 
 
 // Close modals when clicking on any close button
 document.querySelectorAll(".closeModal").forEach((closeBtn) => {

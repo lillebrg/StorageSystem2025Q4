@@ -59,7 +59,7 @@ function displayTable(data) {
   // Build all rows
   data.specific_items.forEach((item) => {
     table.innerHTML += `
-      <tr data-id="${item.id}" data-description="${item.description}">
+      <tr data-id="${item.id}" data-description="${item.description}" data-loanedto="${item.loaned_to == null ? null : item.loaned_to.name}">
         <td>${item.id}</td>
         <td><img src="${url}/barcodes/generate?barcode=${item.barcode}" style="width: 100px;"/></td>
         <td>${item.description}</td>
@@ -93,6 +93,9 @@ async function submitBorrowRequest(event) {
 
 document.querySelectorAll("#tBody tr").forEach((row) => {
   row.addEventListener("click", () => {
+    if(row.dataset.loanedto != "null"){
+      return
+    }
     specificItemId = row.dataset.id;
     document.getElementById(
       "borrowTitle"
