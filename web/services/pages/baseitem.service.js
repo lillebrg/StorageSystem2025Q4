@@ -22,8 +22,6 @@ export function create(name, description, barcode, image_path = null, shelf_id) 
 }
 
 export function update(id, name, description, barcode, image_path = "", shelf_id) {
-      console.log(image_path)
-
   return request("PUT", `/base-items/${id}`, {
     name,
     description,
