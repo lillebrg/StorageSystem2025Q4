@@ -157,7 +157,7 @@ async function handleUserDelete(event) {
 }
 
 //download barcode
-document.getElementById("downloadRedirect").href = `${url}/barcodes/generate?barcode=${shelfBarcode}` 
+document.getElementById("downloadRedirect").href = `${url}/barcodes/generate?barcode=${shelfBarcode}`;
 
 // Close modals when clicking on any close button
 document.querySelectorAll(".closeModal").forEach((closeBtn) => {

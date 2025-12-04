@@ -72,6 +72,10 @@ function displayTable(data) {
         <button class="button delete-btn" style="display: none">
           <i class="fa fa-trash"></i>
         </button>
+            <a download="barcode.png" class="downloadRedirect" target="_blank">
+              <button class="button">
+                <i class="fa fa-download"></i></button
+            ></a>
       </td>
     `;
 
@@ -83,6 +87,8 @@ function displayTable(data) {
         deleteSpecificModal.style.display = "block"
       };
     }
+      row.querySelector(".downloadRedirect").style.display = "inline-block";
+      row.querySelector(".downloadRedirect").href = `${url}/barcodes/generate?barcode=${shelfBarcode}`;
 
     row.querySelector(".borrow-btn").onclick = () => {
 			 if(item.loaned_to.name != null){
