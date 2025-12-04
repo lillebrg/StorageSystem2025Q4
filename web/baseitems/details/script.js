@@ -70,22 +70,27 @@ function displayTable(data) {
         <button class="button borrow-btn">
           Borrow
         </button>
-        <button class="button delete-btn">
+        <button class="button delete-btn" style="display: none">
           <i class="fa fa-trash"></i> Delete
         </button>
       </td>
     `;
 
-    row.querySelector(".delete-btn").onclick = async () => {
-      if (!confirm("Are you sure you want to delete this item?")) return;
+    const role = localStorage.getItem("role");
+    if (["Operator", "Admin"].includes(role)) {
+      row.querySelector(".delete-btn").style.display = "inline-block";
 
-      await deleteSpecificItem(item.id);
+      row.querySelector(".delete-btn").onclick = async () => {
+        if (!confirm("Are you sure you want to delete this item?")) return;
 
-      const newData = Object.assign({}, data); // Clone data into new object
-      newData.specific_items = data.specific_items.filter(it => it.id !== item.id);
+        await deleteSpecificItem(item.id);
 
-      displayTable(newData);
-    };
+        const newData = Object.assign({}, data); // Clone data into new object
+        newData.specific_items = data.specific_items.filter(it => it.id !== item.id);
+
+        displayTable(newData);
+      };
+    }
 
     row.querySelector(".borrow-btn").onclick = () => {
       specificItemId = item.id;
