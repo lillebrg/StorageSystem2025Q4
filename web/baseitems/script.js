@@ -125,7 +125,7 @@ try {
     nameInput.value,
     descriptionInput.value,
     barcodeInput.value,
-    savedFileName.path,
+    savedFileName,
     shelf
   );
 
