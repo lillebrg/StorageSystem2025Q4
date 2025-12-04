@@ -155,7 +155,7 @@ namespace SwaggerRestApi.BusineesLogic
 
             await _borrowedbaccess.DeleteBorrowRequest(borrowRequest);
 
-            var specificItemAndBaseItem = await _itemdbaccess.GetSpecificItemAndBaseItem(borrowRequest.SpecificItem);
+            var specificItemAndBaseItem = await _itemdbaccess.GetSpecificItemAndBaseItem(borrowRequest.SpecificItemId);
             Notifications notification = new Notifications
             {
                 SentBy = userId,
