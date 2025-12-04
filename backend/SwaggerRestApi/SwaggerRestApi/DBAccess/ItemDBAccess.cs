@@ -33,7 +33,7 @@ namespace SwaggerRestApi.DBAccess
         public async Task<List<BaseItem>> GetAllBaseItems(int limit, int offset, string search)
         {
             var items = await _context.BaseItems.Include(b => b.SpecificItems)
-                .Where(b => b.Name.Contains(search))
+                .Where(b => b.Name.ToLower().Contains(search.ToLower()))
                 .OrderBy(b => b.Name).Skip(offset)
                 .Take(limit).ToListAsync();
 
