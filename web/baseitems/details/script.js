@@ -68,7 +68,7 @@ function displayTable(data) {
       <td>${item.loaned_to == null ? "" : item.loaned_to.name}</td>
       <td>
         <button class="button borrow-btn">
-          Borrow
+          <i class="fa fa-handshake"></i> Borrow
         </button>
         <button class="button delete-btn" style="display: none">
           <i class="fa fa-trash"></i> Delete
