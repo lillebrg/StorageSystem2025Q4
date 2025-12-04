@@ -1,5 +1,3 @@
-console.log("Ready");
-
 self.addEventListener("push", event => {
     const message = event.data.text();
 

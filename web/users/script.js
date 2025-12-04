@@ -1,16 +1,27 @@
-import { create, getAll } from "../services/user.service.js";
+import { create, getAll } from "../services/pages/user.service.js";
+
+let getError = document.getElementById("getError");
+getError.style.display = "none";
 
 await getAll()
   .then((data) => displayTable(data))
   .catch((error) => {
-    console.log(error);
+    getError.style.display = "block";
+    getError.color = "red";
+    getError.innerHTML = error;
   });
 
 function displayTable(data) {
   let table = document.getElementById("tBody");
   table.innerHTML = ""; // clear old table
-
-  data.forEach(user => {
+  if (data.length <= 0) {
+    getError.style.display = "block";
+    getError.innerHTML = "No users in the system";
+    return;
+  } else {
+    getError.style.display = "none";
+  }
+  data.forEach((user) => {
     table.innerHTML += `
          <tr data-id="${user.id}">
             <td>${user.name}</td>
@@ -18,7 +29,7 @@ function displayTable(data) {
             <td>${user.role}</td>
             <td>${user.borrowed_items}</td>
           </tr>`;
-  })
+  });
 
   document.querySelectorAll("#tBody tr").forEach((row) => {
     row.addEventListener("click", () => {
@@ -29,32 +40,28 @@ function displayTable(data) {
 }
 
 //create User
-const createUserModal = document.getElementById("createUserModal");
+const createModal = document.getElementById("createModal");
 let nameInput = document.getElementById("name");
 let emailInput = document.getElementById("email");
 let passwordInput = document.getElementById("password");
 let roleInput = document.getElementById("role");
-let createUserError = document.getElementById("createUserError");
-createUserError.style.display = "none";
+const createError = document.getElementById("createError");
+createError.style.display = "none";
 
-document.getElementById("createUserBtn").onclick = () => {
-  createUserModal.style.display = "block";
+document.getElementById("createBtn").onclick = () => {
+  createModal.style.display = "block";
   nameInput.value = "";
   emailInput.value = "";
   passwordInput.value = "";
   roleInput.value = "";
 };
 
-document.getElementById("closeCreateUserBtn").onclick = () => {
-  createUserModal.style.display = "none";
-};
+const createForm = document.getElementById("createForm");
+createForm.addEventListener("submit", handleCreate);
 
-const createUserForm = document.getElementById("createUserForm");
-createUserForm.addEventListener("submit", handleCreateUser);
-
-async function handleCreateUser(event) {
+async function handleCreate(event) {
   event.preventDefault();
-  if (!createUserForm.reportValidity()) {
+  if (!createForm.reportValidity()) {
     return;
   }
 
@@ -63,10 +70,17 @@ async function handleCreateUser(event) {
   const password = passwordInput.value;
   const role = roleInput.value;
 
- await create(name, email, password, role)
+  await create(name, email, password, role)
     .then(() => location.reload())
     .catch((error) => {
-      createUserError.style.display = "block";
-      createUserError.innerText = error;
+      createError.style.display = "block";
+      createError.innerText = error;
     });
 }
+
+// Close modals when clicking on any close button
+document.querySelectorAll(".closeModal").forEach((closeBtn) => {
+  closeBtn.onclick = () => {
+    createModal.style.display = "none";
+  };
+});

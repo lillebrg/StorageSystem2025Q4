@@ -1,4 +1,4 @@
-import { create, getAll } from "../services/storage.service.js";
+import { create, getAll } from "../services/pages/storage.service.js";
 
 let getError = document.getElementById("getError");
 getError.style.display = "none";
@@ -17,6 +17,9 @@ function displayTable(data) {
     if (data.length <= 0) {
     getError.style.display = "block";
     getError.innerHTML = "No storages";
+    return;
+  } else {
+    getError.style.display = "none";
   }
 
     data.forEach(item => {
@@ -34,9 +37,9 @@ function displayTable(data) {
 }
 
 //create Storage
-let createModal = document.getElementById("createModal");
+const createModal = document.getElementById("createModal");
 let nameInput = document.getElementById("name");
-let createError = document.getElementById("createError");
+const createError = document.getElementById("createError");
 createError.style.display = "none";
 
 document.getElementById("createBtn").onclick = () => {

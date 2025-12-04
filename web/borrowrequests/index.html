@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Storage System</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="../baseitems/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+
+    <script src="/services/checklogin.js"></script>
+    <script src="/components/alert.js"></script>
+    <script src="/components/menu.js"></script>
+    <script type="module" src="/borrowrequests/script.js"></script>
+  </head>
+  <body>
+    <menu-nav></menu-nav>
+    <div class="container">
+        <div class="toolBar">
+          <div style="width: 33.33%; display: flex; justify-content: start">
+            <div class="input-container">
+              <select  class="select" name="showAccepted" id="showAccepted">
+                <option value="" selected disabled>Show...</option>
+                <option value="notHandled">Not handled yet</option>
+                <option value="accepted">Accepted</option>
+              </select>
+            </div>
+          </div>
+          <div style="width: 33.33%; justify-content: center">
+            <h2 class="tableTitle">All Borrow Requests</h2>
+          </div>
+          <div style="width: 33.33%; display: flex; justify-content: end"></div>
+        </div>
+      <table class="responsive-table">
+        <thead>
+          <tr>
+            <th scope="col">From</th>
+            <th scope="col">Item</th>
+            <th scope="col">Image</th>
+            <th scope="col">Specific Item Description</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody id="tBody"></tbody>
+      </table>
+      <my-alert id="getError" color="#7d2ae8"></my-alert>
+
+      <div id="reviewModal" class="modal">
+        <form class="form modalContent" id="reviewForm">
+          <span class="closeModal">&times;</span>
+          <p class="form-title" id="borrowTitle"></p>
+          <img id="reviewImg" style="max-height: 200px; max-width: 200px" />
+          <my-alert id="reviewError" color="red"></my-alert>
+          <div style="display: flex; justify-content: center">
+            <button
+              class="button submit"
+              style="margin-top: 10px; background-color: darkred"
+              id="rejectRequestBtn"
+            >
+              Reject
+            </button>
+            <button
+              class="button submit"
+              id="acceptRequestBtn"
+              style="margin-top: 10px"
+            >
+              Accept
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,4 +1,4 @@
-import { request } from "./api.js";
+import { request } from "../api.js";
 
 export function get(id = null) {
   if (id) {
@@ -10,6 +10,10 @@ export function get(id = null) {
 
 export function getAll() {
   return request("GET", `/users`);
+}
+
+export function getBorrowRequests() {
+  return request("GET", `/user/borrow-requests`);
 }
 
 export function create(name, email, password, role) {
@@ -43,7 +47,7 @@ export function updatePassword(id = null, current_password = null, new_password)
       new_password,
     });
   } else {
-    return request("POST", "/user", {
+    return request("POST", "/user/change-password", {
       current_password,
       new_password,
     });

@@ -1,11 +1,20 @@
 import { url } from "/services/config.js";
+import { refreshAuthToken } from "./auth.js";
 
-export async function request(method, path, body = null, image = undefined) {
+export async function request(
+  method,
+  path,
+  body = null,
+  image = undefined,
+  canRetry = true
+) {
   let token = localStorage.getItem("token");
-  const headers = {};
-  headers["Authorization"] = `Bearer ${token}`;
 
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
   if (body) headers["Content-Type"] = "application/json";
+
   return new Promise((resolve, reject) => {
     fetch(url + path, {
       method,
@@ -13,51 +22,36 @@ export async function request(method, path, body = null, image = undefined) {
       body: body ? JSON.stringify(body) : image,
     })
       .then(async (response) => {
-        try {
 
-          if (response.status == 401) console.log(response.status);
-          
-          const json = await response.json();
+        // ---------- 401 HANDLING ----------
+        if (response.status === 401) {
+          if (canRetry) {
+            try {
+              await refreshAuthToken();
 
-          if (response.ok) return resolve(json);
+              // Return the RETRY result!
+              return resolve(
+                await request(method, path, body, image, false)
+              );
+            } catch {
+              return window.location.href = "/";
+            }
+          }
 
-          if (json.error) return reject(json.error);
-
-          if (json.message) return reject(json.message);
-
-          if (json.title) return reject(json.title);
-
-          if (json.errors) return reject(Object.values(json.errors)[0][0]);
-        } finally {
-          reject("Request failed with HTTP code " + response.status);
-        }
-      })
-      .catch((err) => reject(err.message));
-  });
-}
-
-//TODO, implement requestupload inside the normal request, just make it a nullable value and then go from there
-export async function requestUploadImage(image) {
-  const token = localStorage.getItem("token");
-  const headers = {
-    "Authorization": `Bearer ${token}`,
-  };
-
-  return new Promise((resolve, reject) => {
-    fetch(url + "/images", {
-      method: "POST",
-      headers,
-      body: image,
-    })
-      .then(async (response) => {
-        if (!response.ok) {
-          reject("Request failed with HTTP code " + response.status);
-          return;
+          return window.location.href = "/";
         }
 
-        // If the backend returns a plain string
-        const text = await response.text();
-        resolve(text);
+        // ---------- NORMAL RESPONSE ----------
+        const json = await response.json();
+
+        if (response.ok) return resolve(json);
+
+        if (json.error) return reject(json.error);
+        if (json.message) return reject(json.message);
+        if (json.title) return reject(json.title);
+        if (json.errors) return reject(Object.values(json.errors)[0][0]);
+
+        reject("HTTP " + response.status);
       })
       .catch((err) => reject(err.message));
   });

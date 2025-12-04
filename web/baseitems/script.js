@@ -1,4 +1,9 @@
-import { create, getAll, uploadImage } from "../services/baseitem.service.js";
+import { create, getAll, uploadImage, scanBarcode } from "../services/pages/baseitem.service.js"
+//role
+const createBtn = document.getElementById("createBtn")
+if(localStorage.getItem("role") == "User"){
+  createBtn.style.display = "none"
+}
 
 //paginator
 let currentPage = 0;
@@ -6,7 +11,6 @@ document.getElementById("pageBack").onclick = () =>{
    if(currentPage >= 1){
     currentPage -= 1;
    }
-    console.log(currentPage)
     getItems();
 };
 
@@ -41,6 +45,7 @@ await getAll(10, 10 * currentPage, search)
     getError.color = "red";
     getError.innerHTML = error;
   });
+}
 
 function displayTable(data) {
   let table = document.getElementById("tBody");
@@ -48,7 +53,10 @@ function displayTable(data) {
     if (data.length <= 0) {
       getError.style.display = "block";
       getError.innerHTML = "No items in the system";
-      }
+      return;
+  } else {
+    getError.style.display = "none";
+  }
   data.forEach(baseItem => {
     table.innerHTML += `
          <tr data-id="${baseItem.id}">
@@ -64,30 +72,30 @@ function displayTable(data) {
   document.querySelectorAll("#tBody tr").forEach((row) => {
     row.addEventListener("click", () => {
       const id = row.dataset.id;
-      window.location.href = "/users/details/?id=" + id;
+      window.location.href = "/baseitems/details/?id=" + id;
     });
   });
 }
-}
-
-
 
 //create baseItem
-let createModal = document.getElementById("createModal");
+const createModal = document.getElementById("createModal");
 let nameInput = document.getElementById("name");
 let descriptionInput = document.getElementById("description");
 let imageInput = document.getElementById("image");
 let barcodeInput = document.getElementById("barcode");
+let shelfBarcodeInput = document.getElementById("shelfBarcode");
 
-let createError = document.getElementById("createError");
+
+const createError = document.getElementById("createError");
 createError.style.display = "none";
 
-document.getElementById("createBtn").onclick = () => {
+createBtn.onclick = () => {
   createModal.style.display = "block";
   nameInput.value = "";
   descriptionInput.value = "";
   imageInput.value = "";
   barcodeInput.value = "";
+  shelfBarcodeInput.value = "";
 };
 
 const createForm = document.getElementById("createForm");
@@ -99,9 +107,16 @@ async function handleCreate(event) {
     return;
   }
 
-let savedFileName = null;
+
+  let shelf;
+  let savedFileName;
 
 try {
+  if(shelfBarcodeInput.value != ""){
+    let response = await scanBarcode(shelfBarcodeInput.value);
+    shelf = response.shelf.id
+  }
+
   if (imageInput.files.length > 0) {
     savedFileName = await uploadImage(imageInput.files[0]);
   }
@@ -110,8 +125,8 @@ try {
     nameInput.value,
     descriptionInput.value,
     barcodeInput.value,
-    savedFileName.path
-
+    savedFileName,
+    shelf
   );
 
   window.location.reload();

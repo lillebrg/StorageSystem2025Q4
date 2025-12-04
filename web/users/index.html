@@ -11,24 +11,30 @@
     />
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     />
+
     <script src="/services/checklogin.js"></script>
     <script src="/components/menu.js"></script>
     <script src="/components/alert.js"></script>
     <script type="module" src="/users/script.js"></script>
-
   </head>
   <body>
-      <menu-nav></menu-nav>
+    <menu-nav></menu-nav>
     <div class="container">
       <table class="responsive-table">
-        <h2 class="tableTitle">All Users</h2>
         <div class="toolBar">
-          <input class="input" placeholder="Search...">
-          <button class="button" id="createUserBtn">
-            <i class="fa fa-plus"></i>
-          </button>
+          <div
+            style="width: 33.33%; display: flex; justify-content: start"
+          ></div>
+          <div style="width: 33.33%; justify-content: center">
+            <h2 class="tableTitle">All Users</h2>
+          </div>
+          <div style="width: 33.33%; display: flex; justify-content: end">
+            <button class="button" id="createBtn">
+              <i class="fa fa-plus"></i>
+            </button>
+          </div>
         </div>
         <thead>
           <tr>
@@ -38,19 +44,12 @@
             <th scope="col">Borrowed Items</th>
           </tr>
         </thead>
-        <tbody id="tBody">
-           <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-        </tbody>
+        <tbody id="tBody"></tbody>
       </table>
-
-      <div id="createUserModal" class="modal">
-        <form class="form modalContent" id="createUserForm">
-          <span class="closeModal" id="closeCreateUserBtn">&times;</span>
+      <my-alert id="getError" color="#9a03e4"></my-alert>
+      <div id="createModal" class="modal">
+        <form class="form modalContent" id="createForm">
+          <span class="closeModal">&times;</span>
           <p class="form-title">Create User</p>
           <div class="input-container">
             <input placeholder="Enter name" id="name" required />
@@ -68,14 +67,14 @@
           </div>
           <div class="input-container">
             <select name="role" id="role" required>
-              <option value=""selected disabled>Select Role...</option>
-              <option value="Admin" >Admin</option>
+              <option value="" selected disabled>Select Role...</option>
+              <option value="Admin">Admin</option>
               <option value="Operator">Operator</option>
               <option value="User">User</option>
             </select>
           </div>
-          <my-alert id="createUserError" color="red"></my-alert>
-          <button class="button submit" type="submit">Create user</button>
+          <my-alert id="createError" color="red"></my-alert>
+          <button class="button submit" type="submit">Create</button>
         </form>
       </div>
     </div>

@@ -16,17 +16,16 @@
     <script type="module" src="/users/details/script.js"></script>
   </head>
   <body>
-  <menu-nav></menu-nav>
+    <menu-nav></menu-nav>
     <div class="container">
-    <my-alert id="getUserDetailsError" color="red"></my-alert>
       <div class="componentContainer">
-        <my-alert id="getUserError" color="red"></my-alert>
         <div class="card" id="profileCard"></div>
         <div class="table">
           <table class="responsive-table">
+          <h4 style="margin: 0">Borrowed Items</h4>
             <thead>
               <tr>
-                <th scope="col">Id</th>
+                <th scope="col">ID</th>
                 <th scope="col">Name</th>
                 <th scope="col">ItemDescription</th>
                 <th scope="col">Image</th>
@@ -34,14 +33,14 @@
             </thead>
             <tbody id="tBody"></tbody>
           </table>
-          <my-alert id="noItemsBorrowed" color="#7d2ae8">No items borrowed</my-alert>
+          <my-alert id="getError" color="#7d2ae8"></my-alert>
         </div>
       </div>
-
       <div id="deleteUserModal" class="modal">
         <form class="form modalContent" id="userDeleteForm">
           <span class="closeModal">&times;</span>
           <p class="form-title">Are you sure you want to delete this user?</p>
+          <my-alert id="deleteError" color="#7d2ae8"></my-alert>
           <button
             class="button submit"
             style="margin-top: 10px; background-color: darkred"
@@ -74,6 +73,7 @@
             <label for="cponl">Change password on next logon</label><br />
             <input type="checkbox" id="cponl" />
           </div>
+          <my-alert id="editError" color="#7d2ae8"></my-alert>
           <button class="button submit" type="submit">Save changes</button>
         </form>
       </div>
@@ -82,7 +82,7 @@
         <form class="form modalContent" id="changePasswordForm">
           <span class="closeModal">&times;</span>
           <p class="form-title">Reset Users Password</p>
-          <p>The user will be asked to change password on next logon</p>
+          <p>The user will be asked to Change Password on next logon</p>
           <div class="input-container">
             <input
               placeholder="Users new temporary password"
@@ -92,11 +92,23 @@
             />
           </div>
           <my-alert id="changePasswordError" color="red"></my-alert>
-          <button class="button submit" type="submit">
-            Reset Password
+          <button class="button submit" type="submit">Reset Password</button>
+        </form>
+      </div>
+
+      <div id="returnModal" class="modal">
+        <form class="form modalContent" id="returnForm">
+          <span class="closeModal">&times;</span>
+          <p class="form-title" id="borrowTitle"></p>
+          <p id="returnDescription"></p>
+          <img id="reviewImg" style="max-height: 200px; max-width: 200px" />
+          <my-alert id="returnError" color="red"></my-alert>
+          <button class="button submit" style="margin-top: 10px" type="submit">
+            Return item
           </button>
         </form>
       </div>
+    </div>
     </div>
   </body>
 </html>

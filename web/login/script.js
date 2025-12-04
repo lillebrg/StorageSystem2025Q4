@@ -1,12 +1,13 @@
-import { login, updatePassword } from "../services/user.service.js";
+import { login } from "../services/auth.js";
+import { updatePassword } from "../services/pages/user.service.js";
 
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 
 const loginForm = document.getElementById("loginForm");
 loginForm.addEventListener("submit", handleLogin);
-let loginAlert = document.getElementById("loginError");
-loginAlert.style.display = "none";
+let loginError = document.getElementById("loginError");
+loginError.style.display = "none";
 
 const newPasswordForm = document.getElementById("newPasswordForm");
 newPasswordForm.addEventListener("submit", handleNewPassword);
@@ -25,8 +26,8 @@ async function handleLogin(event) {
 
   await login(email, password)
     .then((response) => {
-      console.log(response);
       localStorage.setItem("token", response.access_token);
+      localStorage.setItem("refreshToken", response.refresh_token);
       localStorage.setItem("role", response.role);
       if (response.change_password_on_next_login) {
         let changePasswordModal = document.getElementById("changePasswordModal"
@@ -38,8 +39,8 @@ async function handleLogin(event) {
       }
     })
     .catch((error) => {
-      loginAlert.style.display = "block";
-      loginAlert.innerText = error;
+      loginError.style.display = "block";
+      loginError.innerText = error;
     });
 }
 

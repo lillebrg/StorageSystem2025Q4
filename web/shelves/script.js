@@ -1,7 +1,9 @@
-import { get, update, deleteShelf } from "../services/shelves.service.js";
-import { create, uploadImage} from "../services/baseitem.service.js";
+import { get, update, deleteShelf } from "../services/pages/shelves.service.js";
+import { create, uploadImage} from "../services/pages/baseitem.service.js";
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
+const rackId = params.get("rackId");
+const storageId = params.get("storageId");
 
 let getError = document.getElementById("getError");
 getError.style.display = "none";
@@ -12,6 +14,8 @@ await get(id)
   .then((data) => {
     shelf_no = data.shelf_no;
     document.getElementById("tableTitle").innerHTML = "Shelf: " + data.shelf_no;
+    document.getElementById("shelfBarcode").innerHTML = data.barcode;
+
     displayTable(data.base_items);
   })
   .catch((error) => {
@@ -34,20 +38,28 @@ function displayTable(data) {
          <tr data-id="${baseItem.id}">
             <td>${baseItem.name}</td>
             <td>${baseItem.description}</td>
+            <td>${baseItem.barcode}</td>
             <td><img src="${baseItem.image_url}" style="width: 100px;"/></td>
             <td>${baseItem.specific_items_count}</td>
             <td>${baseItem.specific_items_available_count}</td>
           </tr>`;
   });
+
+    document.querySelectorAll("#tBody tr").forEach((row) => {
+    row.addEventListener("click", () => {
+      const id = row.dataset.id;
+      window.location.href = "/baseitems/details/?id=" + id;
+    });
+  });
 }
 //create baseItem
-let createModal = document.getElementById("createModal");
+const createModal = document.getElementById("createModal");
 let nameInput = document.getElementById("name");
 let descriptionInput = document.getElementById("description");
 let imageInput = document.getElementById("image");
 let barcodeInput = document.getElementById("barcode");
 
-let createError = document.getElementById("createError");
+const createError = document.getElementById("createError");
 createError.style.display = "none";
 
 document.getElementById("createBtn").onclick = () => {
@@ -89,7 +101,7 @@ async function handleCreate(event) {
   }
 }
 
-//Create shelf
+//update shelf
 let updateModal = document.getElementById("updateModal");
 let shelf_noInput = document.getElementById("shelf_no");
 
@@ -102,9 +114,9 @@ document.getElementById("updateBtn").onclick = () => {
 };
 
 const updateForm = document.getElementById("updateForm");
-updateForm.addEventListener("submit", submitCreate);
+updateForm.addEventListener("submit", submitUpdate);
 
-async function submitCreate(event) {
+async function submitUpdate(event) {
   event.preventDefault();
   if (!updateForm.reportValidity()) {
     return;
@@ -113,16 +125,19 @@ async function submitCreate(event) {
   update(id, shelf_noInput.value)
     .then(() => window.location.reload())
     .catch((error) => {
-      createError.style.display = "block";
-      createError.innerText = error;
+      updateError.style.display = "block";
+      updateError.innerText = error;
     });
 }
 
 //delete shelf
-let deleteForm = document.getElementById("deleteForm");
+const deleteForm = document.getElementById("deleteForm");
 deleteForm.addEventListener("submit", handleUserDelete);
 
-let deleteModal = document.getElementById("deleteModal");
+const deleteError = document.getElementById("deleteError");
+deleteError.style.display = "none";
+
+const deleteModal = document.getElementById("deleteModal");
 document.getElementById("deleteBtn").onclick = () =>
   (deleteModal.style.display = "block");
 async function handleUserDelete(event) {
@@ -131,9 +146,10 @@ async function handleUserDelete(event) {
     return;
   }
   deleteShelf(id)
-    .then(() => (window.location.href = "/storages"))
+    .then(() => goBack())
     .catch((error) => {
-      console.log(error);
+      deleteError.style.display = "block";
+      deleteError.innerText = error;
     });
 }
 
@@ -145,3 +161,10 @@ document.querySelectorAll(".closeModal").forEach((closeBtn) => {
     deleteModal.style.display = "none";
   };
 });
+
+//go back btn
+document.getElementById("backBtn").onclick = () => {goBack();};
+
+function goBack() {
+  window.location.href = `/racks/?id=${rackId}&storageId=${storageId}`
+}
