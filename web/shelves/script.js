@@ -1,5 +1,7 @@
 import { get, update, deleteShelf } from "../services/pages/shelves.service.js";
 import { create, uploadImage} from "../services/pages/baseitem.service.js";
+import { url } from "../../services/config.js";
+
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 const rackId = params.get("rackId");
@@ -9,12 +11,14 @@ let getError = document.getElementById("getError");
 getError.style.display = "none";
 
 let shelf_no;
+let shelfBarcode
 
 await get(id)
   .then((data) => {
     shelf_no = data.shelf_no;
+    shelfBarcode = data.barcode;
     document.getElementById("tableTitle").innerHTML = "Shelf: " + data.shelf_no;
-    document.getElementById("shelfBarcode").innerHTML = data.barcode;
+    document.getElementById("shelfBarcode").src = `${url}/barcodes/generate?barcode=${data.barcode}`;
 
     displayTable(data.base_items);
   })
@@ -29,7 +33,7 @@ function displayTable(data) {
   table.innerHTML = ""; // clear old table
   if(data.length <= 0){
     getError.style.display = "block";
-    getError.innerHTML = "Rack is empty";
+    getError.innerHTML = "Shelf is empty";
   }
 
   
@@ -38,8 +42,7 @@ function displayTable(data) {
          <tr data-id="${baseItem.id}">
             <td>${baseItem.name}</td>
             <td>${baseItem.description}</td>
-            <td>${baseItem.barcode}</td>
-            <td><img src="${baseItem.image_url}" style="width: 100px;"/></td>
+            <td><img src="${baseItem.image_url || "/assets/images/placeholder.png"}" width=100px/></td>
             <td>${baseItem.specific_items_count}</td>
             <td>${baseItem.specific_items_available_count}</td>
           </tr>`;
@@ -102,7 +105,7 @@ async function handleCreate(event) {
 }
 
 //update shelf
-let updateModal = document.getElementById("updateModal");
+const updateModal = document.getElementById("updateModal");
 let shelf_noInput = document.getElementById("shelf_no");
 
 let updateError = document.getElementById("updateError");
@@ -152,6 +155,9 @@ async function handleUserDelete(event) {
       deleteError.innerText = error;
     });
 }
+
+//download barcode
+document.getElementById("downloadRedirect").href = `${url}/barcodes/generate?barcode=${shelfBarcode}` 
 
 // Close modals when clicking on any close button
 document.querySelectorAll(".closeModal").forEach((closeBtn) => {

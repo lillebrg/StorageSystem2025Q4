@@ -7,6 +7,7 @@ import {
 } from "../../services/pages/baseitem.service.js";
 import { create, deleteSpecificItem } from "../../services/pages/specificitem.service.js";
 import { createBorrowRequest } from "../../services/pages/borrowrequest.service.js";
+import { url } from "../../services/config.js";
 
 //role
 const createBtn = document.getElementById("createBtn");
@@ -58,12 +59,10 @@ function displayTable(data) {
   // Build all rows
   data.specific_items.forEach((item) => {
     const row = document.createElement("tr");
-    row.dataset.id = item.id
-    row.dataset.description = item.description;
 
     row.innerHTML = `
       <td>${item.id}</td>
-      <td>${item.barcode}</td>
+      <td><img src="${url}/barcodes/generate?barcode=${item.barcode}" style="width: 100px;"/></td>
       <td style="text-align: left">${item.description ?? ""}</td>
       <td>${item.loaned_to == null ? "" : item.loaned_to.name}</td>
       <td>
@@ -86,9 +85,12 @@ function displayTable(data) {
     }
 
     row.querySelector(".borrow-btn").onclick = () => {
+			 if(item.loaned_to.name != null){
+      	return
+    	}
       specificItemId = item.id;
       document.getElementById("borrowTitle").innerHTML = `Do you want to send a borrow request for item "${name}"?`;
-      document.getElementById("borrowDescription").innerHTML = row.dataset.description;
+      document.getElementById("borrowDescription").innerHTML = item.description;
       borrowModal.style.display = "block";
     };
 
@@ -118,6 +120,21 @@ async function submitBorrowRequest(event) {
       borrowError.innerText = error;
     });
 }
+
+document.querySelectorAll("#tBody tr").forEach((row) => {
+  row.addEventListener("click", () => {
+    if(row.dataset.loanedto != "null"){
+      return
+    }
+    specificItemId = row.dataset.id;
+    document.getElementById(
+      "borrowTitle"
+    ).innerHTML = `Do you want to send a borrow request for item "${name}"?`;
+    document.getElementById("borrowDescription").innerHTML =
+      row.dataset.description;
+    borrowModal.style.display = "block";
+  });
+});
 
 //Create specificItem
 const createModal = document.getElementById("createModal");
