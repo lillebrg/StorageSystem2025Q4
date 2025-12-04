@@ -36,7 +36,7 @@ await get(id)
     barcode = data.barcode;
     shelfBarcode = data.shelf_barcode;
     document.getElementById("tableTitle").innerHTML = name;
-    document.getElementById("baseItemImg").src = data.image_url;
+    document.getElementById("baseItemImg").src = data.image_url || "/assets/images/placeholder.png";
     displayTable(data);
   })
   .catch((error) => {
@@ -68,10 +68,10 @@ function displayTable(data) {
       <td>${item.loaned_to == null ? "" : item.loaned_to.name}</td>
       <td>
         <button class="button borrow-btn">
-          <i class="fa fa-handshake"></i> Borrow
+          <i class="fa fa-handshake"></i>
         </button>
         <button class="button delete-btn" style="display: none">
-          <i class="fa fa-trash"></i> Delete
+          <i class="fa fa-trash"></i>
         </button>
       </td>
     `;
@@ -79,16 +79,9 @@ function displayTable(data) {
     const role = localStorage.getItem("role");
     if (["Operator", "Admin"].includes(role)) {
       row.querySelector(".delete-btn").style.display = "inline-block";
-
       row.querySelector(".delete-btn").onclick = async () => {
-        if (!confirm("Are you sure you want to delete this item?")) return;
-
-        await deleteSpecificItem(item.id);
-
-        const newData = Object.assign({}, data); // Clone data into new object
-        newData.specific_items = data.specific_items.filter(it => it.id !== item.id);
-
-        displayTable(newData);
+        specificItemId = item.id;
+        deleteSpecificModal.style.display = "block"
       };
     }
 
@@ -214,7 +207,7 @@ async function handleCreate(event) {
   }
 }
 
-//delete Storage
+//delete baseitem
 const deleteModal = document.getElementById("deleteModal");
 const deleteError = document.getElementById("deleteError");
 deleteError.style.display = "none";
@@ -235,6 +228,26 @@ async function submitDelete(event) {
     });
 }
 
+
+//delete specific
+const deleteSpecificModal = document.getElementById("deleteSpecificModal");
+
+const deleteSpecificError = document.getElementById("deleteSpecificError");
+deleteSpecificError.style.display = "none";
+
+const deleteSpecificForm = document.getElementById("deleteSpecificForm");
+deleteSpecificForm.addEventListener("submit", submitSpecificDelete);
+
+async function submitSpecificDelete(event) {
+  event.preventDefault();
+  deleteSpecificItem(specificItemId)
+    .then(() => window.location.reload())
+    .catch((error) => {
+      deleteSpecificError.style.display = "block";
+      deleteSpecificError.innerText = error;
+    });
+}
+
 // Close modals when clicking on any close button
 document.querySelectorAll(".closeModal").forEach((closeBtn) => {
   closeBtn.onclick = () => {
@@ -242,6 +255,7 @@ document.querySelectorAll(".closeModal").forEach((closeBtn) => {
     borrowModal.style.display = "none";
     updateModal.style.display = "none";
     deleteModal.style.display = "none";
+    deleteSpecificModal.style.display = "none";
   };
 });
 

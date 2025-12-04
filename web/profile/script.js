@@ -100,9 +100,7 @@ function displayBorrowRequestTable(data) {
       request.base_item.image_url
     }">
             <td>${request.base_item.name}</td>
-            <td><img src="${
-              request.base_item.image_url
-            }" style="max-height: 80px; max-width: 80px;"/></td>
+            <td><img src="${request.base_item.image_url || "/assets/images/placeholder.png"}" style="max-height: 80px; max-width: 80px;"/></td>
             <td>${request.specific_item.description}</td>
             <td>Not handled</td>
           </tr>`;

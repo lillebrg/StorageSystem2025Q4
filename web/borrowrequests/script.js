@@ -40,9 +40,7 @@ function displayTable(data) {
     }">
             <td>${request.loaned_to.name}</td>
             <td>${request.base_item.name}</td>
-            <td><img src="${
-              request.base_item.image_url
-            }" style="max-height: 80px; max-width: 80px;"/></td>
+           <td><img src="${request.base_item.image_url || "/assets/images/placeholder.png"}" style="max-height: 80px; max-width: 80px;"/></td>
             <td>${request.specific_item.description}</td>
             <td>${request.accepted == true ? "accepted" : "Not handled"}</td>
           </tr>`;
@@ -94,7 +92,7 @@ function rebindRowClickEvents() {
       document.getElementById(
         "borrowTitle"
       ).innerHTML = `Let ${row.dataset.from} borrow item "${row.dataset.name}"?`;
-      document.getElementById("reviewImg").src = row.dataset.image;
+      document.getElementById("reviewImg").src = row.dataset.image || "/assets/images/placeholder.png";
       reviewModal.style.display = "block";
     });
   });
