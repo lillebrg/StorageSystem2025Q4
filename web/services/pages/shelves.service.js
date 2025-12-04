@@ -19,3 +19,7 @@ export function update(id, shelf_no) {
 export function deleteShelf(id) {
   return request("DELETE", `/shelves/${id}`);
 }
+
+export function downloadBarcode(barcode) {
+  return request("GET", `/barcodes/generate${barcode}`, null, undefined, true, true);
+}

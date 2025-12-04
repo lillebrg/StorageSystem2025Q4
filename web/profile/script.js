@@ -3,6 +3,8 @@ import { logout } from "../services/auth.js";
 import { returnItem } from "../services/pages/borrowrequest.service.js";
 import { getBorrowRequests } from "../services/pages/user.service.js";
 import { rejectRequest } from "../services/pages/borrowrequest.service.js";
+import { url } from "../../services/config.js";
+
 //displayUserDetails
 let name;
 let email;
@@ -64,6 +66,7 @@ function displayTable(data) {
   }
 
   data.forEach(item => {
+    console.log(item)
     table.innerHTML += `
       <tr data-id="${item.specific_item_id}"
           data-name="${item.base_item_name}"
@@ -71,7 +74,7 @@ function displayTable(data) {
           data-image="${item.base_item_picture}">
         <td>${item.specific_item_id}</td>
         <td>${item.base_item_name}</td>
-        <td><img src="${item.base_item_picture}" style="max-height: 80px; max-width: 80px;"/></td>
+        <td><img src="${item.base_item_picture || "/assets/images/placeholder.png"}" style="max-height: 80px; max-width: 80px;"/></td>
         <td>${item.specific_item_description}</td>
       </tr>`;
   });
@@ -100,9 +103,7 @@ function displayBorrowRequestTable(data) {
       request.base_item.image_url
     }">
             <td>${request.base_item.name}</td>
-            <td><img src="${
-              request.base_item.image_url
-            }" style="max-height: 80px; max-width: 80px;"/></td>
+            <td><img src="${request.base_item.image_url || "/assets/images/placeholder.png"}" style="max-height: 80px; max-width: 80px;"/></td>
             <td>${request.specific_item.description}</td>
             <td>Not handled</td>
           </tr>`;

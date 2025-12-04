@@ -7,6 +7,7 @@ import {
 } from "../../services/pages/baseitem.service.js";
 import { create } from "../../services/pages/specificitem.service.js";
 import { createBorrowRequest } from "../../services/pages/borrowrequest.service.js";
+import { url } from "../../services/config.js";
 
 //role
 const createBtn = document.getElementById("createBtn");
@@ -60,7 +61,7 @@ function displayTable(data) {
     table.innerHTML += `
       <tr data-id="${item.id}" data-description="${item.description}">
         <td>${item.id}</td>
-        <td>${item.barcode}</td>
+        <td><img src="${url}/barcodes/generate?barcode=${item.barcode}" style="width: 100px;"/></td>
         <td>${item.description}</td>
         <td>${item.loaned_to == null ? "" : item.loaned_to.name}</td>
       </tr>`;

@@ -6,13 +6,12 @@ export async function request(
   path,
   body = null,
   image = undefined,
-  canRetry = true
+  canRetry = true,
+  isBinary = false
 ) {
   let token = localStorage.getItem("token");
 
-  const headers = {
-    Authorization: `Bearer ${token}`,
-  };
+  const headers = { Authorization: `Bearer ${token}` };
   if (body) headers["Content-Type"] = "application/json";
 
   return new Promise((resolve, reject) => {
@@ -23,25 +22,24 @@ export async function request(
     })
       .then(async (response) => {
 
-        // ---------- 401 HANDLING ----------
+        // ----- 401 -----
         if (response.status === 401) {
           if (canRetry) {
-            try {
-              await refreshAuthToken();
-
-              // Return the RETRY result!
-              return resolve(
-                await request(method, path, body, image, false)
-              );
-            } catch {
-              return window.location.href = "/";
-            }
+            await refreshAuthToken();
+            return resolve(
+              await request(method, path, body, image, false, isBinary)
+            );
           }
-
-          return window.location.href = "/";
+          return (window.location.href = "/");
         }
 
-        // ---------- NORMAL RESPONSE ----------
+        // ----- READ -----
+        let result;
+        if (isBinary) {
+          result = await response.blob();
+          return resolve(result);
+        }
+
         const json = await response.json();
 
         if (response.ok) return resolve(json);
@@ -56,3 +54,4 @@ export async function request(
       .catch((err) => reject(err.message));
   });
 }
+

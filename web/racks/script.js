@@ -1,5 +1,6 @@
 import { deleteRack, get, update } from "../services/pages/racks.service.js";
 import { create } from "../services/pages/shelves.service.js";
+import { url } from "../services/config.js";
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 const storageId = params.get("storageId");
@@ -33,7 +34,7 @@ function displayTable(data) {
     table.innerHTML += `
          <tr data-id="${item.id}">
             <td>${item.shelf_no}</td>
-            <td>${item.barcode}</td>
+            <td><img src="${url}/barcodes/generate?barcode=${item.barcode}" style="width: 100px;"/></td>
           </tr>`;
   });
 

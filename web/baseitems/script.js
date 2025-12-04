@@ -23,10 +23,14 @@ document.getElementById("pageNext").onclick = () =>{
 
 //search
 let search;
-document.getElementById("searchBtn").onclick = () => {
+const searchForm = document.getElementById("searchForm");
+searchForm.addEventListener("submit", handleSearch);
+
+async function handleSearch(event){
+  event.preventDefault();
   search = document.getElementById("searchInput").value;
   getItems();
-};
+}
 
 let getError = document.getElementById("getError");
 getError.style.display = "none";
