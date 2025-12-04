@@ -133,14 +133,14 @@ main {
   display: block;
   padding: 0;
   text-align: left;
-  white-space: normal;
+  white-space: nowrap;
   display: table-row;
 }
 
 .responsive-table th,
 .responsive-table td {
   vertical-align: middle;
-  padding: 0.75em 0.5em;
+  padding: 0.75em 1em;
   display: table-cell;
 }
 
