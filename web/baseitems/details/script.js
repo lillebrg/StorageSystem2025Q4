@@ -64,18 +64,19 @@ function displayTable(data) {
     row.innerHTML = `
       <td>${item.id}</td>
       <td>${item.barcode}</td>
-      <td>${item.description ?? ""}</td>
+      <td style="text-align: left">${item.description ?? ""}</td>
       <td>${item.loaned_to == null ? "" : item.loaned_to.name}</td>
       <td>
+        <button class="button borrow-btn">
+          Borrow
+        </button>
         <button class="button delete-btn">
-          <i class="fa fa-trash"></i>
+          <i class="fa fa-trash"></i> Delete
         </button>
       </td>
     `;
 
-    row.querySelector(".delete-btn").onclick = async (event) => {
-      event.stopPropagation();
-
+    row.querySelector(".delete-btn").onclick = async () => {
       if (!confirm("Are you sure you want to delete this item?")) return;
 
       await deleteSpecificItem(item.id);
@@ -84,6 +85,13 @@ function displayTable(data) {
       newData.specific_items = data.specific_items.filter(it => it.id !== item.id);
 
       displayTable(newData);
+    };
+
+    row.querySelector(".borrow-btn").onclick = () => {
+      specificItemId = item.id;
+      document.getElementById("borrowTitle").innerHTML = `Do you want to send a borrow request for item "${name}"?`;
+      document.getElementById("borrowDescription").innerHTML = row.dataset.description;
+      borrowModal.style.display = "block";
     };
 
     table.appendChild(row);
@@ -112,18 +120,6 @@ async function submitBorrowRequest(event) {
       borrowError.innerText = error;
     });
 }
-
-document.querySelectorAll("#tBody tr").forEach((row) => {
-  row.addEventListener("click", () => {
-    specificItemId = row.dataset.id;
-    document.getElementById(
-      "borrowTitle"
-    ).innerHTML = `Do you want to send a borrow request for item "${name}"?`;
-    document.getElementById("borrowDescription").innerHTML =
-      row.dataset.description;
-    borrowModal.style.display = "block";
-  });
-});
 
 //Create specificItem
 const createModal = document.getElementById("createModal");
