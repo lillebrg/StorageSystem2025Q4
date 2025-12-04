@@ -5,7 +5,7 @@ import {
   uploadImage,
   scanBarcode,
 } from "../../services/pages/baseitem.service.js";
-import { create } from "../../services/pages/specificitem.service.js";
+import { create, deleteSpecificItem } from "../../services/pages/specificitem.service.js";
 import { createBorrowRequest } from "../../services/pages/borrowrequest.service.js";
 
 //role
@@ -57,13 +57,36 @@ function displayTable(data) {
 
   // Build all rows
   data.specific_items.forEach((item) => {
-    table.innerHTML += `
-      <tr data-id="${item.id}" data-description="${item.description}">
-        <td>${item.id}</td>
-        <td>${item.barcode}</td>
-        <td>${item.description}</td>
-        <td>${item.loaned_to == null ? "" : item.loaned_to.name}</td>
-      </tr>`;
+    const row = document.createElement("tr");
+    row.dataset.id = item.id
+    row.dataset.description = item.description;
+
+    row.innerHTML = `
+      <td>${item.id}</td>
+      <td>${item.barcode}</td>
+      <td>${item.description ?? ""}</td>
+      <td>${item.loaned_to == null ? "" : item.loaned_to.name}</td>
+      <td>
+        <button class="button delete-btn">
+          <i class="fa fa-trash"></i>
+        </button>
+      </td>
+    `;
+
+    row.querySelector(".delete-btn").onclick = async (event) => {
+      event.stopPropagation();
+
+      if (!confirm("Are you sure you want to delete this item?")) return;
+
+      await deleteSpecificItem(item.id);
+
+      const newData = Object.assign({}, data); // Clone data into new object
+      newData.specific_items = data.specific_items.filter(it => it.id !== item.id);
+
+      displayTable(newData);
+    };
+
+    table.appendChild(row);
   });
 }
 
