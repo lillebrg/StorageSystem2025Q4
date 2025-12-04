@@ -1,6 +1,5 @@
 package tech.mercantec.storagesystem.adapters
 
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.view.*
@@ -32,26 +31,7 @@ class BorrowedItemAdapter(val ctx: Context, val items: ArrayList<BorrowRequest>,
 
         view.findViewById<TextView>(R.id.borrow_status).setText(if (item.accepted) "Approved" else "Waiting for approval" , TextView.BufferType.SPANNABLE)
 
-        if (item.accepted) {
-            view.findViewById<Button>(R.id.return_button).apply {
-                visibility = View.VISIBLE
-
-                setOnClickListener {
-                    val dialog = AlertDialog.Builder(ctx)
-                        .setTitle("Return item")
-                        .setMessage("Are you sure you want to return this item?")
-                        .setPositiveButton("Return") { dialog, which ->
-                            onReturnItem(item.id)
-                        }
-                        .setNegativeButton("Cancel") { dialog, which -> }
-                        .create()
-
-                    dialog.show()
-                }
-            }
-        }
-
-        view.findViewById<RelativeLayout>(R.id.container).setOnClickListener {
+        view.findViewById<LinearLayout>(R.id.container).setOnClickListener {
             val intent = Intent(ctx, ViewProductActivity::class.java)
             intent.putExtra("baseItemId", item.base_item.id)
             ctx.startActivity(intent)
