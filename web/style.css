@@ -1,22 +1,25 @@
 body {
-	background-color: #F9F9F9;
-	color: #424242;
-	font-family: "Open Sans", sans-serif;
-	text-align: center;
+  background-color: #F9F9F9;
+  color: #424242;
+  font-family: "Open Sans", sans-serif;
+  text-align: center;
+  margin: 0;
 }
 
 main {
-	max-width: 800px;
-	margin: auto;
+  max-width: 800px;
+  margin: auto;
 }
 
 .container{
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-  background: lightgray;
-    border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  border-radius: 0.25rem;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
 }
 
 .toolBar {
@@ -39,7 +42,7 @@ main {
   border: none;
   color: #fff;
   cursor: pointer;
-  background-color: #7d2ae8;
+  background-color: #9a03e4;
   transition: all 0.2s ease;
 }
 
@@ -61,13 +64,7 @@ main {
 /* #endregion */
 
 /* #region Table */
-/* Breakpoints converted to px (1em = 16px) */
-@media (min-width: 48em) { }  /* bp-bart = 768px */
-@media (min-width: 62em) { }  /* bp-marge = 992px */
-@media (min-width: 75em) { }  /* bp-homer = 1200px */
-@media (min-width: 30em) { }  /* bp-lisa = 480px */
-
-.tableTitle{
+.tableTitle {
   margin: 5px 0 5px 0;
 }
 
@@ -77,7 +74,7 @@ main {
 
 .responsive-table tbody tr:hover {
 /* light highlight, added important to make hover work for gray table rows */
-  background-color: rgba(125, 44, 231, 0.2) !important; 
+  background-color: rgba(125, 44, 231, 0.2) !important;
   cursor: pointer;
 }
 
@@ -133,16 +130,34 @@ main {
   }
 }
 
-.responsive-table thead th {
-  background-color: #7d2ce7;
-  border: 1px solid rgb(41, 0, 62);
+.responsive-table th {
+  background-color: #9a03e4;
+  border: 1px solid #7802b2;
+  border-right: none;
   font-weight: normal;
   text-align: center;
   color: white;
 }
 
-.responsive-table thead th:first-of-type {
+.responsive-table th:last-of-type {
+  border-right: 1px solid #7802b2;
+}
+
+.responsive-table th:first-of-type {
   text-align: left;
+  border-top-left-radius: 0.25rem;
+}
+
+.responsive-table th:last-of-type {
+  border-top-right-radius: 0.25rem;
+}
+
+.responsive-table tr:last-of-type td:first-of-type {
+  border-bottom-left-radius: 0.25rem;
+}
+
+.responsive-table tr:last-of-type td:last-of-type {
+  border-bottom-right-radius: 0.25rem;
 }
 
 .responsive-table tbody,
@@ -196,91 +211,34 @@ main {
   }
 }
 
-.responsive-table caption {
-  margin-bottom: 1em;
-  font-size: 1em;
-  font-weight: bold;
-  text-align: center;
-}
-
-@media (min-width: 768px) {
-  .responsive-table caption {
-    font-size: 1.5em;
-  }
-}
-
-.responsive-table tfoot {
-  font-size: .8em;
-  font-style: italic;
-}
-
-@media (min-width: 992px) {
-  .responsive-table tfoot {
-    font-size: .9em;
-  }
-}
-
-@media (min-width: 768px) {
-  .responsive-table tbody {
-    display: table-row-group;
-  }
+.responsive-table tbody {
+  display: table-row-group;
 }
 
 .responsive-table tbody tr {
   margin-bottom: 1em;
 }
 
-@media (min-width: 768px) {
-  .responsive-table tbody tr {
-    display: table-row;
-    border-width: 1px;
-  }
+.responsive-table tbody tr {
+  display: table-row;
 }
 
 .responsive-table tbody tr:last-of-type {
   margin-bottom: 0;
 }
 
-@media (min-width: 768px) {
-  .responsive-table tbody tr:nth-of-type(even) {
-    background-color: rgba(0,0,0,.12);
-  }
-}
-
-.responsive-table tbody th[scope="row"] {
-  background-color: rgb(41, 0, 62);
-  color: white;
-}
-
-@media (min-width: 480px) {
-  .responsive-table tbody th[scope="row"] {
-    border-left: 1px solid rgb(41, 0, 62);
-    border-bottom: 1px solid rgb(41, 0, 62);
-  }
-}
-
-@media (min-width: 768px) {
-  .responsive-table tbody th[scope="row"] {
-    background-color: transparent;
-    color: rgba(0,0,0,.87);
-    text-align: left;
-  }
+.responsive-table tbody tr:nth-of-type(even) {
+  background-color: #EEE;
 }
 
 .responsive-table tbody td {
-  text-align: right;
+  border-left: 1px solid #CCC;
+  border-bottom: 1px solid #CCC;
+  text-align: center;
 }
 
-@media (min-width: 768px) {
-  .responsive-table tbody td {
-    border-left: 1px solid rgb(41, 0, 62);
-    border-bottom: 1px solid rgb(41, 0, 62);
-    text-align: center;
-  }
-
-  .responsive-table tbody td:last-of-type {
-    border-right: 1px solid rgb(41, 0, 62);
-  }
+.responsive-table tbody td:last-of-type {
+  border-right: 1px solid #CCC;
 }
 
 .responsive-table tbody td[data-type="currency"] {
@@ -414,7 +372,7 @@ main {
   outline: none;
   overflow: hidden;
   background-color: #F3F3F3;
-  border-radius: 10px;
+  border-radius: 0.25rem;
   transition: all 0.5s;
 }
 

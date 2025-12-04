@@ -4,10 +4,8 @@
     <title>Storage System</title>
     <link rel="stylesheet" href="/style.css" />
     <link rel="stylesheet" href="/login/style.css" />
-    <link rel="icon" href="../assets/images/telia.png" type="image/x-icon" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="icon" type="image/png" href="../assets/images/telia.png" />
     <link
       href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
       rel="stylesheet"
@@ -17,49 +15,50 @@
   </head>
   <body>
     <main>
-      <div class="container">
-        <h1>Telia Storage System</h1>
-        <form class="form" id="loginForm">
-          <p class="form-title">Sign in to your account</p>
-          <div class="input-container">
-            <input placeholder="Enter email" type="email" id="email" required />
-          </div>
+      <img src="/assets/images/box.png" width="64" height="64" alt="logo">
+
+      <h1>Telia Storage System</h1>
+
+      <form class="form" id="loginForm">
+        <p class="form-title">Sign in to your account</p>
+        <div class="input-container">
+          <input placeholder="Enter email" type="email" id="email" required />
+        </div>
+        <div class="input-container">
+          <input
+            placeholder="Enter password"
+            type="password"
+            id="password"
+            required
+          />
+        </div>
+        <my-alert id="loginError" color="red"></my-alert>
+        <button class="button submit" type="submit">Sign in</button>
+      </form>
+      <div id="changePasswordModal" class="modal">
+        <form class="form modalContent" id="newPasswordForm">
+          <p class="form-title">
+            You need to change your password before gaining access
+          </p>
           <div class="input-container">
             <input
-              placeholder="Enter password"
+              placeholder="Enter new password"
               type="password"
-              id="password"
+              id="newPassword"
               required
             />
           </div>
-          <my-alert id="loginError" color="red"></my-alert>
-          <button class="button submit" type="submit">Sign in</button>
+          <div class="input-container">
+            <input
+              placeholder="Repeat new password"
+              type="password"
+              id="repeatNewPassword"
+              required
+            />
+          </div>
+          <my-alert id="newPasswordError" color="red"></my-alert>
+          <button class="button submit" type="submit">Save changes</button>
         </form>
-        <div id="changePasswordModal" class="modal">
-          <form class="form modalContent" id="newPasswordForm">
-            <p class="form-title">
-              You need to change your password before gaining access
-            </p>
-            <div class="input-container">
-              <input
-                placeholder="Enter new password"
-                type="password"
-                id="newPassword"
-                required
-              />
-            </div>
-            <div class="input-container">
-              <input
-                placeholder="Repeat new password"
-                type="password"
-                id="repeatNewPassword"
-                required
-              />
-            </div>
-            <my-alert id="newPasswordError" color="red"></my-alert>
-            <button class="button submit" type="submit">Save changes</button>
-          </form>
-        </div>
       </div>
     </main>
   </body>

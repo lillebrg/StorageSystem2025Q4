@@ -5,66 +5,41 @@ class MenuNav extends HTMLElement {
     const shadow = this.attachShadow({ mode: "open" });
 
     shadow.innerHTML = `
-     <style>
-      nav {
-  width: 100%;
-  margin: 0 auto;
-  box-shadow: 0px 5px 0px lightgray;
-}
-
-/* By Dominik Biedebach @domobch */
-nav ul {
-  list-style: none;
-  text-align: center;
-}
-nav ul li {
-  display: inline-block;
-}
-nav ul li a {
-  display: block;
-  padding: 5px;
-  text-decoration: none;
-  color: #7d2ae8;
-  font-weight: 800;
-  text-transform: uppercase;
-  margin: 0 10px;
-}
-nav ul li a,
-nav ul li a:after,
-nav ul li a:before {
-  transition: all .5s;
-}
-nav ul li a:hover {
-  color: #a885eb;
-}
-nav.stroke ul li a,
-nav.fill ul li a {
-  position: relative;
-}
-nav.stroke ul li a:after,
-nav.fill ul li a:after {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
-  width: 0%;
-  content: '.';
-  color: transparent;
-  height: 1px;
-}
-nav.stroke ul li a:hover:after {
-  width: 100%;
-}
+      <style>
+        nav {
+          background-color: #9a03e4;
+          margin: 0 auto;
+          box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+        }
+        nav ul {
+           list-style: none;
+           display: flex;
+           justify-content: center;
+           margin: 0;
+        }
+        nav a {
+           color: white;
+           text-decoration: none;
+           display: block;
+           height: 3rem;
+           line-height: 3rem;
+           padding: 0 1.5rem;
+           transition: background-color ease-in-out 200ms;
+        }
+        nav a:hover {
+           background-color: #b31efc;
+        }
+        nav a:active {
+           background-color: #7802b2;
+        }
       </style>
 
-      <nav class="stroke">
+      <nav>
         <ul>
           <li><a href="/baseitems">Items</a></li>
           <li><a href="/storages">Storage</a></li>
           <li><a href="/users">Users</a></li>
           <li><a href="/profile">Profile</a></li>
-
         </ul>
       </nav>
     `;

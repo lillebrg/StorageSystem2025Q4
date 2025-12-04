@@ -79,8 +79,10 @@ async function subscribeToNotifications() {
 
     if (permission === "denied") return;
 
-    const registration = await navigator.serviceWorker.getRegistration()
-        || await navigator.serviceWorker.register("/services/worker.js");
+    if (!await navigator.serviceWorker.getRegistration())
+        await navigator.serviceWorker.register("/service-worker.js");
+
+    const registration = await navigator.serviceWorker.ready;
 
     if (await registration.pushManager.getSubscription()) {
         return;
@@ -88,6 +90,7 @@ async function subscribeToNotifications() {
 
     const subscription = await registration.pushManager.subscribe({
         applicationServerKey: vapidPublicKey,
+        userVisibleOnly: true,
     });
 
     await request("POST", "/notifications/subscribe", {

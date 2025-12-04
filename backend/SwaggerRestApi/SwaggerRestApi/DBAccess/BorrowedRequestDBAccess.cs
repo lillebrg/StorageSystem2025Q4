@@ -14,7 +14,7 @@ namespace SwaggerRestApi.DBAccess
 
         public async Task<List<BorrowRequest>> GetAllBorrwRequests()
         {
-            var borrowRequests = await _context.BorrowRequests.ToListAsync();
+            var borrowRequests = await _context.BorrowRequests.Include(br => br.SpecificItem).Include(br => br.User).ToListAsync();
 
             return borrowRequests;
         }
@@ -28,14 +28,14 @@ namespace SwaggerRestApi.DBAccess
 
         public async Task<bool> CheckIfBorrowRequestExist(int userId, int specificItemId)
         {
-            var borrowRequests = await _context.BorrowRequests.Where(b => b.LoanTo == userId && b.SpecificItem == specificItemId).FirstOrDefaultAsync();
+            var borrowRequests = await _context.BorrowRequests.Where(b => b.LoanTo == userId && b.SpecificItemId == specificItemId).FirstOrDefaultAsync();
 
             return borrowRequests != null;
         }
 
         public async Task<bool> CheckIfSpecificItemIsAlreadyBorrowed(int specificItemId)
         {
-            var borrowRequests = await _context.BorrowRequests.Where(b => b.Accepted == true && b.SpecificItem == specificItemId).FirstOrDefaultAsync();
+            var borrowRequests = await _context.BorrowRequests.Where(b => b.Accepted == true && b.SpecificItemId == specificItemId).FirstOrDefaultAsync();
 
             return borrowRequests != null;
         }
@@ -63,7 +63,7 @@ namespace SwaggerRestApi.DBAccess
 
         public async Task<List<BorrowRequest>> GetAllBorrowRequestWithSpecificItemId(int specificItemId)
         {
-            var borrowRequests = await _context.BorrowRequests.Where(b => b.SpecificItem == specificItemId && b.Accepted != true).ToListAsync();
+            var borrowRequests = await _context.BorrowRequests.Where(b => b.SpecificItemId == specificItemId && b.Accepted != true).ToListAsync();
 
             return borrowRequests;
         }
