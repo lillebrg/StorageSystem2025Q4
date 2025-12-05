@@ -81,7 +81,11 @@ namespace SwaggerRestApi.Controllers
 
             var b = new Barcode();
             b.IncludeLabel = true;
-            SKImage img = b.Encode(BarcodeStandard.Type.Ean13, barcode, 300, 100);
+            b.LabelFont = new SKFont{
+                Typeface = SKTypeface.FromFile("./Fonts/Roboto.ttf"),
+                Size = 28,
+            };
+            SKImage img = b.Encode(BarcodeStandard.Type.Ean13, barcode, 300, 150);
 
             var encoded = img.Encode();
 
