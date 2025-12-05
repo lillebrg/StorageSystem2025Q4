@@ -13,6 +13,8 @@ let email;
   getError.style.display = "none";
 
 await get().then((data) => {
+    console.log(data);
+
   name = data.name;
   email = data.email;
   displayProfile(data);
@@ -66,7 +68,6 @@ function displayTable(data) {
   }
 
   data.forEach(item => {
-    console.log(item)
     table.innerHTML += `
       <tr data-id="${item.specific_item_id}"
           data-name="${item.base_item_name}"
