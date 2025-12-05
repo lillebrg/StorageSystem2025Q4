@@ -13,7 +13,7 @@ import tech.mercantec.storagesystem.models.BorrowRequest
 import tech.mercantec.storagesystem.services.Api
 import tech.mercantec.storagesystem.ui.ViewProductActivity
 
-class BorrowedItemAdapter(val ctx: Context, val items: ArrayList<BorrowRequest>, val onReturnItem: (Int) -> Unit) : BaseAdapter() {
+class BorrowedItemAdapter(val ctx: Context, val items: ArrayList<BorrowRequest>) : BaseAdapter() {
     val layoutInflater = ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     val api = Api(ctx)
 
