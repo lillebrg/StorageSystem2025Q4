@@ -23,13 +23,11 @@ export async function request(
     })
       .then(async (response) => {
 
-        // ---------- 401 HANDLING ----------
         if (response.status === 401) {
           if (canRetry) {
             try {
               await refreshAuthToken();
 
-              // Return the RETRY result!
               return resolve(
                 await request(method, path, body, image, false)
               );
@@ -41,7 +39,6 @@ export async function request(
           return window.location.href = "/";
         }
 
-        // ---------- NORMAL RESPONSE ----------
         const json = await response.json();
 
         if (response.ok) return resolve(json);
