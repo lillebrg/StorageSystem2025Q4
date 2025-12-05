@@ -193,5 +193,6 @@ document.querySelectorAll(".closeModal").forEach((closeBtn) => {
     editUserModal.style.display = "none";
     changePasswordModal.style.display = "none";
     deleteUserModal.style.display = "none";
+    returnModal.style.display = "none";
   };
 });
