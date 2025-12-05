@@ -191,6 +191,21 @@ namespace SwaggerRestApi.BusineesLogic
         {
             var baseItem = await _itemdbaccess.GetBaseItem(id);
 
+            if (baseItem.SpecificItems.Where(s => s.BorrowedTo != null).Count() > 0)
+            {
+                foreach (var item in baseItem.SpecificItems)
+                {
+                    if (item.BorrowedTo != null)
+                    {
+                        var user = await _userdbaccess.GetUser((int)item.BorrowedTo);
+
+                        user.BorrowedItems.Remove(item.Id);
+
+                        await _userdbaccess.UpdateUser(user);
+                    }
+                }
+            }
+
             if (baseItem == null) { return new NotFoundObjectResult(new { message = "Could not fint base item" }); }
 
             await _itemdbaccess.DeleteBaseItem(baseItem);
@@ -198,6 +213,7 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(true);
         }
 
+        // Deletes an image from
         private async Task DeleteImage(string imageUrl)
         {
             var imageBaseURL = _configuration["ImageUrl"];

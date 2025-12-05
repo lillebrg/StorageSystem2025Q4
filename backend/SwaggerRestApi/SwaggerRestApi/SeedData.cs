@@ -20,7 +20,7 @@ namespace SwaggerRestApi
             {
                 ChangePasswordOnNextLogin = false,
                 Email = "admin@admin.com",
-                Name = "admin",
+                Name = "admin1234",
                 Password = BCrypt.Net.BCrypt.HashPassword("admin"),
                 Role = "Admin",
                 BorrowedItems = new List<int>()
