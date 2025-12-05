@@ -91,7 +91,7 @@ function displayTable(data) {
       row.querySelector(".downloadRedirect").href = `${url}/barcodes/generate?barcode=${item.barcode}`;
 
     row.querySelector(".borrow-btn").onclick = () => {
-			 if(item.loaned_to.name != null){
+			if(item.loaned_to != null){
       	return
     	}
       specificItemId = item.id;
