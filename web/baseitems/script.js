@@ -118,11 +118,16 @@ async function handleCreate(event) {
 try {
   if(shelfBarcodeInput.value != ""){
     let response = await scanBarcode(shelfBarcodeInput.value);
-    shelf = response.shelf.id
+    if(response?.shelf?.id){
+      shelf = response.shelf.id
+    }
   }
 
   if (imageInput.files.length > 0) {
-    savedFileName = await uploadImage(imageInput.files[0]);
+    let response = await uploadImage(imageInput.files[0]);
+    if(response?.path){
+      savedFileName = response.path
+    }
   }
 
   await create(
