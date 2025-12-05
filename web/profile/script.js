@@ -13,8 +13,6 @@ let email;
   getError.style.display = "none";
 
 await get().then((data) => {
-    console.log(data);
-
   name = data.name;
   email = data.email;
   displayProfile(data);
@@ -184,7 +182,8 @@ async function handleChangePassword(event) {
   let repeatNewPasswordInput = document.getElementById("repeatNewPassword").value;
 
   if (newPasswordInput != repeatNewPasswordInput) {
-    alert("New passwords do not match");
+     changePasswordError.style.display = "block";
+    changePasswordError.innerText = "New passwords do not match";
     return;
   }
 

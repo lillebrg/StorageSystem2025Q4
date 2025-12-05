@@ -53,7 +53,8 @@ async function handleNewPassword(event) {
   let newPasswordInput = document.getElementById("newPassword").value;
   let repeatNewPasswordInput = document.getElementById("repeatNewPassword").value;
   if (newPasswordInput != repeatNewPasswordInput) {
-    alert("New passwords do not match");
+    changePasswordError.style.display = "block";
+    changePasswordError.innerText = "New passwords do not match";
     return;
   }
   updatePassword(null, passwordInput.value, newPasswordInput)
