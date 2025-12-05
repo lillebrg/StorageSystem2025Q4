@@ -1,11 +1,15 @@
-package tech.mercantec.storagesystem.adapters
+package tech.mercantec.storagesystem.ui.adapters
 
 import android.content.Context
 import android.content.Intent
-import android.view.*
-import android.widget.*
-import tech.mercantec.storagesystem.models.BorrowRequest
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.BaseAdapter
+import android.widget.LinearLayout
+import android.widget.TextView
 import tech.mercantec.storagesystem.R
+import tech.mercantec.storagesystem.models.BorrowRequest
 import tech.mercantec.storagesystem.services.Api
 import tech.mercantec.storagesystem.ui.ViewProductActivity
 

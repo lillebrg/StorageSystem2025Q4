@@ -14,6 +14,7 @@ import tech.mercantec.storagesystem.R
 import tech.mercantec.storagesystem.services.Api
 import tech.mercantec.storagesystem.ui.adapters.SpecificItemAdapter
 import tech.mercantec.storagesystem.models.*
+import java.io.IOException
 import java.io.InputStream
 import java.net.URL
 import kotlin.concurrent.thread
@@ -182,13 +183,19 @@ class ViewProductActivity : AppCompatActivity() {
 
         if (baseItem.image_url != null && baseItem.image_url!!.isNotEmpty()) {
             thread {
-                val stream = URL(baseItem.image_url!!).content as InputStream
-                val drawable = Drawable.createFromStream(stream, "src")
+                try {
+                    val stream = URL(baseItem.image_url!!).content as InputStream
+                    val drawable = Drawable.createFromStream(stream, "src")
 
-                runOnUiThread {
-                    findViewById<ImageView>(R.id.image).apply {
-                        visibility = View.VISIBLE
-                        setImageDrawable(drawable)
+                    runOnUiThread {
+                        findViewById<ImageView>(R.id.image).apply {
+                            visibility = View.VISIBLE
+                            setImageDrawable(drawable)
+                        }
+                    }
+                } catch (e: IOException) {
+                    runOnUiThread {
+                        Toast.makeText(this, "Could not load image", Toast.LENGTH_LONG).show()
                     }
                 }
             }

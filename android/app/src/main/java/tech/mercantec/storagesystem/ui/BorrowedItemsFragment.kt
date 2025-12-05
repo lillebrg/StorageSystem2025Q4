@@ -6,7 +6,7 @@ import android.view.*
 import android.widget.ListView
 import android.widget.Toast
 import tech.mercantec.storagesystem.R
-import tech.mercantec.storagesystem.adapters.BorrowedItemAdapter
+import tech.mercantec.storagesystem.ui.adapters.BorrowedItemAdapter
 import tech.mercantec.storagesystem.models.BorrowRequest
 import tech.mercantec.storagesystem.services.Api
 

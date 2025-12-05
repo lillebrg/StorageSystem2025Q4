@@ -28,6 +28,11 @@ namespace SwaggerRestApi.BusineesLogic
             _notificationdbaccess = notificationDBAccess;
         }
 
+        /// <summary>
+        /// Finds out what kind of barcode you have scanned and returns an object with the data on what you have scanned
+        /// </summary>
+        /// <param name="barcode">The barcode that is to be found</param>
+        /// <returns>A type with what kind of object it is and the data in that object while the other 2 is null</returns>
         public async Task<ActionResult<ScannedBarcode>> GetScannedItem(string barcode)
         {
             var imageBaseURL = _configuration["ImageUrl"];
@@ -131,6 +136,11 @@ namespace SwaggerRestApi.BusineesLogic
             return new NotFoundObjectResult(new { message = "Could not find item" });
         }
 
+        /// <summary>
+        /// Creates a random barcode using the EAN-13 standard and have set the country code to an unused one 
+        /// so it should not be possible to find any of the generated ones elsewhere
+        /// </summary>
+        /// <returns>A string with 13 numbers</returns>
         public async Task<string> CreateRandomBarcode()
         {
             string barcode = "";
@@ -185,6 +195,12 @@ namespace SwaggerRestApi.BusineesLogic
             return barcode;
         }
 
+        /// <summary>
+        /// Saves an users subscription info in the database so it can be used to sent a notifications later
+        /// </summary>
+        /// <param name="subscribe">The info to sent a notification to a user</param>
+        /// <param name="userId">The user that that sends that sends the subscribe info</param>
+        /// <returns>True</returns>
         public async Task<ActionResult> CreateNotificationSubscription(NotificationSub subscribe, int userId)
         {
             NotificationSubscriptions notificationSubscription = new NotificationSubscriptions
@@ -202,6 +218,11 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(true);
         }
 
+        /// <summary>
+        /// Creates a notification that is then saved in the database
+        /// </summary>
+        /// <param name="notification">Contains who sent it what the message is and if it should be sent to someone specific it is also there</param>
+        /// <returns>True</returns>
         public async Task<ActionResult> CreateNotification(Notifications notification)
         {
             await _notificationdbaccess.CreateNotification(notification);
@@ -209,6 +230,10 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(true);
         }
 
+        /// <summary>
+        /// Sends all notifications that are saved in our database if it is to someone specific and cant find them it will just keep them saved
+        /// if it could be sent it is deleted from the database
+        /// </summary>
         public async Task SendAllNotifications()
         {
             var notifications = await _notificationdbaccess.GetNotifications();
@@ -245,6 +270,12 @@ namespace SwaggerRestApi.BusineesLogic
             }
         }
 
+        /// <summary>
+        /// Sends a notification to the user that have subscribed if it cant and gets back status code 410 
+        /// the subscription gets deleted from the database
+        /// </summary>
+        /// <param name="subscription">What subscription to send the notifications to</param>
+        /// <param name="message">What is the message that is in the notification</param>
         private async Task SendNotification(NotificationSubscriptions subscription, string message)
         {
             PushSubscription sub = new PushSubscription();

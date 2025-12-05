@@ -68,6 +68,10 @@ class Auth(ctx: Context) {
         val request = ChangePasswordRequest(currentPassword, newPassword)
 
         api.requestJson<ChangePasswordRequest, Boolean>("POST", "/user/change-password", request)
+
+        prefs.edit {
+            putBoolean("password_change_required", false)
+        }
     }
 
     fun getCurrentUser(): CurrentUser {

@@ -5,7 +5,7 @@ import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import tech.mercantec.storagesystem.R
-import tech.mercantec.storagesystem.adapters.ShelfItemAdapter
+import tech.mercantec.storagesystem.ui.adapters.ShelfItemAdapter
 import tech.mercantec.storagesystem.models.Shelf
 import tech.mercantec.storagesystem.services.Api
 

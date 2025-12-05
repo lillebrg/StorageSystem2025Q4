@@ -29,6 +29,10 @@ namespace SwaggerRestApi.BusineesLogic
             _sharedlogic = sheredlogic;
         }
 
+        /// <summary>
+        /// Gets all borrow request that are in the database and converts it to a dto model
+        /// </summary>
+        /// <returns>A list of borrow requests with who wants to loan it and what they want to loan</returns>
         public async Task<ActionResult<List<BorrowGet>>> GetAllBorrowRequest()
         {
             var imageBaseURL = _configuration["ImageUrl"];
@@ -67,6 +71,12 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(result);
         }
 
+        /// <summary>
+        /// Creates a borrow request and sends a notification to all admins and operators with name of who wants to loan it
+        /// </summary>
+        /// <param name="borrowRequestCreate">It is just the specific item id</param>
+        /// <param name="userId">The id of the user that creates the borrow request</param>
+        /// <returns>True</returns>
         public async Task<ActionResult> CreateBorrowRequest(BorrowRequestCreate borrowRequestCreate, int userId)
         {
             BorrowRequest borrowRequest = new BorrowRequest
@@ -101,6 +111,12 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(true);
         }
 
+        /// <summary>
+        /// Accepts a borrow request and sends a notification to the user that created the borrow request
+        /// </summary>
+        /// <param name="id">The id of the borrow request</param>
+        /// <param name="userId">The id of the user that accepted the borrow request</param>
+        /// <returns>True</returns>
         public async Task<ActionResult> AcceptBorrowRequest(int id, int userId)
         {
             var borrowRequest = await _borrowedbaccess.GetBorrowRequest(id);
@@ -141,6 +157,12 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(true);
         }
 
+        /// <summary>
+        /// Rejects a borrow request and sends a notification to the user that created the borrow request and deletes it from the database
+        /// </summary>
+        /// <param name="id">The id of the borrow request</param>
+        /// <param name="userId">The id of the user that accepted the borrow request</param>
+        /// <returns>True</returns>
         public async Task<ActionResult> RejectBorrowRequest(int id, int userId)
         {
             var borrowRequest = await _borrowedbaccess.GetBorrowRequest(id);
@@ -169,6 +191,12 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(true);
         }
 
+        /// <summary>
+        /// For when an item is returned so you can delete the borrow request and remove the specific item 
+        /// id from the user and remove the user id from the specific item
+        /// </summary>
+        /// <param name="id">The id of the borrow request</param>
+        /// <returns>True</returns>
         public async Task<ActionResult> ReturnBorrowRequest(int id)
         {
             var borrowRequest = await _borrowedbaccess.GetBorrowRequest(id);
