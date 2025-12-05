@@ -29,7 +29,9 @@ class SplashActivity : AppCompatActivity() {
                 Toast.makeText(this, "Welcome back, ${user.name}", Toast.LENGTH_SHORT).show()
             }
         } else {
-            startActivity(Intent(this, LoginActivity::class.java))
+            val intent = Intent(this, LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
         }
 
         super.onCreate(savedInstanceState)
