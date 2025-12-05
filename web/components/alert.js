@@ -1,10 +1,6 @@
 class MyAlert extends HTMLElement {
   constructor() {
-    //Super makes sure the parent of where the super is placed, runs 
-    super();
-
-    //shadow DOM isolates the html and css written inside it from the rest of the project
-    //
+  super();
     const shadow = this.attachShadow({ mode: "open" });
 
     shadow.innerHTML = `
