@@ -34,15 +34,7 @@ class BorrowedItemsFragment : Fragment() {
 
     private fun loadItems() {
         Api.makeRequest(requireActivity(), { api.requestJson<Unit, ArrayList<BorrowRequest>>("GET", "/borrow-requests", null) }) { items ->
-            requireActivity().findViewById<ListView>(R.id.borrowed_items_list).adapter = BorrowedItemAdapter(requireActivity(), items) { id -> onReturnItem(id) }
-        }
-    }
-
-    private fun onReturnItem(id: Int) {
-        Api.makeRequest(requireActivity(), { api.requestJson<Unit, Boolean>("POST", "/borrow-requests/${id}/return", null) }) {
-            loadItems()
-
-            Toast.makeText(requireContext(), "Item has been returned", Toast.LENGTH_LONG).show()
+            requireActivity().findViewById<ListView>(R.id.borrowed_items_list).adapter = BorrowedItemAdapter(requireActivity(), items)
         }
     }
 }
