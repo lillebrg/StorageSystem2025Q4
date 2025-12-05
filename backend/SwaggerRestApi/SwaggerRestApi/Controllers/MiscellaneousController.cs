@@ -20,7 +20,10 @@ namespace SwaggerRestApi.Controllers
             _sharedlogic = sharedLogic;
         }
 
-
+        /// <summary>
+        /// Saves an image in a folder with a random filename
+        /// </summary>
+        /// <returns>The filename</returns>
         [HttpPost("/images")]
         [Authorize(Roles = "Admin, Operator")]
         public async Task<ActionResult<ImagePost>> SaveImage()
@@ -50,6 +53,11 @@ namespace SwaggerRestApi.Controllers
             return Ok(new ImagePost { path = fileName });
         }
 
+        /// <summary>
+        /// Gets an image from its filename
+        /// </summary>
+        /// <param name="filename">The name of the image that is to be returned</param>
+        /// <returns>An image</returns>
         [HttpGet("/images/{filename}")]
         public async Task<ActionResult> GetImage(string filename)
         {
@@ -74,6 +82,11 @@ namespace SwaggerRestApi.Controllers
             return await _sharedlogic.GetScannedItem(barcode);
         }
 
+        /// <summary>
+        /// Generates a barcode image from 13 valid EAN-13 digits
+        /// </summary>
+        /// <param name="barcode">The barcode that the image is generated from</param>
+        /// <returns>A barcode image</returns>
         [HttpGet("/barcodes/generate")]
         public async Task<ActionResult> GenerateBarcode(string barcode)
         {

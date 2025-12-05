@@ -165,8 +165,8 @@ namespace SwaggerRestApi.BusineesLogic
         /// Logs an user in
         /// </summary>
         /// <param name="login">Contain an email and password</param>
-        /// <returns>Returns an authresponse that have a name, id, jwt token, role and whether they have to change password 
-        /// on their nex login</returns>
+        /// <returns>Returns an authresponse that have a name, id, jwt token, role, whether they have to change password 
+        /// on their nex login and a refresh token</returns>
         public async Task<ActionResult<AuthResponse>> Login(UserLogin login)
         {
             var user = await _userdbaccess.GetUserForLogin(login.email);
@@ -326,6 +326,11 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(true);
         }
 
+        /// <summary>
+        /// Gets all items that an user is currently borrowing
+        /// </summary>
+        /// <param name="id">The users id</param>
+        /// <returns>A list of all items that an user is currently borrowing</returns>
         public async Task<ActionResult<List<UserBorroweGet>>> GetAllBorrowedItems(int id)
         {
             var imageBaseURL = _configuration["ImageUrl"];
@@ -360,7 +365,13 @@ namespace SwaggerRestApi.BusineesLogic
 
             return new OkObjectResult(result);
         }
-      
+
+        /// <summary>
+        /// Refreshes jwt token using an refreshtoken so you can stay logged in for longer
+        /// </summary>
+        /// <param name="refreshToken">A random string that was recieved with the old jwt token</param>
+        /// <returns>Returns an authresponse that have a name, id, jwt token, role, whether they have to change password 
+        /// on their nex login and a refresh token</returns>
         public async Task<ActionResult<AuthResponse>> RefreshJWTToken(RefreshTokenRequest refreshToken)
         {
             var tokenEntity = await _userdbaccess.GetRefreshToken(refreshToken.refresh_token);
@@ -389,6 +400,11 @@ namespace SwaggerRestApi.BusineesLogic
             return new OkObjectResult(authresponse);
         }
 
+        /// <summary>
+        /// Deletes a refresh token from the database so it is not valid if someone wants to use it later
+        /// </summary>
+        /// <param name="refreshToken">A random string that was recieved with the old jwt token</param>
+        /// <returns>True</returns>
         public async Task<ActionResult> DeleteRefreshToken(RefreshTokenRequest refreshToken)
         {
             var tokenEntity = await _userdbaccess.GetRefreshToken(refreshToken.refresh_token);
@@ -439,6 +455,7 @@ namespace SwaggerRestApi.BusineesLogic
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        // Generates a random string and saves it in the database so it can refresh an jwt token
         private async Task<string> GenerateRefreshToken(int userId)
         {
             var randomNumber = new byte[64];
