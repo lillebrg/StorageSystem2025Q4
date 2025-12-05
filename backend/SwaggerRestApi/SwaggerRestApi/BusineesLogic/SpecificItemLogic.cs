@@ -10,11 +10,13 @@ namespace SwaggerRestApi.BusineesLogic
     {
         private readonly ItemDBAccess _itemdbaccess;
         private readonly SharedLogic _sharedlogic;
+        private readonly UserDBAccess _userdbaccess;
 
-        public SpecificItemLogic(ItemDBAccess itemDBAccess, SharedLogic sharedLogic)
+        public SpecificItemLogic(ItemDBAccess itemDBAccess, SharedLogic sharedLogic, UserDBAccess userDBAccess)
         {
             _itemdbaccess = itemDBAccess;
             _sharedlogic = sharedLogic;
+            _userdbaccess = userDBAccess;
         }
 
         /// <summary>
@@ -71,8 +73,17 @@ namespace SwaggerRestApi.BusineesLogic
         /// <param name="id">The id of the specific item to be deleted</param>
         /// <returns>True</returns>
         public async Task<ActionResult> DeleteSpecificItem(int id)
-            {
+        {
             var specificItem = await _itemdbaccess.GetSpecificItem(id);
+
+            if (specificItem.BorrowedTo != null)
+            {
+                var user = await _userdbaccess.GetUser((int)specificItem.BorrowedTo);
+
+                user.BorrowedItems.Remove(specificItem.Id);
+
+                await _userdbaccess.UpdateUser(user);
+            }
 
             if (specificItem == null) { return new NotFoundObjectResult(new { message = "Could not find specific item" }); }
 
